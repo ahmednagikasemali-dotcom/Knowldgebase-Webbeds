@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Visa Procedures - WebBeds</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: url('hotel.jpg') no-repeat center top fixed;
+  background-size: cover;
+  color: #333;
+  margin: 0;
+  padding: 80px 20px 40px;
+}
+
+/* Home button */
+#homeBtn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  z-index: 1000;
+}
+#homeBtn .homeIcon {
+  width: 40px;
+  height: 40px;
+  background-color: red;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+}
+#homeBtn span {
+  font-weight: bold;
+  font-size: 18px;
+  color: #2c3e50;
+}
+
+/* Info Icon */
+#infoIcon {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 45px;
+  height: 45px;
+  background-color: #3498db;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+/* Info Popup */
+#infoBox {
+  display: none;
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  width: 350px;
+  background-color: #ffffff;
+  border: 2px solid #3498db;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 1000;
+  font-size: 14px;
+}
+#closeInfo {
+  text-align: left;
+  cursor: pointer;
+  font-weight: bold;
+  color: red;
+}
+
+/* Tab container (even if single tab, for consistency) */
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+/* Single active tab style */
+.option-btn {
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: 2px solid #3498db;
+  background: #3498db;
+  cursor: default;
+  font-weight: bold;
+  color: #fff;
+}
+
+/* Option content */
+.option-content {
+  display: block;
+  background: rgba(255,255,255,0.95);
+  padding: 20px;
+  margin-top: 15px;
+  border-radius: 10px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  font-size: 14px;
+  line-height: 1.5;
+  color: #222;
+}
+
+/* Fade-in Animation */
+.fade-in {
+  animation: fadeIn 0.5s ease forwards;
+  opacity: 0;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+
+/* Table styling */
+.visa-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  font-size: 13px;
+}
+.visa-table th, .visa-table td {
+  padding: 10px 12px;
+  border: 1px solid #bbb;
+  vertical-align: top;
+}
+.visa-table th {
+  background-color: #d80000; /* bright red */
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+.visa-table tbody tr:nth-child(odd) {
+  background-color: #fff7e6; /* light cream */
+}
+.visa-table tbody tr:nth-child(even) {
+  background-color: #eef5fb; /* light blue */
+}
+/* Use background colors for groups like original table */
+.visa-table tbody tr:nth-child(3), 
+.visa-table tbody tr:nth-child(4),
+.visa-table tbody tr:nth-child(10),
+.visa-table tbody tr:nth-child(11) {
+  background-color: #d5e1f2; /* soft blue */
+}
+.visa-table tbody tr:nth-child(5),
+.visa-table tbody tr:nth-child(6) {
+  background-color: #dde9d3; /* soft green */
+}
+.visa-table tbody tr:nth-child(7),
+.visa-table tbody tr:nth-child(8) {
+  background-color: #f9dcd3; /* soft peach */
+}
+
+.visa-table td:nth-child(4) {
+  white-space: pre-wrap; /* preserve line breaks */
+}
+
+/* Search box style */
+#searchInput {
+  display: block;
+  width: 400px;
+  max-width: 90%;
+  margin: 20px auto 10px auto;
+  padding: 10px 15px;
+  font-size: 16px;
+  border: 2px solid #3498db;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  .visa-table th, .visa-table td {
+    font-size: 12px;
+    padding: 8px 6px;
+  }
+  #searchInput {
+    width: 95%;
+  }
+}
+
+h1 { text-align:center; color:#2c3e50; }
+h2 { color:#34495e; margin-top:20px; }
+</style>
+</head>
+
+<body>
+
+<!-- Home -->
+<div id="homeBtn" onclick="window.location.href='index.html'">
+  <div class="homeIcon">🏠</div>
+  <span>WebBeds</span>
+</div>
+
+<!-- Info -->
+<div id="infoIcon" onclick="toggleInfo()">❓</div>
+<div id="infoBox">
+  <div id="closeInfo" onclick="toggleInfo()">✖</div>
+  <p><strong>Main Tab:</strong> Offline & Visa</p>
+  <p><strong>Sub Tab:</strong> Visa Procedures</p>
+  <p><strong>Description:</strong><br>All details about visa types, extensions, requirements, and processes.</p>
+</div>
+
+<h1>Visa Procedures</h1>
+
+<!-- Single Tab Button -->
+<div class="tabs">
+  <button class="option-btn active">Visa Types & Prices</button>
+</div>
+
+<!-- Search Input -->
+<input type="text" id="searchInput" placeholder="Search inside the visa table..." onkeyup="filterTable()" aria-label="Search visa table" />
+
+<!-- Visa Types Table -->
+<div id="visaTypes" class="option-content fade-in">
+<h2>Visa Types & Prices</h2>
+<table class="visa-table" id="visaTable">
+<thead>
+  <tr>
+    <th>Visa Type</th>
+    <th>Cost Price (AED)</th>
+    <th>Sales Price (USD)</th>
+    <th>T&amp;C</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td>30 Days single entry (Adult)</td>
+    <td>AED 310.00</td>
+    <td>$ 88.00</td>
+    <td>* Visa holder must enter the UAE with maximum 60 days from date of visa issue, which is mentioned on the visa, Visa holder will not be permitted entry into UAE if this 60 days has expired.
+* Once visa holder has entered the UAE, they are permitted to stay in the UAE for maximum of 30 days starting from date of entry.</td>
+  </tr>
+  <tr>
+    <td>30 Days single entry (Minor)</td>
+    <td>AED 35.00</td>
+    <td>$ 15.00</td>
+    <td>* Visa holder must enter the UAE with maximum 60 days from date of visa issue, which is mentioned on the visa, Visa holder will not be permitted entry into UAE if this 60 days has expired.
+* Once visa holder has entered the UAE, they are permitted to stay in the UAE for maximum of 30 days starting from date of entry.</td>
+  </tr>
+  <tr>
+    <td>60 Days single entry (Adult)</td>
+    <td>AED 600.00</td>
+    <td>$ 200.00</td>
+    <td>* Visa holder must enter the UAE with maximum 60 days from date of visa issue, which is mentioned on the visa, Visa holder will not be permitted entry into UAE if this 60 days has expired.
+* Once visa holder has entered the UAE, they are permitted to stay in the UAE for maximum of 60 days starting from date of entry.</td>
+  </tr>
+  <tr>
+    <td>60 Days single entry (Minor)</td>
+    <td>AED 150.00</td>
+    <td>$ 65.00</td>
+    <td>* Visa holder must enter the UAE with maximum 60 days from date of visa issue, which is mentioned on the visa, Visa holder will not be permitted entry into UAE if this 60 days has expired.
+* Once visa holder has entered the UAE, they are permitted to stay in the UAE for maximum of 60 days starting from date of entry.</td>
+  </tr>
+  <tr>
+    <td>30 Days Multiple entry (Adult)</td>
+    <td>AED 525.00</td>
+    <td>$ 168.00</td>
+    <td>* Visa holder must enter the UAE with maximum 60 days from date of visa issue, which is mentioned on the visa, Visa holder will not be permitted entry into UAE if this 60 days has expired.
+* Once visa holder has entered the UAE, they are permitted to enter and exit -several time/unlimited-the UAE for maximum of 30 days starting from date of first entry.</td>
+  </tr>
+  <tr>
+    <td>30 Days Multiple entry (Minor)</td>
+    <td>AED 150.00</td>
+    <td>$ 65.00</td>
+    <td>* Visa holder must enter the UAE with maximum 60 days from date of visa issue, which is mentioned on the visa, Visa holder will not be permitted entry into UAE if this 60 days has expired.
+* Once visa holder has entered the UAE, they are permitted to enter and exit -several time/unlimited-the UAE for maximum of 30 days starting from date of first entry.</td>
+  </tr>
+  <tr>
+    <td>60 Days Multiple entry (Adult)</td>
+    <td>AED 925.00</td>
+    <td>$ 295.00</td>
+    <td>* Visa holder must enter the UAE with maximum 60 days from date of visa issue, which is mentioned on the visa, Visa holder will not be permitted entry into UAE if this 60 days has expired.
+* Once visa holder has entered the UAE, they are permitted to enter and exit -several time/unlimited-the UAE for maximum of 60 days starting from date of first entry.</td>
+  </tr>
+  <tr>
+    <td>60 Days Multiple entry (Minor)</td>
+    <td>AED 400.00</td>
+    <td>$ 120.00</td>
+    <td>* Visa holder must enter the UAE with maximum 60 days from date of visa issue, which is mentioned on the visa, Visa holder will not be permitted entry into UAE if this 60 days has expired.
+* Once visa holder has entered the UAE, they are permitted to enter and exit -several time/unlimited-the UAE for maximum of 60 days starting from date of first entry.</td>
+  </tr>
+  <tr>
+    <td>30 Days visa - Extension (Adult)</td>
+    <td>AED 955.00</td>
+    <td>$ 280.00</td>
+    <td>Extension applicable on all type of visas twice for 30 days, and not 60 days at once</td>
+  </tr>
+  <tr>
+    <td>30 Days visa - Extension (Minor)</td>
+    <td>AED 955.00</td>
+    <td>$ 280.00</td>
+    <td>Extension applicable on all type of visas twice for 30 days, and not 60 days at once</td>
+  </tr>
+  <tr>
+    <td>Visa cancellation fee</td>
+    <td>AED 180.00</td>
+    <td>$ 52.00</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Penalty per day</td>
+    <td>AED 60.00</td>
+    <td>$ 18.00</td>
+    <td></td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+<script>
+// Info toggle
+function toggleInfo() {
+  const box = document.getElementById("infoBox");
+  box.style.display = box.style.display === "block" ? "none" : "block";
+}
+
+// Filter Table Function
+function filterTable() {
+  const input = document.getElementById("searchInput");
+  const filter = input.value.toLowerCase();
+  const table = document.getElementById("visaTable");
+  const trs = table.tBodies[0].getElementsByTagName("tr");
+
+  for(let i = 0; i < trs.length; i++) {
+    const tr = trs[i];
+    const tds = tr.getElementsByTagName("td");
+    let found = false;
+    for(let j = 0; j < tds.length; j++) {
+      if(tds[j].textContent.toLowerCase().indexOf(filter) > -1) {
+        found = true;
+        break;
+      }
+    }
+    tr.style.display = found ? "" : "none";
+  }
+}
+</script>
+
+</body>
+</html>

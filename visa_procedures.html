@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visa Procedures - WebBeds</title>
+
+<style>
+:root {
+  --primary: #3498db;
+  --secondary: #e67e22;
+  --tertiary: #2ecc71;
+  --text: #333;
+  --bg-card: rgba(255,255,255,0.95);
+  --bg-accordion: #e8f6f3;
+  --bg-accordion-active: #d0ece7;
+}
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: url('hotel.jpg') no-repeat center top fixed;
+  background-size: cover;
+  color: var(--text);
+}
+
+h1 { text-align:center; color:var(--primary); margin-bottom:15px; }
+h2 { margin-top:20px; color:var(--primary); }
+.contentBox {
+  background-color: var(--bg-card);
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 15px;
+  box-shadow:0 3px 10px rgba(0,0,0,0.2);
+}
+
+/* Accordion */
+.accordion {
+  background-color: var(--bg-accordion);
+  cursor: pointer;
+  padding: 14px 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  font-size: 16px;
+  border-radius: 6px;
+  margin-top: 10px;
+  transition:0.2s;
+}
+.accordion.active { background-color: var(--bg-accordion-active); }
+
+/* Panel */
+.panel {
+  padding: 10px 18px;
+  display: none;
+  background-color: var(--bg-card);
+  margin-top: 5px;
+  border-left: 4px solid var(--primary);
+  border-radius: 6px;
+}
+
+/* Option Tabs */
+.option-tabs { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:15px; }
+.option-tabs button { padding:10px 18px; border:none; border-radius:8px; cursor:pointer; font-weight:600; color:#fff; flex:1 1 120px; transition:0.3s; }
+.option-btn-prepayment { background-color:var(--primary); }
+.option-btn-credit { background-color:var(--secondary); }
+.option-btn-creditcard { background-color:var(--tertiary); }
+.option-tabs button.active { box-shadow:0 4px 12px rgba(0,0,0,0.3); transform:scale(1.05); }
+
+/* Home & Info */
+#homeBtn, #infoIcon {
+  position: fixed;
+  top: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius:50%;
+  display:flex; justify-content:center; align-items:center;
+  cursor:pointer; z-index:1000;
+  font-size:24px; color:#fff;
+}
+#homeBtn { left:20px; background-color:red; }
+#infoIcon { right:20px; background-color:var(--primary); }
+
+/* Info Box */
+#infoBox {
+  display:none;
+  position:fixed;
+  top:80px; right:20px;
+  width:320px;
+  background-color:var(--bg-card);
+  border:2px solid var(--primary);
+  border-radius:12px;
+  padding:16px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.3);
+  z-index:1000;
+  font-size:14px;
+}
+#closeInfo { text-align:left; cursor:pointer; font-weight:bold; color:red; }
+
+/* Credit Card Warning */
+.warning { background:#fce4e4; padding:8px; margin-top:10px; border-radius:6px; font-weight:bold; font-size:14px; display:none; }
+
+/* Responsive */
+@media(max-width:600px){
+  .option-tabs { flex-direction:column; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Home & Info -->
+<div id="homeBtn" onclick="window.location.href='index.html'">🏠</div>
+<div id="infoIcon" onclick="toggleInfo()">❓</div>
+<div id="infoBox">
+  <div id="closeInfo" onclick="toggleInfo()">✖</div>
+  <p><strong>Tab:</strong> Offline & Visa</p>
+  <p><strong>Sub Tab:</strong> Visa Procedures</p>
+  <p><strong>Description:</strong><br>Visa types, requirements, extension, terms, and processes.</p>
+</div>
+
+<h1>Visa Procedures</h1>
+
+<div class="contentBox">
+  <!-- General Visa Info -->
+  <button class="accordion">Visa Supplier</button>
+  <div class="panel"><p>Miracle Tourism LLC</p></div>
+
+  <button class="accordion">Visa Types</button>
+  <div class="panel">
+    <ul>
+      <li>30 days single-entry</li>
+      <li>30 days multiple-entry</li>
+      <li>60 days single-entry</li>
+      <li>60 days multiple-entry</li>
+    </ul>
+  </div>
+
+  <button class="accordion">Extension</button>
+  <div class="panel">
+    <p>30 days visa-extension</p>
+    <p><strong>Note:</strong> Can extend twice for 30 days. Not 60 days at once. Applicable to all visa types.</p>
+  </div>
+
+  <button class="accordion">Visa Requirements</button>
+  <div class="panel">
+    <ul>
+      <li>Visa application: 3-4 working days</li>
+      <li>Subject to Dubai immigration approval</li>
+      <li>Clear passport copy</li>
+      <li>Passport-size photo, white background</li>
+      <li>Passport valid 6+ months</li>
+      <li>Birth certificate for kids travelling with parents</li>
+      <li>Child special rate: below 17y 9m</li>
+    </ul>
+  </div>
+
+  <button class="accordion">Visa Terms & Conditions</button>
+  <div class="panel">
+    <p>Rules for each visa type, entry limits, extensions, penalties. No grace period.</p>
+  </div>
+</div>
+
+<!-- Option Tabs: Prepayment | Credit | Credit Card -->
+<div class="option-tabs">
+  <button class="option-btn option-btn-prepayment active" data-tab="tabPrepayment">Prepayment</button>
+  <button class="option-btn option-btn-credit" data-tab="tabCredit">Credit</button>
+  <button class="option-btn option-btn-creditcard" data-tab="tabCreditCard">Credit Card</button>
+</div>
+
+<div id="tabPrepayment" class="option-content">
+  <div class="contentBox">
+    <h2>Process: Prepayment</h2>
+    <ol>
+      <li>Client sends email to visa-support@webbeds.com</li>
+      <li>Check documents</li>
+          <li>create a MISC with the requested Visa type and ask the client to pay and waiting untill he sent te payment confirmation</li>
+      <li>Upload VISA details on DOTW</li>
+      <li>Add booking ref to email subject</li>
+      <li>Send email to supplier (VISA TYPE/NATIONALITY/BOOKING REF)</li>
+      <li>Agent processes payment & provides proof within 12h</li>
+      <li>Send Visa request to Miracle Tourism LLC</li>
+      <li>Send VISA document back to client after receiving from supplier</li>
+    </ol>
+  </div>
+</div>
+
+<div id="tabCredit" class="option-content" style="display:none;">
+  <div class="contentBox">
+    <h2>Process: Credit</h2>
+    <ol>
+      <li>Client sends email to visa-support@webbeds.com</li>
+      <li>Check documents</li>
+      <li>Upload VISA details on DOTW</li>
+      <li>Add booking ref to email subject</li>
+      <li>Send email to supplier (VISA TYPE/NATIONALITY/BOOKING REF)</li>
+      <li>Send request to Miracle Tourism LLC</li>
+      <li>Send VISA document back to client after receiving from supplier</li>
+    </ol>
+  </div>
+</div>
+
+<div id="tabCreditCard" class="option-content" style="display:none;">
+  <div class="contentBox">
+    <h2>Credit Card Process</h2>
+  
+ <ol>
+      <li>Client sends email to visa-support@webbeds.com</li>
+      <li>Check documents</li>
+          <li>create a MISC with the requested Visa type and ask the client to pay and waiting untill he sent te payment confirmation</li>
+      <li>Upload VISA details on DOTW</li>
+      <li>Add booking ref to email subject</li>
+      <li>Send email to supplier (VISA TYPE/NATIONALITY/BOOKING REF)</li>
+      <li>Agent processes payment & provides proof within 12h</li>
+      <li>Send Visa request to Miracle Tourism LLC</li>
+      <li>Send VISA document back to client after receiving from supplier</li>
+    </ol>
+  <ul>
+      <li><input type="checkbox" id="custAcceptance"> Customer Acceptance Needed (yes)</li>
+      <li><input type="checkbox" id="sendEmail"> Send Email communication to customer (yes)</li>
+      <li><input type="checkbox" id="payable"> Payable by customer (yes)</li>
+    </ul>
+    <p class="warning" id="creditWarning">Warning: If "Customer Acceptance Needed" or "Send Email communication" is NO, the customer won't be able to pay with credit card and MISC payment will fail.</p>
+  </div>
+</div>
+
+<!-- Sales Protocol -->
+<div class="contentBox">
+  <div class="warning">
+    <p>I would like to remind everyone of the protocol to follow when we receive an email from Shivanka or any member of the Sales team requesting us to load a booking into the system, including the markup, and share the MISC number with the provider.</p>
+    <ul>
+      <li>Create a <strong>new email</strong> to share the MISC number with the supplier.</li>
+      <li>Internal communications must <strong>not</strong> be included.</li>
+      <li>Pay extra attention due to sensitivity of information.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+// Accordion
+const acc = document.getElementsByClassName("accordion");
+for (let i=0;i<acc.length;i++){
+  acc[i].addEventListener("click",function(){
+    this.classList.toggle("active");
+    const panel = this.nextElementSibling;
+    panel.style.display = panel.style.display==='block'?'none':'block';
+  });
+}
+
+// Option Tabs
+const optionBtns = document.getElementsByClassName('option-btn');
+const optionContents = document.getElementsByClassName('option-content');
+for(let btn of optionBtns){
+  btn.addEventListener('click', function(){
+    for(let b of optionBtns) b.classList.remove('active');
+    for(let t of optionContents) t.style.display='none';
+    this.classList.add('active');
+    document.getElementById(this.dataset.tab).style.display='block';
+  });
+}
+
+// Info Popup
+function toggleInfo(){
+  const box = document.getElementById("infoBox");
+  box.style.display = box.style.display==='block'?'none':'block';
+}
+
+// Credit Card Warning
+const custAcceptance = document.getElementById('custAcceptance');
+const sendEmail = document.getElementById('sendEmail');
+const creditWarning = document.getElementById('creditWarning');
+
+function checkCreditWarning(){
+  if(!custAcceptance.checked || !sendEmail.checked){
+    creditWarning.style.display='block';
+  } else {
+    creditWarning.style.display='none';
+  }
+}
+custAcceptance.addEventListener('change', checkCreditWarning);
+sendEmail.addEventListener('change', checkCreditWarning);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRev Failures Handling Guide</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-red: #d32f2f;
+            --dark-blue: #0747a6;
+            --bg-light: #f4f5f7;
+            --text-dark: #172b4d;
+            --border-color: #dfe1e6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        /* Toolbar with only 2 Icons */
+        .toolbar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .nav-btn {
+            text-decoration: none;
+            background: white;
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: 8px;
+            color: var(--text-dark);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .nav-btn:hover {
+            background: var(--dark-blue);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        header {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            border-left: 10px solid var(--primary-red);
+        }
+
+        .content-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        h2 { color: var(--dark-blue); border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        
+        .instruction-step {
+            background: #fff9db;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 5px solid #fcc419;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            color: var(--dark-blue);
+        }
+
+        tr:nth-child(even) { background-color: #fafbfc; }
+
+        .email-example {
+            background: #fdfdfd;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            position: relative;
+        }
+
+        .email-header {
+            color: #555;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+        }
+
+        .error-msg {
+            background: #ffebe6;
+            color: #bf2600;
+            padding: 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 25px;
+            outline: none;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="toolbar">
+        <a href="index.html" class="nav-btn">
+            <i class="fas fa-home"></i> Home
+        </a>
+        <button class="nav-btn" onclick="window.location.reload()">
+            <i class="fas fa-sync-alt"></i> Refresh Page
+        </button>
+    </div>
+
+    <header>
+        <h1 style="margin:0;">WebRev Failures Handling</h1>
+        <p>Operational guide for identifying and managing WebRev process failures.</p>
+    </header>
+
+    <input type="text" id="searchInput" class="search-box" onkeyup="filterContent()" placeholder="Search failure type or action...">
+
+    <div class="content-card">
+        <h2><i class="fas fa-list-ol"></i> Instructions</h2>
+        <div class="instruction-step">1. Email is sent to operations team with failure description.</div>
+        <div class="instruction-step">2. Identify what kind of failure occurred.</div>
+        <div class="instruction-step">3. Follow below guide for handling failure.</div>
+    </div>
+
+    <div class="content-card">
+        <h2><i class="fas fa-exclamation-triangle"></i> Failure Types & Actions</h2>
+        <table id="failureTable">
+            <thead>
+                <tr>
+                    <th>Type of Failure</th>
+                    <th>Required Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><b>Creation of new booking with supplier fails</b></td>
+                    <td>Original booking needs to be checked if all ok and make sure no other booking was created (neither shell or any similar).</td>
+                </tr>
+                <tr>
+                    <td><b>Cancellation of new booking in case of price validation failure</b></td>
+                    <td>Original booking number needs to be checked and to cancel the new booking.</td>
+                </tr>
+                <tr>
+                    <td><b>Cancellation of original booking failure</b></td>
+                    <td>To cancel the new booking and leave the original untouched (as at this stage bookings are identical but have 2 different bkg refs).</td>
+                </tr>
+                <tr>
+                    <td><b>Linking of the bookings failure</b></td>
+                    <td>To check with customer and supplier if they have the reservation correctly according to the original booking then to cancel the new booking.</td>
+                </tr>
+                <tr>
+                    <td><b>Fatal Error</b></td>
+                    <td>To check with customer and supplier if they have the reservation correctly according to the original booking and in case new booking exists then to cancel the new booking.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="content-card">
+        <h2><i class="fas fa-envelope"></i> Email Example</h2>
+        <div class="email-example">
+            <div class="email-header">
+                <b>From:</b> Dotw Support &lt;dotw_support@dotwconnect.com&gt;<br>
+                <b>Sent:</b> Wednesday, November 15, 2023 3:43 AM<br>
+                <b>Subject:</b> WebRev Failure for HTL-WBD-468574075
+            </div>
+            <div class="error-msg">
+                The following error occurred while trying to rebook: Could not cancel initial booking 468574075. Check: 1700012621115424
+            </div>
+            <p>
+                <b>Initial Booking Code:</b> HTL-WBD-468574075<br>
+                <b>Initial Booking Payable Amount:</b> 161.6000 EUR - Euro<br><br>
+                <b>New Booking Code:</b> HTL-WBD-482509585<br>
+                <b>New Booking Payable Amount:</b> 149.6000 EUR - Euro
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function filterContent() {
+        let input = document.getElementById('searchInput').value.toLowerCase();
+        let table = document.getElementById('failureTable');
+        let tr = table.getElementsByTagName('tr');
+
+        for (let i = 1; i < tr.length; i++) {
+            let text = tr[i].innerText.toLowerCase();
+            tr[i].style.display = text.includes(input) ? "" : "none";
+        }
+    }
+</script>
+
+</body>
+</html>
