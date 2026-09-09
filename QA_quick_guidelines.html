@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QA Rules – Agent Actions</title>
+
+<style>
+/* ===== Body / Mountain Premium Background ===== */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+
+  background:
+    linear-gradient(
+      rgba(255, 255, 255, 0.6),
+      rgba(255, 255, 255, 0.6)
+    ),
+    url("https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260")
+    no-repeat center center fixed;
+
+  background-size: cover;
+}
+
+/* ===== Header ===== */
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.homeBtn, .backBtn {
+  background: #e60000;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 25px;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.homeBtn:hover { background: #b30000; }
+.backBtn { background: #34495e; }
+.backBtn:hover { background: #2c3e50; }
+
+/* ===== Title ===== */
+h1 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 25px;
+}
+
+/* ===== Steps Container ===== */
+.steps {
+  max-width: 900px;
+  margin: auto;
+}
+
+/* ===== Step Card ===== */
+.step {
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 12px;
+  margin-bottom: 18px;
+  border-left: 6px solid #3498db;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  backdrop-filter: blur(3px);
+  overflow: hidden;
+  transition: 0.3s;
+}
+
+/* ===== Step Header ===== */
+.stepHeader {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  cursor: pointer;
+  background: #ecf3fa;
+  transition: 0.3s;
+}
+
+.stepHeader:hover {
+  background: #dde9f5;
+}
+
+.icon {
+  font-size: 26px;
+}
+
+.stepHeader h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #2c3e50;
+}
+
+/* ===== Step Content ===== */
+.stepContent {
+  display: none;
+  padding: 16px 20px;
+  color: #333;
+}
+
+/* ===== Info Boxes ===== */
+.success {
+  background: #eafaf1;
+  border-left: 6px solid #2ecc71;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+.warning {
+  background: #fdecea;
+  border-left: 6px solid #e74c3c;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+.info {
+  background: #fff9e6;
+  border-left: 6px solid #f1c40f;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+.example {
+  background: #eef2f7;
+  border-left: 6px solid #7f8c8d;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+/* ===== Active Step ===== */
+.step.active .stepContent {
+  display: block;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== Header ===== -->
+<div class="header">
+  <a href="index.html" class="homeBtn">🏠 Home</a>
+  <a href="javascript:history.back()" class="backBtn">⬅ Back</a>
+</div>
+
+<h1>QA Rules – Agent Actions</h1>
+
+<div class="steps">
+
+<!-- STEP 1 -->
+<div class="step">
+  <div class="stepHeader">
+    <div class="icon">📞</div>
+    <h2>Step 1: Take Action on Any Call</h2>
+  </div>
+  <div class="stepContent">
+    <p>An action must be taken anyway to make the call time worth it.</p>
+    <div class="example">
+      📌 Example: If a client calls for any request, the agent should either send an email (if not urgent) or call the provider (if urgent).
+    </div>
+  </div>
+</div>
+
+<!-- STEP 2 -->
+<div class="step">
+  <div class="stepHeader">
+    <div class="icon">⚡</div>
+    <h2>Step 2: Calls Take Priority Over Tickets</h2>
+  </div>
+  <div class="stepContent">
+    <p>The call has priority over the ticket, even if the ticket owner is available.</p>
+    <div class="example">
+      📌 Example: Client calls regarding a new ticket → the agent focuses on the call first.
+    </div>
+  </div>
+</div>
+
+<!-- STEP 3 -->
+<div class="step">
+  <div class="stepHeader">
+    <div class="icon">✉️</div>
+    <h2>Step 3: Client Requests</h2>
+  </div>
+  <div class="stepContent">
+    <ul>
+      <li>If request is urgent or pending → call hotel/provider and keep ticket under owner’s name</li>
+      <li>If not urgent → send email to hotel/provider, keep ticket under owner’s name</li>
+      <li>Reply to client with provided info and add clear notes on ticket</li>
+    </ul>
+    <div class="example">
+      📌 Example: Client calls for tomorrow's arrival → email + phone call to hotel to resolve ASAP.
+    </div>
+  </div>
+</div>
+
+<!-- STEP 4 -->
+<div class="step">
+  <div class="stepHeader">
+    <div class="icon">🏨</div>
+    <h2>Step 4: FOC Approval Checks</h2>
+  </div>
+  <div class="stepContent">
+    <ul>
+      <li>If client says hotel approved FOC and it's DC/CM/Dynamic → agent contacts hotel to confirm, even if assigned to another agent</li>
+      <li>If it's TP booking → agent sends email to TP to confirm, inform client about response delay</li>
+    </ul>
+    <div class="example">
+      📌 Example: Client mentions hotel approved FOC → agent calls hotel to confirm before updating ticket.
+    </div>
+  </div>
+</div>
+
+<!-- STEP 5 -->
+<div class="step">
+  <div class="stepHeader">
+    <div class="icon">⏳</div>
+    <h2>Step 5: Pending Requests >5 Days</h2>
+  </div>
+  <div class="stepContent">
+    <p>Any request pending for over 5 days, even if not urgent → agent should call hotel/provider or send follow-up email.</p>
+    <div class="example">
+      📌 Example: Ticket pending 6 days → agent calls hotel to push for updates, then emails client.
+    </div>
+  </div>
+</div>
+
+<!-- STEP 6 -->
+<div class="step">
+  <div class="stepHeader">
+    <div class="icon">📋</div>
+    <h2>Step 6: Cannot Reach Hotel/Provider</h2>
+  </div>
+  <div class="stepContent">
+    <p>Even if the hotel/provider is unreachable, take action by email and keep client informed.</p>
+    <div class="example">
+      📌 Example: No answer from hotel → send email chasing update, notify client about follow-up.
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+// Expand / Collapse Steps
+document.querySelectorAll(".stepHeader").forEach(header => {
+  header.addEventListener("click", () => {
+    header.parentElement.classList.toggle("active");
+  });
+});
+</script>
+
+</body>
+</html>

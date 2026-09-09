@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saudia DMC</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{
+  --bg:#f8f9fa;
+  --card:#fff;
+  --text:#222;
+  --border:#ddd;
+  --primary:#0d6efd;
+}
+body.dark{
+  --bg:#121212;
+  --card:#1e1e1e;
+  --text:#f1f1f1;
+  --border:#333;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:"Segoe UI",Arial;
+  background:var(--bg);
+  color:var(--text);
+}
+.container{
+  max-width:1300px;
+  margin:auto;
+  padding:20px;
+}
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  flex-wrap:wrap;
+}
+.search-box{
+  position:relative;
+}
+.search-box input{
+  width:280px;
+  padding:10px 35px 10px 12px;
+  border:1px solid var(--border);
+  border-radius:6px;
+  background:var(--card);
+  color:var(--text);
+}
+.search-box i{
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
+}
+.actions{
+  display:flex;
+  gap:15px;
+  font-size:20px;
+}
+.actions i{
+  cursor:pointer;
+  color:var(--primary);
+}
+.home-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: red;
+  border-radius: 6px;
+  text-decoration: none;
+}
+.home-btn i {
+  color: white;
+  font-size: 20px;
+}
+.table-wrapper{
+  margin-top:15px;
+  background:var(--card);
+  border-radius:8px;
+  overflow-x:auto;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+}
+th,td{
+  padding:10px;
+  border-bottom:1px solid var(--border);
+  text-align:left;
+}
+th{
+  background:rgba(0,0,0,.03);
+  cursor:pointer;
+}
+tr:hover{
+  background:rgba(0,0,0,.04);
+}
+a{
+  color:var(--primary);
+  text-decoration:none;
+}
+.empty{color:#888;font-style:italic}
+.pagination{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-top:15px;
+}
+.pagination button{
+  padding:6px 12px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  cursor:pointer;
+}
+.pagination button.active{
+  background:var(--primary);
+  color:#fff;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <div class="search-box">
+    <input id="search" placeholder="Search suppliers, email, phone...">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </div>
+
+  <div class="actions">
+    <a href="#" class="home-btn" title="Home" onclick="goHome()"><i class="fa-solid fa-house"></i></a>
+    <i class="fa-solid fa-moon" title="Dark mode" onclick="toggleTheme()"></i>
+  </div>
+</header>
+
+<div class="table-wrapper">
+<table>
+<thead>
+<tr>
+  <th onclick="sortBy('supplier')">Supplier</th>
+  <th onclick="sortBy('contact')">Contact</th>
+  <th onclick="sortBy('email')">Email</th>
+  <th onclick="sortBy('phone')">Phone</th>
+</tr>
+</thead>
+<tbody id="tbody"></tbody>
+</table>
+</div>
+
+<div class="pagination" id="pagination"></div>
+
+</div>
+
+<script>
+const data = [
+  {supplier:"Easy Umrah", contact:"Rabeh Mousa", email:"reservations@easyumrah.com", phone:"966566966700"},
+  {supplier:"Arkan AL Motamer", contact:"Eslam Kotb", email:"Eslam@arkaanalmotamer.com", phone:"201092163231"},
+  {supplier:"MyHotels", contact:"Ahmed AL Saholy", email:"Extranet2@MyHotels.SA", phone:"966567777798"},
+  {supplier:"AL Saeh Hotels", contact:"Mohamed Eissa", email:"ota@alsaehhotels.com", phone:"966568003523"},
+  {supplier:"Sedra International Company", contact:"Noha Ghannam", email:"Res@sedra-travel.com", phone:"966582593877"},
+  {supplier:"East Pearl", contact:"Sultan Wasi", email:"reservations@east-pearl.com", phone:"966592496549"},
+  {supplier:"Deyar Makkah", contact:"Mohamed AL Samahy", email:"Online@deyaarmakkah.com", phone:"966548888206"},
+  {supplier:"Golden Rowaa", contact:"Hasan Aslam", email:"booking@rowaa.ltd", phone:"966597242741"},
+  {supplier:"ASKANT TRAVEL", contact:"Hamdy Mohammed", email:"info@asscant.com", phone:"966564183144"},
+  {supplier:"Samayaa Travel", contact:"Islam Enany", email:"Islam.enany@samayaa.net", phone:"966560455523"},
+  {supplier:"Astonalhijaz", contact:"Mohammed Essam", email:"Ota@astonalhijaz.sa", phone:"966544901612"},
+  {supplier:"BND HOSPITALITY", contact:"seref.demiralp", email:"reservation@bndhospitality.com", phone:"905327084744"},
+  {supplier:"Golden Tawaf", contact:"Mohamed sami", email:"m.sami@tawaf-sa.com", phone:"966566457274"},
+  {supplier:"Nasamat Travel", contact:"Atef Samir", email:"reservation@nasamat-travel.com", phone:"966596685465"},
+  {supplier:"Wosol Supplier", contact:"Mohamed Fathy", email:"Oualaalou@wosolgroup.com", phone:"966561186089"},
+  {supplier:"ALRait AL Khair", contact:"Mohamed Wagdy", email:"m.wagdy@raitalkhair.com", phone:"966541949090"},
+  {supplier:"ZIYARA", contact:"Said Zayira", email:"contracts@ziyarasa.com", phone:"966597219046"},
+  {supplier:"Diyar Ul Bait", contact:"Hisham Alhadi", email:"reservations@diyarulbait.com", phone:"966569043468"},
+  {supplier:"United Attaya Travel", contact:"Amal", email:"info@attayatravel.com", phone:"966549315564"},
+  {supplier:"Al Mashrabia Hotel", contact:"Samir Helmy", email:"info@almashrabia.com", phone:"966555123456"},
+  {supplier:"Riyadh Tours", contact:"Faisal Al Saud", email:"contact@riyadhtours.com", phone:"966500987654"},
+  {supplier:"Desert Safari Co.", contact:"Ahmed Al Farsi", email:"bookings@desertsafari.com", phone:"966511223344"},
+  {supplier:"Mecca Travel", contact:"Omar Saeed", email:"info@meccatravel.com", phone:"966522334455"},
+  {supplier:"Medina Lodges", contact:"Huda Al Anzi", email:"reservations@medinalodges.com", phone:"966533445566"}
+];
+
+const rowsPerPage = 10;
+let currentPage = 1;
+let currentData = [...data];
+let sortDir = 1;
+
+const tbody = document.getElementById("tbody");
+const pagination = document.getElementById("pagination");
+const search = document.getElementById("search");
+
+function createCell(value,type){
+  if(!value) return `<span class="empty">—</span>`;
+  if(type==="email") return `<a href="mailto:${value}">${value}</a>`;
+  if(type==="phone") return `<a href="tel:${value}">${value}</a>`;
+  return value;
+}
+
+function render(){
+  const start = (currentPage-1)*rowsPerPage;
+  const pageData = currentData.slice(start,start+rowsPerPage);
+  tbody.innerHTML = pageData.map(r=>`
+    <tr>
+      <td>${r.supplier}</td>
+      <td>${r.contact}</td>
+      <td>${createCell(r.email,"email")}</td>
+      <td>${createCell(r.phone,"phone")}</td>
+    </tr>`).join("");
+  renderPagination();
+}
+
+function renderPagination(){
+  pagination.innerHTML="";
+  const pages = Math.ceil(currentData.length / rowsPerPage);
+  for(let i=1;i<=pages;i++){
+    pagination.innerHTML+=`
+      <button class="${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+  }
+}
+
+function goPage(p){
+  currentPage=p;
+  render();
+}
+
+search.oninput=()=>{
+  const v=search.value.toLowerCase();
+  currentData = data.filter(r =>
+    Object.values(r).join(" ").toLowerCase().includes(v)
+  );
+  currentPage=1;
+  render();
+};
+
+function sortBy(key){
+  sortDir*=-1;
+  currentData.sort((a,b)=>
+    a[key].localeCompare(b[key]) * sortDir
+  );
+  render();
+}
+
+function toggleTheme(){
+  document.body.classList.toggle("dark");
+}
+
+// الذهاب للصفحة الرئيسية
+function goHome(){
+  window.location.href = "index.html"; // ضع هنا رابط صفحتك الرئيسية
+}
+
+render();
+</script>
+
+</body>
+</html>
+

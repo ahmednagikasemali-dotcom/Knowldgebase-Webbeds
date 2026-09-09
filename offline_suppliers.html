@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Travel Contacts</title>
+<style>
+<script>
+const searchInput = document.getElementById('searchInput');
+const table = document.getElementById('destinationsTable');
+const rows = table.getElementsByTagName('tr');
+
+searchInput.addEventListener('input', function() {
+    const query = this.value.toLowerCase();
+
+    // إزالة أي تمييز سابق
+    for (let i = 1; i < rows.length; i++) {
+        rows[i].style.backgroundColor = '';
+    }
+
+    if (query === '') return;
+
+    // البحث داخل العمود الأول فقط (Destination)
+    for (let i = 1; i < rows.length; i++) {
+        const cell = rows[i].getElementsByTagName('td')[0];
+        if (cell.textContent.toLowerCase().includes(query)) {
+            // تمييز الصف
+            rows[i].style.backgroundColor = '#ffff99';
+            // تمرير الصفحة للصف
+            rows[i].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            break; // تمييز أول نتيجة فقط
+        }
+    }
+});
+</script>
+
+  body {
+    font-family: Arial, sans-serif;
+
+    background-color: #f5f5f5;
+    padding: 20px;
+  }
+
+.excel-icon {
+    position: fixed;       /* أيقونة ثابتة على الشاشة */
+    top: 20px;             /* 20 بكسل من أعلى الصفحة */
+    right: 20px;           /* ضعها على اليمين بدل اليسار */
+    background-color: #217346; /* اللون الأخضر الخاص بـ Excel */
+    color: white;
+    padding: 12px 14px;
+    font-size: 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    transition: background-color 0.3s, transform 0.3s;
+    z-index: 1000;         /* لتكون فوق العناصر الأخرى */
+}
+
+.excel-icon:hover {
+    background-color: #14532d; /* لون أغمق عند المرور */
+    transform: scale(1.1);
+}
+
+  h1 {
+    text-align: center;
+    color: #2c3e50;
+  }
+  #searchContainer {
+    margin: 20px 0;
+    text-align: center;
+  }
+  #searchInput {
+    width: 400px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #333;
+  }
+  #infoIcon {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    background-color: #3498db;
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 35px;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  #infoBox {
+    display: none;
+    position: absolute;
+    top: 80px;
+    right: 20px;
+    width: 320px;
+    background: #fff;
+    border: 2px solid #3498db;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    font-size: 14px;
+    z-index: 1000;
+  }
+  #closeInfo {
+    cursor: pointer;
+    color: red;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+/* أيقونة الصفحة الرئيسية */
+.home-icon {
+    position: fixed;      /* ثابت على الشاشة */
+    top: 20px;            /* من أعلى الصفحة */
+    left: 20px;           /* من اليسار */
+    background-color: #3498db;
+    color: white;
+    padding: 16px 18px;   /* حجم أكبر حول الرمز */
+    font-size: 28px;      /* حجم أكبر للرمز */
+    border-radius: 50%;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    transition: background-color 0.3s, transform 0.3s;
+    z-index: 1000;
+}
+
+.home-icon:hover {
+    background-color: #2980b9;
+    transform: scale(1.1);
+}
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  th, td {
+    padding: 12px;
+    border: 1px solid #ccc;
+    vertical-align: top;
+    text-align: left;
+  }
+  th {
+    background-color: #3498db;
+    color: #fff;
+  }
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+</style>
+
+</head>
+<body>
+
+<!-- أيقونة الصفحة الرئيسية -->
+<a href="index.html" class="home-icon" title="العودة للصفحة الرئيسية">🏠</a>
+
+<h1>Travel Contacts</h1>
+
+<!-- أيقونة تحميل ملف Excel -->
+<a href="Updated Offline Suppliers.xlsx" download class="excel-icon" title="تحميل ملف Excel">📊</a>
+
+<div id="searchContainer">
+  <input type="text" id="searchInput" placeholder="ابحث عن Destination...">
+</div>
+
+
+<div id="infoBox">
+  <div id="closeInfo" onclick="toggleInfo()">✖ Close</div>
+  <p>This table contains travel suppliers, contacts, emails, phone numbers, and notes for easy reference.</p>
+</div>
+
+<table id="contactsTable">
+  <thead>
+    <tr>
+      <th>Destination</th>
+      <th>Supplier</th>
+      <th>Contact Person / Email</th>
+      <th>Email</th>
+      <th>Phone Number</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- AUSTRALIA -->
+    <tr>
+      <td>AUSTRALIA</td>
+      <td>Mr. Wael</td>
+      <td>wael@lawand.com</td>
+      <td>reservations@lawand.com</td>
+      <td>mobile +971.55.4787860 / landline +971.4.2958688</td>
+      <td></td>
+    </tr>
+
+    <!-- ARGENTINA -->
+    <tr>
+      <td rowspan="2">ARGENTINA</td>
+      <td>Darshana Manglani</td>
+      <td></td>
+      <td>connectwithus@phoenixinternational.me</td>
+      <td>mobile +97150 764 1835 / landline +9714 282 7274</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Turstin Group</td>
+      <td></td>
+      <td>info@turstingroup.com & gm@turstingroup.com & ismail@turstin.com</td>
+      <td></td>
+      <td></td>
+    </tr>
+
+    <!-- ARMENIA -->
+    <tr>
+      <td rowspan="3">ARMANIA</td>
+      <td>Armenia Travel</td>
+      <td>Aida Avagyan</td>
+      <td>hotel_reservation@armeniatrael.am</td>
+      <td>Phone: +374 10 563 667</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Armenia Travel</td>
+      <td></td>
+      <td>aida.avagyan@armeniatravel.am</td>
+      <td>Mob: +374 94 611 799; Fax: +374 77 526 106</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Tour Advice Armenia</td>
+      <td>Artak vetisyan</td>
+      <td>artak@toursarmenia.com & travel@touradvice.am</td>
+      <td>T +374 10 566 022</td>
+      <td>M +374 96 566 022</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>Alisa travel</td>
+      <td>Ani Manukyan</td>
+      <td>alisa.travel@outlook.com</td>
+      <td>Mob.: +374 93395141</td>
+      <td></td>
+    </tr>
+
+    <!-- AUSTRIA -->
+    <tr>
+      <td rowspan="4">AUSTRIA</td>
+      <td>EURONET</td>
+      <td>Sabrina Mischinger</td>
+      <td>salzburg@euronet.at</td>
+      <td>T : +43-66 2877 111 / M : +43 -66 4260 2489</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>MEETING EUROPE CETRALE</td>
+      <td>Michal Sarkany</td>
+      <td></td>
+      <td>T: +421915235866</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Oceandusk europe</td>
+      <td></td>
+      <td>europe@oceandusk.travel</td>
+      <td>+44(0)77 9454 9359</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Emad Tours</td>
+      <td>Raymond Viego</td>
+      <td>emadtours@emirates.net.ae</td>
+      <td>+971 6 7471767</td>
+      <td></td>
+    <tr>
+  <td rowspan="4">Azerbaijan</td>
+  <td></td>
+  <td></td>
+  <td>info@ag-travel.com & inbound@ag-travel.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td></td>
+  <td>contact@tripsbaku.com & incoming@tripsbaku.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td>Valley of Tourism</td>
+  <td></td>
+  <td>online@vot.com.tr</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td>Start Travel</td>
+  <td></td>
+  <td>nadir@starttravel.az & said@starttravel.az & zumrud@starttravel.az & farid.m@starttravel.az</td>
+  <td>+99450 247 5494</td>
+  <td></td>
+<tr>
+  <td>Bahrain</td>
+  <td>Farhat Tours</td>
+  <td></td>
+  <td>bahrain@farhat-tours.com & travel1@farhat-tours.com & book@farhat-tours.com</td>
+  <td>97336310319</td>
+  <td></td>
+</tr>
+<tr>
+  <td>BRATISLAVIA</td>
+  <td>MEETING EUROPE CETRALE</td>
+  <td>Michal Sarkany</td>
+  <td>michal@meetig-ec.com</td>
+  <td>T: +421915235866</td>
+  <td></td>
+</tr>
+<tr>
+  <td>BOLIVIA</td>
+  <td>Darshana Manglani</td>
+  <td>Darshana Manglani</td>
+  <td>connectwithus@phoenixinternational.me</td>
+  <td>mobile +97150 764 1835   landline +9714 282 7274</td>
+  <td>info@signaturedmc.com</td>
+</tr>
+<tr>
+  <td>BRAZIL</td>
+  <td>Darshana Manglani</td>
+  <td>Darshana Manglani</td>
+  <td>connectwithus@phoenixinternational.me</td>
+  <td>mobile +97150 764 1835   landline +9714 282 7274</td>
+  <td>lilly@bitourism.com</td>
+</tr>
+<tr>
+  <td></td>
+  <td>Ada Tours</td>
+  <td></td>
+  <td>info@adatours.com & olga@adatours.com</td>
+  <td></td>
+  <td></td>
+<tr>
+  <td>BOSNIA</td>
+  <td>Nikaia</td>
+  <td>Borut Dubrovič</td>
+  <td>borut@nikaia.si &</td>
+  <td>+386 14305426</td>
+  <td>www.bto.ba</td>
+</tr>
+<tr>
+  <td></td>
+  <td>Valley of Tourism</td>
+  <td></td>
+  <td>egl</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td>CANADA</td>
+  <td></td>
+  <td></td>
+  <td>info@cantrav.com</td>
+  <td>T +16043967090</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Mazda Travel Inc.</td>
+  <td>Santosh Kamath</td>
+  <td>info@mazdatravel.com</td>
+  <td>+1-604-8887845</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Sara</td>
+  <td></td>
+  <td>sara@mail.luxuryretreats.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td>CARIBBEAN ISLANDS</td>
+  <td>Darshana Manglani</td>
+  <td>Darshana Manglani</td>
+  <td>connectwithus@phoenixinternational.me</td>
+  <td>mobile +97150 764 1835   landline +9714 282 7274</td>
+  <td>reservations@suntourscaribbean.com</td>
+</tr>
+<tr>
+  <td>CHILIE</td>
+  <td>Darshana Manglani</td>
+  <td>Darshana Manglani</td>
+  <td>connectwithus@phoenixinternational.me</td>
+  <td>mobile +97150 764 1835   landline +9714 282 7274</td>
+  <td>info@htz.hr</td>
+</tr>
+<tr>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td>sales@adatours.com</td>
+  <td></td>
+  <td></td>
+<tr>
+  <td>COLOMBIA</td>
+  <td>Darshana Manglani</td>
+  <td>Darshana Manglani</td>
+  <td>connectwithus@phoenixinternational.me</td>
+  <td>mobile +97150 764 1835   landline +9714 282 7274</td>
+  <td>sales@adatours.com<br>info@htz.hr</td>
+</tr>
+<tr>
+  <td>CROATIA</td>
+  <td>Fourseasons travel</td>
+  <td></td>
+  <td>db@fourseasonstravel.eu</td>
+  <td>T +420 222 882 454</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Kompas Zagreb</td>
+  <td></td>
+  <td>tomislav.kero@kompas.hr</td>
+  <td>T +38514882507 & M +385914882510</td>
+  <td>sales@adatours.com & olga@adatours.com<br>info@htz.hr</td>
+</tr>
+<tr>
+  <td></td>
+  <td>Samer Fawzy l FST</td>
+  <td></td>
+  <td>sf@fourseasonstravel.eu</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td>CUBA</td>
+  <td>Darshana Manglani</td>
+  <td>Darshana Manglani</td>
+  <td>connectwithus@phoenixinternational.me</td>
+  <td>mobile +97150 764 1835   landline +9714 282 7274</td>
+  <td>sales@adatours.com<br>info@htz.hr</td>
+</tr>
+<tr>
+  <td>CYPRUS</td>
+  <td>CGM Holidays</td>
+  <td>Ehab Orfaly (Inbound / Outbound Travel Manager)</td>
+  <td>info@cgmholidays.com</td>
+  <td>35724254455<br>m:+971 055 11 73375</td>
+  <td></td>
+</tr>
+<tr>
+  <td>CZECH REPUBLIC</td>
+  <td>Fourseasons travel</td>
+  <td></td>
+  <td>db@fourseasonstravel.eu</td>
+  <td>T +420 222 882 454</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>MEETING EUROPE CETRALE</td>
+  <td>Michal Sarkany</td>
+  <td>michal@meetig-ec.com</td>
+  <td>T: +421915235866</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Prime Travel Agency</td>
+  <td></td>
+  <td>primetravel@primetravel.hu</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td>Dubai</td>
+  <td>Horizon Tours LLC</td>
+  <td>Rajat Gupta</td>
+  <td>tour@horizontours.ae & eliyaz@horizontours.ae</td>
+  <td>971-43972010 & 971-526935537</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Darina Holidays</td>
+  <td></td>
+  <td>mariam@darinaholidays.ae & reserve@darinaholidays.ae & reserve5@darinaholidays.ae</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>LEGEND LIMOUSINE L.L.C</td>
+  <td></td>
+  <td>omer@legend.limo & Info@legend.limo</td>
+  <td>97142989815 | T2: +97142989816</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>LeEnticing Global Tourism LLC</td>
+  <td>Rahil Lokku</td>
+  <td>anas@leenticing.ae & reservations@leenticing.ae & suppliersteam@leenticing.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Aoryx</td>
+  <td>Farah</td>
+  <td>sales@aoryx.ae & contracting8@aoryx.ae & reservations1@aoryx.ae</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Travellers Choise</td>
+  <td>Waqas Ahmed / Contracting Manager</td>
+  <td>reservations@travellerschoice.ae & sales2@travellerschoice.ae</td>
+  <td>971-508996855</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Dadabhai Travel</td>
+  <td></td>
+  <td>anurag@dadabhaitravel.ae</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>First Class Fleet Management</td>
+  <td>MARIANE JANDA</td>
+  <td>booking@uaechauffeur.com & booking@fcfleets.com & mariane@fcfleets.com</td>
+  <td>+971 56 869 3458</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Duvia Tourism LLC</td>
+  <td>Zeeshan Ahma</td>
+  <td>zeeshan@duviabookings.com</td>
+  <td>971 56 852 7257</td>
+  <td></td>
+<tr>
+  <td>EGYPT</td>
+  <td>Touring Club</td>
+  <td>Mrs. Hanan Beheiry</td>
+  <td>hanan.beheiry@tcegypt.com & Haytham.salem@tcegypt.com & Yasser.Kahly@Tcegypt.com</td>
+  <td>Mobile +20-100-3300001</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Egypt Express TVL</td>
+  <td>Randa</td>
+  <td>btb@egyptexpresstvl.com & info@mztourism.com</td>
+  <td>02 33057373</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Dana Booking</td>
+  <td>Randa</td>
+  <td>reservation@danabooking.online</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Guide Tours</td>
+  <td>Khaled</td>
+  <td>khaled.fouda@guide-tours.com & Guide@guide-tours.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Blue sky</td>
+  <td></td>
+  <td>MSelim@blueskygroup.net</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>STANDARD TOURS</td>
+  <td>Mrs. Mona Salah Eddin</td>
+  <td>mona.salah@standard-tours.net & Shimaa Gamal &lt;book@standard-tours.net&gt;</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Nicolas Tours</td>
+  <td>Monica</td>
+  <td>incoming@nicolastours.com & Contracting@nicolastours.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td>ECUADOR</td>
+  <td>Darshana Manglani</td>
+  <td>Darshana Manglani</td>
+  <td>connectwithus@phoenixinternational.me</td>
+  <td>mobile +97150 764 1835   landline +9714 282 7274</td>
+  <td></td>
+</tr>
+<tr>
+  <td>FRANCE</td>
+  <td>ESCALES INTERNATIONAL</td>
+  <td>Ms.Dima Hobeika</td>
+  <td>zeina.zein@escaleservice.com & eva.hamdan@escaleservice.com</td>
+  <td>T : +33 -1 4279 9927 / Mob:+33 -6 5023 2997</td>
+  <td>hatem.elsouki@escaleservice.com & batoul.mhanna@escaleservice.com<br>KSA Mob: 05 4855 8977</td>
+</tr>
+<tr>
+  <td></td>
+  <td>KTS</td>
+  <td>Adeline</td>
+  <td>adeline.fiani@ktsvoyages.fr & jean.fiani@ktstravel.com & incoming@ktsvoyages.fr</td>
+  <td>33142686810 & 0033142686808</td>
+  <td></td>
+</tr>
+<tr>
+  <td>GERMANY</td>
+  <td>Elinor GmbH Travel Services - Germany</td>
+  <td></td>
+  <td>incoming@elinortravel.com</td>
+  <td>Tel. +49 (0) 211 94210834<br>Fax +49 (0) 211 92417732<br>Mobil +49 (0) 152 53994914</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>MEETING EUROPE CETRALE</td>
+  <td>Michal Sarkany</td>
+  <td>michal@meetig-ec.com</td>
+  <td>T: +421915235866</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>JT Touristik</td>
+  <td>Omid Haghighat</td>
+  <td>o.haghighat@jt.de</td>
+  <td>T:004930887787718</td>
+  <td></td>
+<tr>
+  <td>GEORGIA</td>
+  <td>Voyager</td>
+  <td>Mariam Rochikashvili</td>
+  <td>Sopho.medzvelia@voyager.ge & marina.orekhova@voyager.ge</td>
+  <td>T - +995322400808 (909)</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td>Ana.eradze@voyager.ge & marisha.pkhovelishvili@voyager.ge & gcc.support@voyager.ge</td>
+  <td>M - 995599101156</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Valley of Tourism</td>
+  <td></td>
+  <td>online@vot.com.tr</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Eurolex Travel</td>
+  <td></td>
+  <td>info@eurolex.travel & reservation@eurolex.travel</td>
+  <td>+995 593 42 68 28</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Alisa travel</td>
+  <td>Ani Manukyan</td>
+  <td>alisa.travel@outlook.com</td>
+  <td>Mob.: +374 93395141</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Grata DMC</td>
+  <td></td>
+  <td>aleksandra@gratadmc.com</td>
+  <td></td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>GREECE</td>
+  <td>MTS Incoming</td>
+  <td>Dimitra I. Dimou</td>
+  <td>reservations.jtr@opentravelservice.gr</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Fay V.Screta - Destination Manager Cyclades</td>
+  <td></td>
+  <td>maysoun.alrabie@otsglobe.com & Panos.Filopoulos@mtsglobe.com & reservations.ath@mtsglobe.com & Pavlos.Gkorogias@otsglobe.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>GTL George Soultis - Ganymedes Tours LTD</td>
+  <td>Giorgos Soultis</td>
+  <td>marketing@ganymedes.gr & giorgos_soultis@ganymedes.gr</td>
+  <td>30 210 8640853</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Las Lomas</td>
+  <td>Marie</td>
+  <td>info@laslomasinmo.com & marie@laslomasinmo.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Greece Discoveries</td>
+  <td>Ghassan Jibril</td>
+  <td>g.jibril@greecediscoveries.com & info@greecediscoveries.com</td>
+  <td>30 69 75906674</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>HONG KONG</td>
+  <td>HS Travel International Company Limited</td>
+  <td>Kata Shum</td>
+  <td>katashum@hstvl.com & johnmong@hstvl.com</td>
+  <td>DID: (852) 2739 6100<br>Fax: (852) 8169 3223</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>CHINA</td>
+  <td>Unicorn Travel Management Ltd.</td>
+  <td></td>
+  <td>mktg@unicorntvl.com.hk</td>
+  <td>852-23126126</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>HUNGARY</td>
+  <td>Fourseasons travel</td>
+  <td></td>
+  <td>db@fourseasonstravel.eu</td>
+  <td>T +420 222 882 454</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>MEETING EUROPE CETRALE</td>
+  <td>Michal Sarkany</td>
+  <td>michal@meetig-ec.com</td>
+  <td>T: +421915235866</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Prime Travel Agency</td>
+  <td></td>
+  <td>primetravel@primetravel.hu</td>
+  <td></td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>ICELAND</td>
+  <td>Global hotel reservations</td>
+  <td>Shirin Ahadi</td>
+  <td>info@ghrb.ir</td>
+  <td>Tel: +98 (21) 88505002-4<br>Fax: +98 (21) 88757544</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>INDIA</td>
+  <td>Tamarind Global</td>
+  <td></td>
+  <td>vikramn@tamarindglobal.com & yogitas@tamarindglobal.com & angelk@tamarindglobal.com</td>
+  <td>Mobile: +91-9833771800<br>Direct: +91-22-66802539</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Harvey India</td>
+  <td>Chaitali Shah</td>
+  <td>chaitali@harveyindia.com</td>
+  <td>0091-22-43554322</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Harvey World Destinations Pvt. Ltd</td>
+  <td>Clarence Pereira</td>
+  <td>clarence@harveywd.com</td>
+  <td>9820263747</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Aamantaran Travel</td>
+  <td>Ravi Gupta</td>
+  <td>md@aamantaran.in & sushil@aamantaran.in</td>
+  <td>91 9350620417</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>INDONESIA</td>
+  <td>KCBJTours</td>
+  <td>Agustinus San</td>
+  <td>agustinus@kcbtours.com</td>
+  <td>Phone: +62.361.751517</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Asian Famous Tours</td>
+  <td>Pradeep Kumar</td>
+  <td>pradeep@asianfamoustours.com</td>
+  <td>T + 6012 926 3846 & T + 6581210444</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Tour East Indonesia</td>
+  <td>Samaritan Building</td>
+  <td>sales-bali@toureast.net</td>
+  <td>T (62) 361 237 782</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>EXOTIC BALI Destination, INDIAN, PAKISTANI, SRI LANKA & NEPALESE & MIDDLE EAST, ASIAN</td>
+  <td>Ngurah SUSRAMA – Managing Director</td>
+  <td>info@exoticbalitravel.com & susrama@gmail.com, operation2@exoticbalitravel.com, reservation@exoticbalitravel.com</td>
+  <td>62.8585 667 9427</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>IRELAND</td>
+  <td>Global hotel reservations</td>
+  <td>Shirin Ahadi</td>
+  <td>info@ghrb.ir</td>
+  <td>Tel: +98 (21) 88505002-4<br>Fax: +98 (21) 88757544</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>IRAN</td>
+  <td>Global hotel reservations</td>
+  <td>Shirin Ahadi</td>
+  <td>info@ghrb.ir</td>
+  <td>Tel: +98 (21) 88505002-4<br>Fax: +98 (21) 88757544</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>ITALY</td>
+  <td>BERTEL TRAVEL</td>
+  <td>Ms.Eleonora Bertuzzi</td>
+  <td>info@berteltravel.com</td>
+  <td>39 -347 462 9011 // 39 -2 655 2598/ -2 655 2870</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Mappamondo</td>
+  <td>Elena Ms.</td>
+  <td>incoming@mappamondo.com</td>
+  <td>+39-6-48789670</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Valley of Tourism</td>
+  <td></td>
+  <td>online@vot.com.tr</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>GREENSHUTTLEH24 Group SRL</td>
+  <td>Cordialità</td>
+  <td>info@greenshuttleh24.com</td>
+  <td>+39 334 2204383</td>
+  <td></td>
+<tr>
+  <td>JAPAN</td>
+  <td>JTB Japan</td>
+  <td>Ms.Kaneko</td>
+  <td>fit01@gmt.jtb.jp</td>
+  <td>T +81357965481</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>JTB Global Marketing & Travel Inc</td>
+  <td></td>
+  <td>kg01@gmt.jtb.jp & pat_fujimoto@ntaamerica.com</td>
+  <td>T (81) 3 5796 5430 & F (81) 3 5495 0684</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Tobu Top Tours Co., LTD.</td>
+  <td></td>
+  <td>japan_travel@tobutoptours.co.jp</td>
+  <td>+81 (3) 5348-2745</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Triangle Japan DMC Limited</td>
+  <td></td>
+  <td>group@trianglejapandmc.com & FIT@trianglejapandmc.com</td>
+  <td>+81 (3) 5155-3700</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Ayabex INC</td>
+  <td>Yang Helen (Ms.)</td>
+  <td>helen@ayabex.com & info@ayabex.com</td>
+  <td>81)6-6306-6515</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>MT Japan Travel</td>
+  <td></td>
+  <td>tour@muslimstraveljapan.com & taiga@muslimstraveljapan.com</td>
+  <td>81593770677</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>JORDAN</td>
+  <td>Dakkak tours</td>
+  <td>Suzan Awwad</td>
+  <td>sawwad@dakkak.com</td>
+  <td>T. +962 6 5601076 Ext: 144</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Royal Tours</td>
+  <td>Yasmeen</td>
+  <td>yasmeen.zaza@royaltours.com.jo & dmc@royaltours.com.jo & gm@royaltours.com.jo</td>
+  <td>Mobile: +962 796767976</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>KOREA</td>
+  <td>MorningStar Travel Co</td>
+  <td>Hope</td>
+  <td>hope821035997792@gmail.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Holidaylink DMC</td>
+  <td>Jeon Chunghee</td>
+  <td>joanne@holidaylink.co.kr</td>
+  <td>0082-2-755-2955</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Jane Tour</td>
+  <td></td>
+  <td>dmc@janetour.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>NNT&DMC</td>
+  <td>Jay Lee</td>
+  <td>korea@nntdmc.com</td>
+  <td>+82 2 6925 7487 & +82 10 7553 8159</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>Kuwait</td>
+  <td>KTS Travel</td>
+  <td></td>
+  <td>habib@kts-kuwait-tourism.com & kts@kts-kuwait-tourism.com & mayann@kts-kuwait-tourism.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>White Moon Cars</td>
+  <td></td>
+  <td>sherif@whitemoons.com</td>
+  <td>965) 50088860</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>Kenya</td>
+  <td>HTT HOLIDAYS & INCENTIVES</td>
+  <td>Najma Poona</td>
+  <td>najma@travelhtt.com</td>
+  <td></td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>LEBANON</td>
+  <td>Organized</td>
+  <td>Omar Khattab</td>
+  <td>o.khattab@organized-lb.com</td>
+  <td>T +96170948894</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>E booking center</td>
+  <td>Joe</td>
+  <td>joe@ebookingcenter.com & info@ebookingcenter.com & Mirna@ebookingcenter.com & res@ebookingcenter.com</td>
+  <td>00961 4 402 009</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Kurban</td>
+  <td>Ms Nadine</td>
+  <td>nadine.boutrous@kurbantravel.com</td>
+  <td>009611760500 D : 009611420603</td>
+  <td></td>
+<tr>
+  <td>Libya</td>
+  <td></td>
+  <td></td>
+  <td>a.almagdob@tripolisail.com & w.elayeb@tripolisail.com & Nuha Sherif <n.sherif@tripolisail.com></td>
+  <td></td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>MALDIVES</td>
+  <td>Aitken spence</td>
+  <td>Nuwan Wijesena</td>
+  <td>nuwan@aitkenspence.lk</td>
+  <td>00 94777 270555</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>CBS</td>
+  <td>Suthinun Phothong</td>
+  <td>inbound@cbstour.co.th</td>
+  <td>+66 2268 1280</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Alpha Maldives</td>
+  <td>Mari</td>
+  <td>reservations1@alphamaldives.com</td>
+  <td>+960 7 970267</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Inner Maldives</td>
+  <td></td>
+  <td>reservations@innermaldives.com & sales1@innermaldives.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Travel Lanka</td>
+  <td></td>
+  <td>booking1@travellankaconnection.com & satheesh@travellankaconnection</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Reollo Travel</td>
+  <td></td>
+  <td>reservations@reollo.com & javeed.ahmed@reollo.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Akqua sun</td>
+  <td></td>
+  <td>khurshid@akquasun.com & mahshook@akquasun.com & Maldives.ops5@akquasun.com; maldives.ops5@akquasun.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td>nabeell@classicdestinations.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>andeverywhere</td>
+  <td></td>
+  <td>product.male@andeverywhere.co; sujit@andeverywhere.co; gautam@andeverywhere.co; ejaz@andeverywhere.co; sales@andeverywhere.co; nishang@andeverywhere.co</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Capital Travel</td>
+  <td>Mr. Riffah CEO</td>
+  <td>ee@capitaltravel.com; ceo@capitaltravel.com & asia@capitaltravel.com & riffath@capitaltravel.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Travel Bullz</td>
+  <td>Mr. Kanwer Deep Singh, CEO</td>
+  <td>rohit@travelbullz.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Classic Destinations</td>
+  <td>Fahara Fallil</td>
+  <td>faharaf@classicdestinations.com</td>
+  <td>+94 77020569</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>MALAYSIA</td>
+  <td>Asian Famous Tours</td>
+  <td>Pradeep Kumar</td>
+  <td>pradeep@asianfamoustours.com</td>
+  <td>T + 6012 926 3846 / T + 6581210444</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>The Traveller</td>
+  <td>Zira Omar</td>
+  <td>resv2@thetraveller.com.my & resv5@thetraveller.com.my & journeys@thetraveller.com.my; products@thetraveller.com.my & amit@thetraveller.com.my</td>
+  <td>+601 2210386</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Universal Holidays</td>
+  <td>Ms. Zahira Tahir (CEO)</td>
+  <td>zahira@uhttravels.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Asian Trails Malaysia</td>
+  <td>Julien Collot</td>
+  <td>julien.collot@asiantrails.com.my & ravi@asiantrails.sg & khairul@asiantrails.sg & haida@asiantrails.sg</td>
+  <td></td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>MAURITIUS</td>
+  <td>Whey Holidays Mauritius</td>
+  <td>Anas Kazi</td>
+  <td>Info@wheyholidays.co.za // anas@wheyholidays.co.za</td>
+  <td>T +23057645550</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>white sands tour</td>
+  <td>Cathy (Marketing Manager)</td>
+  <td>marketing1@whitesand.mu</td>
+  <td>+230 605 1508</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Mautourco Ltd</td>
+  <td>Cathy Carcasse</td>
+  <td>cathyc@mautourco.com & nadineaj@mautourco.com & resasales@mautourco.com</td>
+  <td></td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>Morroco</td>
+  <td>Nuitee</td>
+  <td>Naveed Mushtaq</td>
+  <td>dmcmorocco@nuitee.com & operations@nuitee.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>JCI Tours</td>
+  <td>Ryahi Abdelhakim</td>
+  <td>h.ryahi@jcitours.com</td>
+  <td>212 661 11 39 19</td>
+  <td>sales@morocco-unlimited.com & fatima@morocco-unlimited.com</td>
+</tr>
+<tr>
+  <td></td>
+  <td>Amazing Group</td>
+  <td>Abderrahim elidrissi</td>
+  <td>a.benjelloun@amazingmorocco.com & bookings@amazingmorocco.com & rajaa@amazingmorocco.com</td>
+  <td></td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>Mozambique</td>
+  <td>Dana Tours</td>
+  <td>Edna Suleimangy</td>
+  <td>edna@danatours.com</td>
+  <td>258 21 418 144</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>New Zeland</td>
+  <td></td>
+  <td></td>
+  <td>tours@pdnz.co.nz & dave.headfirst@gmail.com & savanna@clearyak.co.nz & info@whakarewarewa.com & admin@footprintswaipoua.co.nz</td>
+  <td></td>
+  <td></td>
+<tr>
+  <td>OMAN</td>
+  <td>Mezoon DMC</td>
+  <td>Ginu Abrahim</td>
+  <td>ginu@mezooninternational.com</td>
+  <td>+968 24700318</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Old Muscat tourism</td>
+  <td></td>
+  <td>info@oldmuscattourism.com & sales@oldmuscattourism.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>quarantine pkg in oman</td>
+  <td></td>
+  <td>neeghat@tripsnstay.com</td>
+  <td></td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>Philippines</td>
+  <td>Intas Destination Management Inc</td>
+  <td>Teresita Henderson</td>
+  <td>teresita@intasdestinations.ph</td>
+  <td>63 920 916 7972</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Travelite Travel</td>
+  <td></td>
+  <td>matt.poonin@travelite.com.ph</td>
+  <td>6326338434</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>Qatar</td>
+  <td>Jnan tours</td>
+  <td></td>
+  <td>qatar@jnantours.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>World Avenue</td>
+  <td></td>
+  <td>ashkaf@worldavenues.biz & qatar@world-avenues.com & booking@worldavenues.biz</td>
+  <td></td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>RUSSIA</td>
+  <td>M.I travel group</td>
+  <td>Natalia Esayan</td>
+  <td>natalia@mitg.ru</td>
+  <td>M : +79168822085</td>
+  <td>group@ostrovok.ru & fit@ostrovok.ru +7916 126 85 93</td>
+</tr>
+<tr>
+  <td></td>
+  <td>Roam Around Travels</td>
+  <td>Syed Hussain</td>
+  <td>sales@roamaroundtravels.com</td>
+  <td></td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>Saudi Arabia</td>
+  <td>Fast Aviation</td>
+  <td></td>
+  <td>syed.meer@fastaviation.net & hany.tohamy@fastaviation.net & reservation@fastaviation.net</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Arkaan Tourism</td>
+  <td>Saif Jafar / Director of Sales & Marketing</td>
+  <td>saif@arkaantourism.com & saif@arkaanalmotamer.com</td>
+  <td>966 50 7099 565</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Mawasim Travel</td>
+  <td>Khalid Saad Al Kalashany / Sr Manager - Hajj & Umrah Fulfiment</td>
+  <td>khalid.saad@seera.sa & reservation.mawasim@seera.sa</td>
+  <td>966 555650924</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>East Pearl</td>
+  <td>Ahmed Zaki / Director of Markiting</td>
+  <td>A.zaki@east-pearl.com & info@east-pearl.com</td>
+  <td>966 597134322</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Shaden Al Ula</td>
+  <td></td>
+  <td>milka.petrushevska@seera.sa & kelly.langrick@discoversaudi.sa</td>
+  <td></td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>SEYCHELLES</td>
+  <td>Mason's Travels (Pty) Ltd</td>
+  <td>Hilda Camille</td>
+  <td>hcamille@masonstravel.com & mmoses@masonstravel.com</td>
+  <td>T +968 24700318</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Vision Voyages DMC (Pty) Ltd</td>
+  <td>Chamika Ariyasinghe</td>
+  <td>chamika@visionvoyages.sc</td>
+  <td>+248 432 3767</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>SINGAPORE</td>
+  <td>Yvonne Low</td>
+  <td></td>
+  <td>yvonne@thetraveller.sg</td>
+  <td>Tel +65 6225 2777 (Ext. 115) || Fax +65 6323 3033</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Director of Business Development (G.I.T/MICE Division)</td>
+  <td>Theresa Ho</td>
+  <td>Theresa@thetraveller.sg</td>
+  <td>Mobile: +65 9455 9640 || Tel +65 6225 2777 (Ext. 115) || Fax +65 6323 3033</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Asian Famous Tours</td>
+  <td>Pradeep Kumar</td>
+  <td>pradeep@asianfamoustours.com & inbound@incrediblevoyages.com & info@incrediblevoyages.com</td>
+  <td>T + 6012 926 3846 / T + 6581210444</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Universal Holidays</td>
+  <td>Ms. Zahira Tahir (CEO)</td>
+  <td>zahira@uhttravels.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Asian Trails Malaysia</td>
+  <td>Julien Collot</td>
+  <td>julien.collot@asiantrails.com.my & ravi@asiantrails.sg & khairul@asiantrails.sg & haida@asiantrails.sg</td>
+  <td></td>
+  <td></td>
+<tr>
+  <td>SLOVANIA</td>
+  <td>Palma</td>
+  <td></td>
+  <td>lea.stokuca@palma.si</td>
+  <td>T +38615133670</td>
+  <td>F +38612443695</td>
+</tr>
+<tr>
+  <td></td>
+  <td>Nikaia</td>
+  <td>Borut Dubrovič</td>
+  <td>borut@nikaia.si</td>
+  <td>+386 14305426</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>Slovakia (BRATISLAVA)</td>
+  <td></td>
+  <td></td>
+  <td>rezervacie_ind@spapiestany.sk</td>
+  <td></td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>SOUTH AFRICA</td>
+  <td>TAMRICH TOURS PTY (LTD)</td>
+  <td>Tedani</td>
+  <td>tendani@tamrich.com</td>
+  <td>Tel: +27 11 431.1000</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td></td>
+  <td>Sabine Wilken</td>
+  <td>sabine@tamrich.com</td>
+  <td>Fax: +27 11 678.7376</td>
+  <td>EMERGENCY CONTACT NUMBER: +27 79 789 4422</td>
+</tr>
+
+<tr>
+  <td>SPAIN</td>
+  <td>ACROSS SPAIN</td>
+  <td>marta ríos (director)</td>
+  <td>mgutierrez@across-spain.es & mrios@across-spain.es & ccreus@across-spain.es</td>
+  <td>+34-91-3605864</td>
+  <td>Fax: +34.91.523.35.90</td>
+</tr>
+<tr>
+  <td></td>
+  <td>JULIA TRAVEL</td>
+  <td>Szilvia Kovacs</td>
+  <td>aarnal@julia.net / incoming@juliatravel.com</td>
+  <td>34 91 559 9605 / 93 402 6900</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Click Online</td>
+  <td></td>
+  <td>ldelapena@clickonline.es</td>
+  <td>+34-91-6024300</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Turstin Group</td>
+  <td></td>
+  <td>info@turstingroup.com & gm@turstingroup.com</td>
+  <td></td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>SRI LANKA</td>
+  <td>Aitken spence</td>
+  <td>Nuwan Wijesena</td>
+  <td>nuwan@aitkenspence.lk</td>
+  <td>00 94777 270555</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>LANKA VACATIONS</td>
+  <td>Mrs. Farouk / Cherry</td>
+  <td>lankavac@slt.lk</td>
+  <td>94 -777 269 047 / -777 418 064</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Travel Lanka</td>
+  <td></td>
+  <td>booking1@travellankaconnection.com & satheesh@travellankaconnection.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Classic Destination</td>
+  <td>Fahara Fallil</td>
+  <td>faharaf@classicdestinations.com</td>
+  <td>M +94 76 0427908</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>Syechelles</td>
+  <td></td>
+  <td>Chami</td>
+  <td>chamika@luxurytravel.sc</td>
+  <td></td>
+  <td></td>
+</tr>
+
+<tr>
+  <td></td>
+  <td>Sunhotels</td>
+  <td></td>
+  <td>agent@sunhotels.com & groups@sunhotels.com & info@eventholiday.com & Transfer@sunhotels.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Methabook</td>
+  <td></td>
+  <td>customerservice@methabook.com & support@bookohotel.com</td>
+  <td></td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>SWITZERLAND</td>
+  <td>STC Switzerland Travel Centre AG</td>
+  <td>Lucia Filippone</td>
+  <td>touroperating@stc.ch</td>
+  <td>Phone +41 (0) 43 210 55 94</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Thomas Gessler & Dorothea Karl</td>
+  <td></td>
+  <td>dorothea.karl@stc.ch</td>
+  <td>Phone +41 (0)43 210 55 10 & 41 (0)78 779 27 08</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Delta Voyages</td>
+  <td>Jean-Daniel Ducret – Account Manager</td>
+  <td>jd.ducret@delta-voyages.ch</td>
+  <td>+41 22 731 3535</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Executive Travel Airport</td>
+  <td>Olivier Emch,- Managing Director</td>
+  <td>olivier.emch@e-travel.ch</td>
+  <td>+41 22 9298929</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Fert Travel</td>
+  <td>Laurent Cuennet – Account Manager</td>
+  <td>l.cuennet@fert.ch</td>
+  <td>+41 22 7304701</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Transcontinental</td>
+  <td>Patrick Vuille,- Director</td>
+  <td>patrick.vuille@transcontinental.ch</td>
+  <td>+41 22 9298929</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Gulf Service SA Limousine Service Geneva</td>
+  <td></td>
+  <td>gulfservice@gulfservice.ch & sales@slra.ch & swiss-luxury-apartments.ch</td>
+  <td>Phone +41 22 596 12 00</td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>TUNISIA</td>
+  <td>Select Travel</td>
+  <td>Semi</td>
+  <td>reservations@selecttraveltours.com & semi.tounsi@selectraveltours.com & ibrahim@omnialine.com</td>
+  <td>00216 71 848 100</td>
+  <td></td>
+<tr>
+  <td>THAILAND</td>
+  <td>DIETHELM TRAVEL</td>
+  <td>Sasilada</td>
+  <td>Sasilada.L@th.diethelmtravel.com</td>
+  <td>00662 -660 7101 / -660 7177</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>CBS</td>
+  <td>Suthinun Phothong</td>
+  <td>inbound@cbstour.co.th & me1@cbstour.co.th</td>
+  <td>+66 2268 1280</td>
+  <td>wan@cbstour.co.th &  inbound@cbstour.co.th & mice@cbstour.co.th</td>
+</tr>
+<tr>
+  <td></td>
+  <td>Prestige Holiday</td>
+  <td>Siddique Madamun</td>
+  <td>prestige@prestigeholiday.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Destination Asia</td>
+  <td>Rajesh Nair</td>
+  <td>rajeshnair@destination-asia.com</td>
+  <td></td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>TURKEY</td>
+  <td>Bita Tourism</td>
+  <td></td>
+  <td>bita@bitatourism.com.tr & bita3@bitatourism.com.tr</td>
+  <td>Mobile / Whatsapp 0090 535 721 60 50</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Valley of Tourism</td>
+  <td></td>
+  <td>online@vot.com.tr</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>PLAZA TRAVELS & TOURS</td>
+  <td>Mr.Musa/ Mr.Huseyin</td>
+  <td>hotels@plazatur.com/ engin@plazatour.com</td>
+  <td>0090 533 953 0348</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>HEYSEM TURIZM AND TRAVEL</td>
+  <td>Ufuk Maslamani</td>
+  <td>ufuk@heysem.com / info@heysem.com & info@heysem.com.tr</td>
+  <td>0090 212 533 3030</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>PERPAX TRAVEL</td>
+  <td>Kadriye/ Tanya/ Hakan/ Gozde</td>
+  <td>res1@perpaxtravel.com / res2@perpaxtravel.com</td>
+  <td>0090 542 550 1542 / 542 316 3699</td>
+  <td>/ res3@perpaxtravel.com/ res3@perpaxtravel.com /turabi@perpaxtravel.com</td>
+</tr>
+<tr>
+  <td></td>
+  <td>Vazelon tour</td>
+  <td>Serra AKYILDIZ</td>
+  <td>serra.akyildiz@vazelontour.com.tr & Seher.alp@vazelontour.com.tr</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Grand emin</td>
+  <td>Taner Gencer</td>
+  <td>info@grandemin.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Aneno Tour Turkey( Azerbaijan, North Cyprus, Egypt )</td>
+  <td></td>
+  <td>packageanenotour@gmail.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Travel Ideas</td>
+  <td>Aysegul Kose</td>
+  <td>aysegul@travelideas.com.tr</td>
+  <td>9.05331E+11</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Travelium</td>
+  <td>Babur</td>
+  <td>operations@travelium.com.tr; y.b.arslan@travelium.com.tr; t.derelioglu@travelium.com.tr</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Azad Tours</td>
+  <td>Mr. Syed Abbas CEO</td>
+  <td>syedabbas@azadtours.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>La Luz Tour</td>
+  <td>Dilber Dunk</td>
+  <td>info@laluztour.com</td>
+  <td>90 533 209 92 15</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>BellaVita – Artisans of Lifestyle</td>
+  <td>Elvan Dok</td>
+  <td>elvan@bvlstyle.com & melis@bvlstyle.com & concierge@bvlstyle.com</td>
+  <td>9.05455E+11</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Dorak Exclusive</td>
+  <td></td>
+  <td>beyza.turgay@dorakexclusive.com & renjith.thankappan@dorakexclusive.com & ela.aydin@dorakexclusive.com</td>
+  <td></td>
+  <td></td>
+</tr>
+
+<tr>
+  <td>UNITED KINGDOM</td>
+  <td>OCEAN DUSK</td>
+  <td></td>
+  <td>uk@oceandusk.travel</td>
+  <td>T +44 (0)20 7582 2233 | F +44 (0)20 7735 2800</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Chalo Holiday Limited</td>
+  <td>Mr. Rohit A. Jaiswal</td>
+  <td>Email : info@chaloholiday.com & reservations@chaloholidays.com</td>
+  <td>Tel : +44 (0) 2030049978</td>
+  <td>MSN: chaloholiday@hotmail.co.uk | Fax: +44 (0) 8007561288</td>
+</tr>
+<tr>
+  <td></td>
+  <td>Sal Tours</td>
+  <td>Miss Vicci Bell</td>
+  <td>Email: vbell@saltours.co.uk</td>
+  <td>Tel: +44 (0) 20 7724 7711</td>
+  <td>Ops : saltours@saltours.co.uk</td>
+</tr>
+<tr>
+  <td></td>
+  <td>Apartment stay</td>
+  <td>Simona Zelinkova</td>
+  <td>mail@apartmentstay.co.uk & govind@oceanduskgroup.com</td>
+  <td>44 (0)20 7724 4848</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Elevate Holidays</td>
+  <td>Varun Soni</td>
+  <td>res@elevatecorporate.com & sales@elevateholidays.com & sales1@elevateholidays.com & groups@elevateholidays.com & vsoni@elevatecorporate.com</td>
+  <td>+44 7404504223</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Dawn Travel</td>
+  <td></td>
+  <td>waseem@dawntravels.co.uk</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Travel Trick</td>
+  <td>Faiz</td>
+  <td>sales@traveltrick.co.uk</td>
+  <td></td>
+  <td></td>
+<tr>
+  <td>USA</td>
+  <td>AlliedTPro Inc.</td>
+  <td>Eric Sasmor</td>
+  <td>eric.sasmor@alliedtpro.com & giorgio.ghezzi@alliedtpro.com</td>
+  <td>T +1 (212) 596 1030</td>
+  <td>vipconcierge@alliedtpro.com & groups@alliedtpro.com</td>
+</tr>
+<tr>
+  <td></td>
+  <td>CTN TOURS</td>
+  <td>Ms.Effie/ Rachel</td>
+  <td>rachel@ctntours.com / etavares@ctjntours.com / ctn@ctntours.com</td>
+  <td>T : +1 -212 684 0001</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>DREAM WORLD TRAVELS</td>
+  <td>Sumeet & Radhika</td>
+  <td>res@dwtus.net/ CC to :sumeetgr@dreamworldtravels.com</td>
+  <td>T : +1 -803 464 6454 /-803 795 6990</td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>Tripedia Introduction</td>
+  <td></td>
+  <td>operations@tripedia.com & mehtap@tripedia.com</td>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <td></td>
+  <td>SEE USA Tours</td>
+  <td></td>
+  <td>hoteles@seeusatours.com & csmanager@seeusatours.com</td>
+  <td>212 944 4919</td>
+  <td>info@acrossborders.ae  & Akhil@dmci.ca</td>
+</tr>
+<tr>
+  <td></td>
+  <td>Getaroom</td>
+  <td></td>
+  <td>drodriguez@getaroom.com & jcala@getaroom.com & Customercare@getaroom.com</td>
+  <td></td>
+  <td></td>
+</tr>
+
+
+
+  </tbody>
+</table>
+
+<script>
+  function toggleInfo() {
+    const box = document.getElementById("infoBox");
+    box.style.display = box.style.display === "block" ? "none" : "block";
+  }
+
+  // Search functionality
+  const searchInput = document.getElementById("searchInput");
+  searchInput.addEventListener("input", function () {
+    const filter = this.value.toLowerCase();
+    const rows = document.querySelectorAll("#contactsTable tbody tr");
+    rows.forEach((row) => {
+      const text = row.textContent.toLowerCase();
+      row.style.display = text.includes(filter) ? "" : "none";
+    });
+  });
+</script>
+
+</body>
+</html>

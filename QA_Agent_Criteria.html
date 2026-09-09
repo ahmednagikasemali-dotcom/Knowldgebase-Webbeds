@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Evaluation – WebBeds</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 { 
+  color: #2c3e50; 
+  text-align: center; 
+  margin-top: 20px; 
+}
+
+.contentBox {
+  margin-top: 20px;
+}
+
+/* Accordion style */
+.accordion {
+  background-color: #e8f6f3;
+  color: #2c3e50;
+  cursor: pointer;
+  padding: 14px 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  font-size: 16px;
+  border-radius: 6px;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+
+.accordion.active {
+  background-color: #d0ece7;
+}
+
+.panel {
+  padding: 10px 18px;
+  display: none;
+  background-color: #fafafa;
+  margin-top: 5px;
+  border-left: 4px solid #3498db;
+  border-radius: 6px;
+}
+
+ul {
+  margin: 5px 0 10px 20px;
+}
+
+.note {
+  background: #e8f6f3;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 6px;
+  font-size: 14px;
+  display: none; /* hidden by default */
+}
+
+.warning {
+  background: #fce4e4;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Home button */
+#homeBtn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+#homeBtn .homeIcon {
+  width: 40px;
+  height: 40px;
+  background-color: red;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+}
+
+#homeBtn span {
+  font-weight: bold;
+  font-size: 18px;
+  color: #2c3e50;
+}
+
+/* Search box */
+#searchBox {
+  width: 100%;
+  padding: 12px 15px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-bottom: 15px;
+}
+</style>
+</head>
+<body>
+
+<div id="homeBtn" onclick="window.location.href='index.html'">
+  <div class="homeIcon">🏠</div>
+  <span>WebBeds</span>
+</div>
+
+<h1>Agent Evaluation Checklist – WebBeds</h1>
+
+<input type="text" id="searchBox" placeholder="Search questions or keywords...">
+
+<div class="contentBox">
+
+<!-- Softskill / Script Adherence -->
+<button class="accordion">Softskill / Script Adherence</button>
+<div class="panel">
+<ul>
+  <li>Did you greet the customer correctly within the first 10 seconds?
+    <div class="note">
+      📝 Script: "Thank you for calling WebBeds. My name is [xxx]. How can I help/assist you?"
+    </div>
+  </li>
+  <li>For transfer calls, did you acknowledge holding correctly?
+    <div class="note">
+      📝 Script: "Thank you for holding" or "Thank you for waiting" AND introduce yourself: "My name is [xxx]" or "You are through to [xxx]"
+    </div>
+  </li>
+  <li>Did you verify booking details early in the call (first 20%)?
+    <div class="note">
+      📝 Script: "To ensure I have the correct booking, can you please verify hotel/property name, guest name, travel date?"<br>
+      OR "Can I verify the booking details with you? May I have hotel name, guest name, arrival date?"
+    </div>
+  </li>
+  <li>Did you follow the On-Hold process correctly?
+    <div class="note">
+      📝 Steps: Ask client if okay to be on hold, thank after hold.<br>
+      Script: "Can I put/place you on hold?" or "Please hold" AND "Thank you for holding" or "Thank you for your patience"
+    </div>
+  </li>
+  <li>Did you perform a proper Warm Transfer with correct info and expectations?
+    <div class="note">
+      📝 Steps: Inform client transfer is needed, share verified booking, concern, collected info.<br>
+      Script Examples:<br>
+      "Hi Kristine, I’m going to transfer you to our Inresort team, where Darwin will assist you. Please hold."<br>
+      "Thank you for your patience, April. I’ll transfer you to Kathleen, who can resolve your issue. Please stay on the line."
+    </div>
+  </li>
+  <li>Did you show empathy, assurance, and proper acknowledgement?
+    <div class="note">
+      📝 Example Statements:<br>
+      Empathy: "I am sorry you are having this problem."<br>
+      "I realise how upsetting this must be."<br>
+      Assurance: "I'll be delighted to help you."<br>
+      "Don’t worry, you have the best person on the phone."<br>
+      Acknowledgement: "I want to make sure I fully understand your request…"
+    </div>
+  </li>
+  <li>Did you recap the customer's concern before closing?
+    <div class="note">
+      📝 Script: "To summarize, you want to modify the date from March 03-05, 2025 to May 16-18, 2025. Is this correct?"
+    </div>
+  </li>
+</ul>
+</div>
+
+<!-- Research / Documentation -->
+<button class="accordion">Research / Documentation</button>
+<div class="panel">
+<ul>
+  <li>Did you investigate all available resources?
+    <div class="note">
+      📝 Steps: Contact hotel/supplier/customer, check SM/CM/IT, review tickets, booking vouchers, hotel's website, WB platform, follow Freshdesk guidelines.
+    </div>
+  </li>
+  <li>Did you document all findings clearly?
+    <div class="note">
+      📝 Steps: Add complete notes in system/Freshdesk, update notes and tags, enter correct entries in Loss Tracker.
+    </div>
+  </li>
+  <li>Did you transfer the case to the correct folder/agent?
+    <div class="note">📝 Step: Identify customer location and send to correct agent/folder.</div>
+  </li>
+  <li>Did you provide accurate and clear information to hotel/customer?
+    <div class="note">📝 Step: Share necessary information according to issue need.</div>
+  </li>
+  <li>Did you endorse the case properly for the next agent?
+    <div class="note">📝 Step: Use notes and tags in Freshdesk to guide next agent.</div>
+  </li>
+</ul>
+</div>
+
+<!-- Outcome / Resolution -->
+<button class="accordion">Outcome / Resolution</button>
+<div class="panel">
+<ul>
+  <li>Did you exhaust all means to provide a resolution?
+    <div class="note">📝 Step: Collaborate with internal/external stakeholders. Avoid pushing back on client.</div>
+  </li>
+  <li>Did you process refund or compensation correctly?
+    <div class="note">📝 Step: Adjust rate correctly, inform supplier/customer about amount.</div>
+  </li>
+  <li>Did you follow cancellation/amendment process correctly?
+    <div class="note">📝 Step: Follow full guidelines in User Guide manual.</div>
+  </li>
+</ul>
+</div>
+
+<!-- Compliance / Auto Fail -->
+<button class="accordion">Compliance / Auto Fail</button>
+<div class="panel">
+<ul>
+  <li>Did you categorize and disposition the case/call correctly?
+    <div class="note">📝 Step: Ensure accurate categorization and call disposition.</div>
+  </li>
+  <li>Did you provide complete and accurate resolution?
+    <div class="note">📝 Step: Tailor resolution to customer concern.</div>
+  </li>
+  <li>Did you send emails/updates to the correct recipient?
+    <div class="note">📝 Step: Check email addresses before sending.</div>
+  </li>
+  <li>Did you use correct terminology for suppliers?
+    <div class="note">📝 Step: Use "hotel provider", "hotel partner", "partner" instead of generic terms.</div>
+  </li>
+  <li>Did you maintain professional communication?
+    <div class="note">📝 Step: Avoid rudeness, sarcasm, profanity; maintain appropriate tone.</div>
+  </li>
+</ul>
+</div>
+
+</div>
+
+<script>
+// Accordion functionality
+const acc = document.getElementsByClassName("accordion");
+for (let i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    const panel = this.nextElementSibling;
+    panel.style.display = panel.style.display === "block" ? "none" : "block";
+  });
+}
+
+// Toggle note visibility on li click
+const listItems = document.querySelectorAll("li");
+listItems.forEach(li => {
+  li.addEventListener("click", function(e) {
+    e.stopPropagation(); // prevent accordion toggle
+    // hide all other notes
+    document.querySelectorAll(".note").forEach(n => {
+      if (n !== this.querySelector(".note")) n.style.display = "none";
+    });
+    // toggle clicked note
+    const note = this.querySelector(".note");
+    if(note) {
+      note.style.display = note.style.display === "block" ? "none" : "block";
+    }
+  });
+});
+
+// Search functionality
+const searchBox = document.getElementById("searchBox");
+searchBox.addEventListener("input", function() {
+  const query = this.value.toLowerCase();
+  const panels = document.getElementsByClassName("panel");
+  for (let i = 0; i < panels.length; i++) {
+    const items = panels[i].getElementsByTagName("li");
+    let found = false;
+    for (let j = 0; j < items.length; j++) {
+      if (items[j].innerText.toLowerCase().includes(query)) {
+        items[j].style.display = "list-item";
+        found = true;
+      } else {
+        items[j].style.display = "none";
+        const note = items[j].querySelector(".note");
+        if(note) note.style.display = "none";
+      }
+    }
+    panels[i].style.display = found ? "block" : "none";
+    if (found) acc[i].classList.add("active"); else acc[i].classList.remove("active");
+  }
+});
+</script>
+
+</body>
+</html>

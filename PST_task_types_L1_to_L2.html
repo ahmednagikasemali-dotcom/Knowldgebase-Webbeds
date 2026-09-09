@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L1 to L2 PST Task Types - SOP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #0052cc;
+            --l2-red: #de350b;
+            --l1-green: #00875a;
+            --bg-light: #f4f5f7;
+            --text-dark: #172b4d;
+            --border-color: #dfe1e6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        /* Toolbar with 2 Icons */
+        .toolbar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(244, 245, 247, 0.9);
+            padding: 10px 0;
+        }
+
+        .nav-btn {
+            text-decoration: none;
+            background: white;
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: 8px;
+            color: var(--text-dark);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-blue);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        header {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            border-left: 10px solid var(--primary-blue);
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 30px;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        /* Content Sections */
+        .section-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        h2 { color: var(--primary-blue); border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: var(--l2-red); margin-top: 20px; font-size: 1.2rem; }
+
+        .logic-box {
+            background: #f0f7ff;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 5px solid var(--primary-blue);
+            margin-bottom: 15px;
+        }
+
+        .action-point {
+            background: #fff9db;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 10px 0;
+            border-left: 4px solid #fcc419;
+        }
+
+        .l2-transfer {
+            background: #ffebe6;
+            color: #bf2600;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
+        }
+
+        th { background: #f8f9fa; }
+
+        .exception-tag {
+            background: #eae6ff;
+            color: #403294;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="toolbar">
+        <a href="index.html" class="nav-btn">
+            <i class="fas fa-home"></i> Home
+        </a>
+        <button class="nav-btn" onclick="window.location.reload()">
+            <i class="fas fa-sync-alt"></i> Refresh
+        </button>
+    </div>
+
+    <header>
+        <h1 style="margin:0;">L1 to L2 PST Task Types</h1>
+        <p>Liability determination, Triaging process, and Escalation protocols.</p>
+    </header>
+
+    <input type="text" id="searchInput" class="search-box" onkeyup="filterData()" placeholder="Search scenarios, tasks, or keywords (e.g. Nationality, Mapping, Group)...">
+
+    <div id="sopContent">
+        <div class="section-card">
+            <h2><i class="fas fa-balance-scale"></i> General Responsibility</h2>
+            <div class="logic-box">
+                <b>L1:</b> Determines liability based on triaging. <br>
+                <b>L2:</b> Handles only if <b>WebBeds (WB) is liable</b> and there is a potential financial loss.
+            </div>
+        </div>
+
+        <div class="section-card">
+            <h2><i class="fas fa-globe"></i> Nationality Issues</h2>
+            
+            <h3>Scenario 1: Incorrect Nationality Proof Exists</h3>
+            <p>Establish source: Customer vs WB responsibility.</p>
+            <div class="action-point">
+                <b>Customer Responsibility:</b> (Selected wrong channel). <br>
+                - Check if provider accepts with extra cost. <br>
+                - Send proof to agency and request decision (Accept price or Cancel).
+            </div>
+            <div class="action-point">
+                <b>WB Responsibility:</b> (System issue or CS error). <br>
+                - If provider accommodates for free: Confirm. <br>
+                - If NOT free or rejected: <span class="l2-transfer">Pass to L2 (PST - Hotel/Suppliers)</span>
+            </div>
+
+            <h3>Scenario 2: Assumption of Nationality (Validation Request)</h3>
+            <p>Respond to provider to keep booking valid. Request documentation (Passport) from agency.</p>
+            
+            <div class="logic-box">
+                <span class="exception-tag">EXCEPTION: German Market / Expedia / LoveHolidays</span><br>
+                Inform provider: Customer has EU residence and is protected. We do not validate. <br>
+                If rejected/extra cost: <span class="l2-transfer">Pass to L2 (FD group PST - Hotel/Suppliers)</span>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <h2><i class="fas fa-map-marked-alt"></i> Mapping Error</h2>
+            <p>L1 investigates the source of the error.</p>
+            <ul>
+                <li>If <b>WB Issue:</b> <span class="l2-transfer">Escalate to L2</span></li>
+                <li>If <b>Client Error:</b> Offer FOC cancellation (if hotel agrees) or Rebooking (client pays difference).</li>
+            </ul>
+            <p><i>Note: Always involve the Sales Manager.</i></p>
+        </div>
+
+        <div class="section-card">
+            <h2><i class="fas fa-dollar-sign"></i> Handling Rate Differences</h2>
+            <ul>
+                <li>If client disputes rate: Forward to <b>Disputes Team</b>.</li>
+                <li><b>Special Case (IT Claim):</b> If client claims different rate after confirmation, involve IT Team.</li>
+                <li>While waiting: If Sales Manager accepts, charge difference to Sales. If not, wait for IT findings.</li>
+            </ul>
+        </div>
+
+        <div class="section-card">
+            <h2><i class="fas fa-hotel"></i> Renovations & Group Bookings</h2>
+            
+            <h3>Renovations</h3>
+            <p>L1 handles alerts. If relocation is needed: <span class="l2-transfer">Pass to L2</span></p>
+
+            <h3>Group Bookings (9+ Passengers)</h3>
+            <p>If same customer: Inform them to contact <b>groups@webbeds.com</b>. <br>
+               If different customers: Inform property it is FIT. <br>
+               If hotel rejects but FIT policy was respected: <span class="l2-transfer">L2 will handle</span></p>
+        </div>
+
+        <div class="section-card">
+            <h2><i class="fas fa-user-slash"></i> Hotelmize & Blacklisted Clients</h2>
+            <p><b>Hotelmize:</b> L1 tries to persuade provider or reinstate original. If impossible: <span class="l2-transfer">Transfer to L2</span></p>
+            <p><b>Blacklisted:</b> L1 asks client to cancel. If commercial team requests relocation: <span class="l2-transfer">Transfer to L2</span></p>
+        </div>
+
+        <div class="section-card">
+            <h2><i class="fas fa-passport"></i> Visa & General Client Errors</h2>
+            <p><b>Visa Bookings:</b> L1 requests flight details for validation. If still rejected: <span class="l2-transfer">Pass to L2</span></p>
+            <p><b>Client Errors (Adult only, Pets, names):</b> L1 explains error and requests cancellation. If relocation is forced by commercial: <span class="l2-transfer">Pass to L2</span></p>
+            <div class="logic-box"><b>Exception:</b> For <b>CTRIP</b>, all tasks remain with L1 with specific L2 involvement.</div>
+        </div>
+
+        <div class="section-card">
+            <h2><i class="fas fa-phone-volume"></i> Call Transfer Process</h2>
+            <table>
+                <tr><th>Relocations Skills</th></tr>
+                <tr><td>PST AMER</td></tr>
+                <tr><td>PST APAC</td></tr>
+                <tr><td>PST MEA</td></tr>
+                <tr><td>PST EUR</td></tr>
+            </table>
+            <p><i>Note: 15-second overflow goes to Relocations Global line.</i></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function filterData() {
+        let input = document.getElementById('searchInput').value.toLowerCase();
+        let cards = document.querySelectorAll('.section-card');
+        
+        cards.forEach(card => {
+            let text = card.innerText.toLowerCase();
+            card.style.display = text.includes(input) ? "block" : "none";
+        });
+    }
+</script>
+
+</body>
+</html>

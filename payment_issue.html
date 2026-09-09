@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>VCC Payment Issue Flow</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+    direction: ltr; /* كل النصوص من الشمال لليمين */
+  }
+  h1 {
+    text-align: center;
+    color: #e60000;
+    text-shadow: 0 0 5px #fff;
+    margin-bottom: 20px;
+  }
+
+  #homeIcon,
+  #refreshBtn,
+  #helpIcon,
+  #wordIcon {
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 999;
+  }
+  #homeIcon {
+    top: 20px;
+    left: 20px;
+    background: #e60000;
+  }
+  #homeIcon::before {
+    content: "🏠";
+    font-size: 28px;
+    color: white;
+  }
+  #refreshBtn {
+    top: 20px;
+    right: 80px;
+    background: #2196f3;
+  }
+  #refreshBtn::before {
+    content: "🔄";
+    font-size: 28px;
+    color: white;
+  }
+  #helpIcon {
+    top: 20px;
+    right: 20px;
+    background: #ff9800;
+  }
+  #helpIcon::before {
+    content: "❓";
+    font-size: 28px;
+    color: white;
+  }
+  #wordIcon {
+    top: 80px;
+    right: 20px;
+    background: #4caf50;
+  }
+  #wordIcon::before {
+    content: "📄";
+    font-size: 28px;
+    color: white;
+  }
+
+  .box {
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid #e60000;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+  .option {
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-top: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s ease;
+  }
+  .option:hover {
+    transform: scale(1.03);
+    background-color: #ffe0b2;
+  }
+
+  ul {
+    margin-top: 10px;
+    list-style-type: none;
+    padding-left: 0;
+  }
+
+  .stepLevel {
+    border-left: 4px solid #9e9e9e;
+    padding: 6px 8px;
+    border-radius: 3px;
+    margin-left: 20px;
+    margin-top: 5px;
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+  }
+  .stepLevel span {
+    margin-right: 8px;
+  }
+
+  #helpBox {
+    position: fixed;
+    top: 140px;
+    right: 20px;
+    background: #fff8e1;
+    border: 2px solid #ff9800;
+    padding: 15px;
+    border-radius: 8px;
+    width: 250px;
+    display: none;
+    z-index: 1000;
+  }
+
+  .backBtn {
+    margin-top: 10px;
+    padding: 6px 12px;
+    background-color: #ff9800;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s ease;
+  }
+  .backBtn:hover {
+    background-color: #e68a00;
+  }
+</style>
+</head>
+<body>
+
+<div id="homeIcon" title="Go to Home" onclick="window.location.href='index.html'"></div>
+<div id="refreshBtn" title="Refresh Page" onclick="window.location.reload()"></div>
+<div id="helpIcon" title="Help" onclick="toggleHelp()"></div>
+<div id="wordIcon" title="Open VCC Word File" onclick="window.open('VCC Payment Issues L1.docx', '_blank')"></div>
+
+<h1>VCC Payment Issue Flow</h1>
+
+<div class="box">
+  <h3>Select Scenario:</h3>
+  <div class="option" onclick="showSteps('before')">⏳ Before Check-in</div>
+  <div class="option" onclick="showSteps('sameDay')">📅 Same-Day Check-in</div>
+  <div class="option" onclick="showSteps('after')">✅ After Check-in</div>
+</div>
+
+<div id="stepsContainer"></div>
+
+<div id="helpBox">
+  <h3>Help / Reference</h3>
+  <ul>
+    <li>Steps appear immediately below selection.</li>
+    <li>Click each step to read details.</li>
+    <li>Follow the flow from receiving request → verifying → action → In-Resort transfer if unresolved.</li>
+  </ul>
+</div>
+
+<script>
+  function toggleHelp() {
+    const box = document.getElementById("helpBox");
+    box.style.display = box.style.display === "block" ? "none" : "block";
+  }
+
+  function showSteps(type) {
+    const container = document.getElementById("stepsContainer");
+    container.innerHTML = "";
+
+    const stepsBox = document.createElement("div");
+    stepsBox.className = "box";
+    const ul = document.createElement("ul");
+
+    let steps = [];
+
+    if (type === "before") {
+      steps = [
+        "📩 Receive request from client before check-in.",
+        "✅ Verify booking and payment details with hotel/supplier.",
+        "📱 Open VCarly app and validate booking reference.",
+        "📧 Provider cannot locate VCC or declined: Forward to relevant VCC department (Vcc.global@webbeds.com or vccdeclien@webbeds.com)."
+      ];
+    } else if (type === "sameDay") {
+      steps = [
+        "📩 Receive request from client on same check-in day (any issue or unconfirmed booking).",
+        "✅ Verify booking and details with hotel or supplier.",
+        "📞 If booking confirmed and correct, inform client and provide confirmation number.",
+        "⏱ If cannot confirm with hotel/supplier or after 30 minutes unresolved → Transfer ticket to In-Resort."
+      ];
+    } else if (type === "after") {
+      steps = [
+        "📩 Receive request from client reporting VCC issue after check-in.",
+        "✅ Verify booking and payment details with hotel/supplier.",
+        "📱 Open VCarly app, greet, validate booking reference.",
+        "🔑 Check VCC details & passcode. DOTW: digits only; Maker: include SH letters.",
+        "📧 Provider cannot locate VCC or declined: Forward to relevant VCC department (Vcc.global@webbeds.com or vccdeclien@webbeds.com)."
+      ];
+    }
+
+    steps.forEach((s) => {
+      const li = document.createElement("li");
+      li.className = "stepLevel";
+      li.innerHTML = `<span>➡️</span>${s}`;
+      ul.appendChild(li);
+    });
+
+    stepsBox.appendChild(ul);
+
+    const backBtn = document.createElement("button");
+    backBtn.className = "backBtn";
+    backBtn.innerText = "⬅️ Back";
+    backBtn.onclick = () => {
+      stepsBox.remove();
+    };
+    stepsBox.appendChild(backBtn);
+
+    container.appendChild(stepsBox);
+  }
+</script>
+
+</body>
+</html>

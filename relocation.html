@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relocation – Interactive Flow Chart</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
+  background-size: cover;
+  margin: 0;
+  padding: 20px;
+  color: #333;
+}
+h1 { text-align: center; color: #e60000; text-shadow: 0 0 5px #fff; margin-bottom: 20px; }
+
+#homeIcon, #refreshBtn, #helpIcon {
+  position: fixed;
+  width: 50px; height: 50px;
+  border-radius: 50%;
+  display: flex; justify-content: center; align-items: center;
+  cursor: pointer;
+  z-index: 999;
+}
+#homeIcon { top: 20px; left: 20px; background: #e60000; }
+#homeIcon::before { content: "🏠"; font-size: 28px; color: white; }
+#refreshBtn { top: 20px; right: 80px; background: #2196f3; }
+#refreshBtn::before { content: "🔄"; font-size: 28px; color: white; }
+#helpIcon { top: 20px; right: 20px; background: #ff9800; }
+#helpIcon::before { content: "❓"; font-size: 28px; color: white; }
+
+.box { background: rgba(255,255,255,0.95); border: 2px solid #e60000; border-radius: 10px; padding: 20px; margin-top: 20px; }
+
+.option { border-radius: 8px; padding: 10px 12px; margin-top: 5px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; }
+.option:hover { transform: scale(1.03); }
+
+ul { margin-top: 10px; list-style-type: none; padding-left: 0; }
+
+.stepLevel { border-left: 4px solid #9e9e9e; padding: 6px 8px; border-radius: 3px; margin-left: 20px; margin-top: 5px; background: #f0f0f0; display: flex; align-items: center; }
+.stepLevel span { margin-right: 8px; }
+
+.collapsible { cursor: pointer; padding: 10px; border-radius: 5px; margin-top: 5px; font-weight: bold; color: white; display: flex; align-items: center; }
+.collapsible span { margin-right: 10px; }
+.collapsibleContent { display: none; padding-left: 20px; margin-top: 5px; border-left: 3px dashed #ccc; }
+
+#helpBox { position: fixed; top: 80px; right: 20px; background: #fff8e1; border: 2px solid #ff9800; padding: 15px; border-radius: 8px; width: 250px; display: none; z-index: 1000; }
+
+#stepsContainer .box { border-color: #4caf50; }
+</style>
+</head>
+<body>
+
+<div id="homeIcon" title="Go to Home" onclick="window.location.href='index.html'"></div>
+<div id="refreshBtn" title="Refresh Page" onclick="window.location.reload()"></div>
+<div id="helpIcon" title="Help" onclick="toggleHelp()"></div>
+
+<h1>Relocation</h1>
+
+<div class="box">
+<h3>Reasons for Relocation (Click to expand):</h3>
+<div class="collapsible" style="background:#ff7043;">📂 <span>Over Booked</span></div>
+<div class="collapsibleContent">
+<ul>
+<li>🏨 Hotel is overbooked / High occupancy due to peak season, concerts, events.</li>
+<li>📅 Hotel claim dates should not be on sale or dispute contractual details.</li>
+</ul>
+</div>
+
+<div class="collapsible" style="background:#42a5f5;">📂 <span>System Issues</span></div>
+<div class="collapsibleContent">
+<ul>
+<li>💻 Hotel denies receiving the booking from WebBeds/Supplier.</li>
+<li>⚠️ Mapping error.</li>
+</ul>
+</div>
+
+<div class="collapsible" style="background:#66bb6a;">📂 <span>Fundamentals / Structure Change</span></div>
+<div class="collapsibleContent">
+<ul>
+<li>🏢 Hotel under new management/ownership.</li>
+<li>🔨 Hotel under construction, renovation, or closed.</li>
+</ul>
+</div>
+</div>
+
+<div class="box">
+<h3>Select Time of Issue:</h3>
+<div class="option" onclick="showSteps('before')">⏳ Before Check-in</div>
+<div class="option" onclick="showSteps('same')">📅 Same Day of Check-in</div>
+</div>
+
+<div id="stepsContainer"></div>
+
+<div id="helpBox">
+<h3>Help / Reference</h3>
+<ul>
+<li>Main Tab: Relocation</li>
+<li>Sub-tabs: Before Check-in, Same Day of Check-in</li>
+<li>Click each step to see procedure</li>
+<li>Click reasons to expand details</li>
+</ul>
+</div>
+
+<script>
+// Collapsible tree
+document.querySelectorAll(".collapsible").forEach(item => {
+  item.addEventListener("click", function() {
+    this.classList.toggle("active");
+    const content = this.nextElementSibling;
+    content.style.display = content.style.display === "block" ? "none" : "block";
+  });
+});
+
+// Steps based on time
+function showSteps(time){
+  const container = document.getElementById('stepsContainer');
+  container.innerHTML = '';
+
+  const stepsBox = document.createElement('div');
+  stepsBox.className = 'box';
+
+  const ul = document.createElement('ul');
+
+  let steps = [];
+  if(time==='before'){
+    steps = [
+      "📞 Call the hotel and negotiate using info/arguments (contract, escalation, VIP, early booking).",
+      "💻 Check if the hotel is available online.",
+      "⚠️ Use firm tone and escalate if needed.",
+      "📂 Reach out to concerned department with all info.",
+      "✅ Booking confirmed or relocation needed.",
+      "🔄 Transfer ticket to PST Team if issue is from us or provider."
+    ];
+  } else if(time==='same'){
+    steps = [
+      "⏱ Attempt to resolve ticket within 20 minutes.",
+      "📝 Check system logs and contact hotel/provider for resolution.",
+      "🔄 If unable to fix, transfer ticket to In-Resort."
+    ];
+  }
+
+  steps.forEach(s=>{
+    const li = document.createElement('li');
+    li.className='stepLevel';
+    li.innerHTML = `<span>➡️</span>${s}`;
+    ul.appendChild(li);
+  });
+
+  stepsBox.appendChild(ul);
+
+  const collapseBtn = document.createElement('div');
+  collapseBtn.className = 'collapseBtn';
+  collapseBtn.innerText = "📂 Collapse Steps";
+  collapseBtn.onclick = ()=>{ stepsBox.remove(); };
+  stepsBox.appendChild(collapseBtn);
+
+  container.appendChild(stepsBox);
+}
+
+// Help toggle
+function toggleHelp(){
+  const box = document.getElementById('helpBox');
+  box.style.display = box.style.display==='block' ? 'none' : 'block';
+}
+</script>
+
+</body>
+</html>

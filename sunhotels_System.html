@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SunHotels Maker | Comprehensive Technical Manual 2024</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #f57c00; 
+            --secondary: #2c3e50;
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --text: #334155;
+            --accent: #e67e22;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            background-color: var(--bg);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 340px;
+            background: var(--secondary);
+            color: white;
+            height: 100vh;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .sidebar h2 {
+            padding: 25px 20px;
+            font-size: 1.1rem;
+            text-align: center;
+            background: #1a252f;
+            color: var(--primary);
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-group {
+            padding: 15px 20px 5px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #7f8c8d;
+            font-weight: bold;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #bdc3c7;
+            padding: 12px 25px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #34495e;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .sidebar a:hover, .sidebar a.active {
+            background: var(--primary);
+            color: white;
+            padding-left: 35px;
+        }
+
+        /* Main Content */
+        .main-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .header-tools {
+            background: var(--white);
+            padding: 15px 40px;
+            border-bottom: 3px solid var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .nav-buttons { display: flex; gap: 10px; }
+
+        .content-body {
+            padding: 40px;
+            overflow-y: auto;
+            flex-grow: 1;
+            scroll-behavior: smooth;
+        }
+
+        section {
+            display: none;
+            max-width: 1100px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        section.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Styling Elements */
+        h1 { color: var(--secondary); border-left: 6px solid var(--primary); padding-left: 15px; font-size: 1.8rem; margin-bottom: 25px; }
+        h2 { color: var(--accent); margin-top: 30px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        h3 { color: #2c3e50; background: #f1f5f9; padding: 10px; border-radius: 4px; margin-top: 20px; font-size: 1.1rem; }
+
+        .detail-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: 0.3s;
+        }
+        .btn-home { background: #475569; color: white; }
+        .btn-refresh { background: var(--primary); color: white; }
+        .btn-pdf { background: #ef4444; color: white; }
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        .search-container { position: relative; }
+        .search-container input {
+            padding: 10px 35px 10px 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            width: 250px;
+        }
+        .search-container i { position: absolute; right: 10px; top: 12px; color: #94a3b8; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { text-align: left; padding: 12px; border: 1px solid #e2e8f0; font-size: 0.9rem; }
+        th { background: #f8fafc; color: var(--secondary); }
+
+        .highlight-box {
+            border-left: 4px solid var(--primary);
+            background: #fff7ed;
+            padding: 15px;
+            margin: 15px 0;
+            font-style: italic;
+        }
+        
+        .tag-orange { color: #f57c00; font-weight: bold; }
+        .tag-green { color: #2e7d32; font-weight: bold; }
+        .tag-red { color: #d32f2f; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>Maker Guide V022024</h2>
+        
+        <div class="sidebar-group">Standard Modules</div>
+        <a onclick="showSection('homepage')" class="active"><i class="fas fa-desktop"></i> 1. Homepage & Menu</a>
+        <a onclick="showSection('hotel-dir')"><i class="fas fa-hotel"></i> 2. Hotel Directory</a>
+        <a onclick="showSection('agent')"><i class="fas fa-users"></i> 3. Agent (Client) Profiles</a>
+        <a onclick="showSection('destinations')"><i class="fas fa-globe"></i> 4. Destinations & Transfers</a>
+        
+        <div class="sidebar-group">Booking Engine</div>
+        <a onclick="showSection('booking-search')"><i class="fas fa-search"></i> 5. Advanced Search</a>
+        <a onclick="showSection('booking-details')"><i class="fas fa-file-invoice"></i> 6. Booking Details Sections</a>
+        <a onclick="showSection('actions')"><i class="fas fa-bolt"></i> 7. Booking Actions list</a>
+        
+        <div class="sidebar-group">Advanced & Finance</div>
+        <a onclick="showSection('backoffice')"><i class="fas fa-file-contract"></i> 8. BackOffice Operations</a>
+        <a onclick="showSection('hotel-maker')"><i class="fas fa-key"></i> 9. Hotel Maker (VCC)</a>
+        <a onclick="showSection('admin')"><i class="fas fa-user-shield"></i> 10. Admin & Markets</a>
+    </div>
+
+    <div class="main-container">
+        
+        <div class="header-tools">
+            <div class="nav-buttons">
+                <a href="index.html" class="btn btn-home"><i class="fas fa-home"></i> Home</a>
+                <button onclick="location.reload()" class="btn btn-refresh"><i class="fas fa-sync-alt"></i> Refresh</button>
+                <a href="SunHotels Maker manual v022024.pdf" target="_blank" class="btn btn-pdf"><i class="fas fa-file-pdf"></i> Open PDF 2024</a>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" id="mainSearch" onkeyup="liveSearch()" placeholder="Search keywords...">
+                <i class="fas fa-search"></i>
+            </div>
+        </div>
+
+        <div class="content-body">
+            
+            <section id="homepage" class="active">
+                <h1>1. Homepage & Menu Options</h1>
+                <div class="detail-card">
+                    <p>The Maker homepage is the first screen after logging in. It features a top menu and search options for hotels within the platform.</p>
+                    <h3>Menu Options Description:</h3>
+                    <ul>
+                        <li><strong>Hotel Dir:</strong> Search for hotels WebBeds currently has contracts with.</li>
+                        <li><strong>Bookings:</strong> Search for existing bookings or transfers (SH/ST numbers).</li>
+                        <li><strong>Agent:</strong> Search for travel agencies and find client account settings.</li>
+                        <li><strong>Destinations:</strong> Look up hotels by selecting a specific city or area first.</li>
+                        <li><strong>Admin:</strong> Check valid guest nationalities for specific contracts.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="hotel-dir">
+                <h1>2. Hotel Dir. (Directory)</h1>
+                <div class="detail-card">
+                    <p>Use the <strong>Hotel Name</strong> field in the search form to locate a property. Results display the full hotel name and location.</p>
+                    <h3>Key Buttons:</h3>
+                    <ul>
+                        <li><strong>[Add/Edit rooms]:</strong> Shows channels available for booking rooms.</li>
+                        <li><strong>[Edit]:</strong> View the full profile (Address, Sunhotel Class/Rating, Phone, and the Contractor manager).</li>
+                    </ul>
+                    <h3>Channel Color Coding:</h3>
+                    <ul>
+                        <li><span class="tag-orange">Orange:</span> Non-XML rooms (Direct Contract or DMC).</li>
+                        <li><span class="tag-green">Green:</span> 3rd Party / XML rooms.</li>
+                        <li><span class="tag-red">Red:</span> Not Active rooms.</li>
+                    </ul>
+                    <div class="highlight-box">Each supplier has a unique ID to identify the specific room provider in Maker.</div>
+                </div>
+            </section>
+
+            <section id="agent">
+                <h1>3. Agent (Travel Agencies)</h1>
+                <div class="detail-card">
+                    <p>Search by agency name. Important: Some agencies have multiple accounts with different settings.</p>
+                    <h3>Tab Details:</h3>
+                    <ul>
+                        <li><strong>Agent Details:</strong> Physical address, Sales Manager (Sales Responsible), and Market Settings (defines the handling CS office: Europe, MEA, APAC).</li>
+                        <li><strong>Rates/Account:</strong> Default payment currency and commission settings.</li>
+                        <li><strong>Options:</strong> Payment method (Invoice vs Credit Card). If the <strong>Invoice box</strong> is ticked, the method is via Invoice.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="destinations">
+                <h1>4. Destinations & Transfers</h1>
+                <div class="detail-card">
+                    <p>Search hotels or transfers based on geographical hierarchy (Country > City).</p>
+                    <h3>Transfer Providers:</h3>
+                    <p>Clicking this button next to a city shows a list of suppliers, their contact details, and the payment currency. If blank, no transfers are offered in that city.</p>
+                </div>
+            </section>
+
+            <section id="booking-search">
+                <h1>5. Advanced Booking Search</h1>
+                <div class="detail-card">
+                    <p><strong>Crucial:</strong> You must select the correct <strong>Operations Brand</strong> (e.g., WebBeds Europe). If the brand is incorrect, the system will not find the SH/ST number.</p>
+                    <h3>Search Methods:</h3>
+                    <ul>
+                        <li><strong>Reference Number:</strong> SH######## for Bookings, ST######## for Transfers. Search multiple by using a comma (,).</li>
+                        <li><strong>Agent Reference:</strong> Client’s internal number (takes longer to search).</li>
+                        <li><strong>Guest Name & Date:</strong> Lead name + Check-in date.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="booking-details">
+                <h1>6. Booking Details Deep-Dive</h1>
+                <div class="detail-card">
+                    <h3>A. Main Info:</h3>
+                    <ul>
+                        <li><strong>Room ID:</strong> Used to track the specific provider room code.</li>
+                        <li><strong>Arrival/Departure:</strong> Check-in and out dates.</li>
+                        <li><strong>Room Type Blue Text:</strong> Indicates the booking channel.</li>
+                    </ul>
+                    <h3>B. Payment & History:</h3>
+                    <ul>
+                        <li><strong>XMLTotalPrice:</strong> The buying price (Net) we pay to the provider.</li>
+                        <li><strong>XMLID:</strong> Supplier reference or Hotel Confirmation Number (HCN).</li>
+                        <li><strong>CR (Cancellation Rules):</strong> Click to see deadlines and penalties.</li>
+                        <li><strong>View Booking History:</strong> Check <u>Room History</u> for XML provider and <u>Customer History</u> for guest nationality.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="actions">
+                <h1>7. Booking Actions List</h1>
+                <div class="detail-card">
+                    <ul>
+                        <li><strong>[Voucher]:</strong> Edit guest names. Use <strong>Save Voucher</strong> and then <strong>Send</strong>.</li>
+                        <li><strong>[Create Manual Voucher]:</strong> Allows manual changes to dates/details on the printed voucher only (does not update the system DB).</li>
+                        <li><strong>[Resend Reservation Email]:</strong> Resends LPO to hotel/DMC. Recipient email can be edited here.</li>
+                        <li><strong>[Note]:</strong> View/Add internal notes. All price/manual changes are logged under the user ID.</li>
+                        <li><strong>[Cancel/Delete]:</strong> Cancel is for XML. Delete is for manual status change (must contact hotel first).</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="backoffice">
+                <h1>8. BackOffice Operations</h1>
+                <div class="detail-card">
+                    <p>Used for manual adjustments after the booking is confirmed.</p>
+                    <ul>
+                        <li><strong>Price Changes:</strong> Adjusting Net or Selling prices.</li>
+                        <li><strong>Change Payment Method:</strong> Switching between Invoice and Credit Card (VCC).</li>
+                        <li><strong>Provider Swap:</strong> Adjusting the room provider/source in special cases.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="hotel-maker">
+                <h1>9. Hotel Maker (VCC & Stop Sales)</h1>
+                <div class="detail-card">
+                    <h3>Virtual Credit Card (VCC):</h3>
+                    <ul>
+                        <li>Access the payment tab to find card details.</li>
+                        <li>Check "Can be charged" to see if charging is allowed at Check-in or Check-out.</li>
+                    </ul>
+                    <h3>Contract Management:</h3>
+                    <ul>
+                        <li><strong>Stop Sales:</strong> Check if a contract has stop-sales applied for specific dates.</li>
+                        <li><strong>Hotel Info:</strong> View main reservations email and finance contacts.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="admin">
+                <h1>10. Admin & Nationality Checks</h1>
+                <div class="detail-card">
+                    <p>Ensuring guest nationality compliance for specific contracts.</p>
+                    <ol>
+                        <li>Select <strong>Admin > Edit Providers</strong>.</li>
+                        <li>Search for the contract name (Ctrl+F).</li>
+                        <li>Check if the specific market/country is <strong>Open</strong> or <strong>Closed</strong>.</li>
+                    </ol>
+                    <div class="highlight-box">Note: Countries like Belarus might be grouped under CIS (Commonwealth of Independent States).</div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script>
+        function showSection(id) {
+            document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+            
+            document.getElementById(id).classList.add('active');
+            const activeLink = document.querySelector(`.sidebar a[onclick*="${id}"]`);
+            if(activeLink) activeLink.classList.add('active');
+            
+            document.querySelector('.content-body').scrollTop = 0;
+        }
+
+        function liveSearch() {
+            let input = document.getElementById('mainSearch').value.toLowerCase();
+            let cards = document.querySelectorAll('.detail-card');
+            
+            cards.forEach(card => {
+                let text = card.innerText.toLowerCase();
+                if (text.includes(input) && input !== "") {
+                    card.style.background = "#fffbeb";
+                    card.style.borderColor = "#f57c00";
+                } else {
+                    card.style.background = "white";
+                    card.style.borderColor = "#e2e8f0";
+                }
+            });
+        }
+    </script>
+</body>
+</html>

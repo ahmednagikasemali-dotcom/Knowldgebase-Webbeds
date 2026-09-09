@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suppliers Contacts</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{
+  --bg:#f8f9fa;
+  --card:#fff;
+  --text:#222;
+  --border:#ddd;
+  --primary:#0d6efd;
+}
+body.dark{
+  --bg:#121212;
+  --card:#1e1e1e;
+  --text:#f1f1f1;
+  --border:#333;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:"Segoe UI",Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+.container{
+  max-width:1300px;
+  margin:auto;
+  padding:20px;
+}
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  flex-wrap:wrap;
+}
+.search-box{
+  position:relative;
+}
+.search-box input{
+  width:280px;
+  padding:10px 35px 10px 12px;
+  border:1px solid var(--border);
+  border-radius:6px;
+  background:var(--card);
+  color:var(--text);
+}
+.search-box i{
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
+}
+.actions{
+  display:flex;
+  gap:15px;
+  font-size:20px;
+}
+.actions i{
+  cursor:pointer;
+  color:var(--primary);
+}
+.table-wrapper{
+  margin-top:15px;
+  background:var(--card);
+  border-radius:8px;
+  overflow-x:auto;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+}
+th,td{
+  padding:10px;
+  border-bottom:1px solid var(--border);
+  text-align:left;
+}
+th{
+  background:rgba(0,0,0,.03);
+  cursor:pointer;
+}
+tr:hover{
+  background:rgba(0,0,0,.04);
+}
+a{
+  color:var(--primary);
+  text-decoration:none;
+}
+.empty{color:#888;font-style:italic;}
+.pagination{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-top:15px;
+}
+.pagination button{
+  padding:6px 12px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  cursor:pointer;
+}
+.pagination button.active{
+  background:var(--primary);
+  color:#fff;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <div class="search-box">
+    <input id="search" placeholder="Search suppliers, email, phone...">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </div>
+
+  <div class="actions">
+    <i class="fa-solid fa-house" title="Home" onclick="goHome()"></i>
+    <i class="fa-solid fa-moon" title="Dark mode" onclick="toggleTheme()"></i>
+  </div>
+</header>
+
+<div class="table-wrapper">
+<table>
+<thead>
+<tr>
+  <th onclick="sortBy('supplier')">Supplier</th>
+  <th onclick="sortBy('contact')">Contact</th>
+  <th onclick="sortBy('email')">Email</th>
+  <th onclick="sortBy('phone')">Phone</th>
+</tr>
+</thead>
+<tbody id="tbody"></tbody>
+</table>
+</div>
+
+<div class="pagination" id="pagination"></div>
+
+</div>
+
+<script>
+// ======= بيانات الموردين كاملة =======
+const data = [
+  {supplier:"Touring club",contact:"Operations Email",email:"Loh-Reservations@tcegypt.com",phone:"222627222"},
+  {supplier:"Touring club",contact:"Account manager",email:"haytham.salem@tcegypt.com",phone:"1006640293"},
+  {supplier:"IllusionsXTG",contact:"Emergency",email:"instanthelp@iol.world",phone:"15188004989"},
+  {supplier:"Jumbo",contact:"In Resort",email:"inresort@jumbotours.com",phone:"+34910609323"},
+  {supplier:"booking.com",contact:"Operations Email",email:"customer.service@booking.com",phone:"+442033202614"},
+  {supplier:"Restel",contact:"Operations Email",email:"booking@restel.travel",phone:"34 91 728 36 74"},
+  {supplier:"Restel",contact:"Operations Email",email:"booking@restel.travel",phone:"34 917 36 50 40"},
+  {supplier:"Pricetravel",contact:"Operations Email",email:"apireservations@pricetravel.com",phone:"+52 998 283 3208 / 855 252 6896"},
+  {supplier:"Pricetravel",contact:"Escalation",email:"claudia.salazar@pricetravel.com",phone:""},
+  {supplier:"Olympia (Go Global)",contact:"Operations Email",email:"fitsk@goglobal.travel",phone:""},
+  {supplier:"Olympia (Go Global)",contact:"Emergency",email:"reservations.in@goglobal.travel",phone:"+44 204 525 9675"},
+  {supplier:"DiDA Travel",contact:"Operations Email",email:"intlservice@didatravel.com",phone:"+86 0755 82639330"},
+  {supplier:"Ixpira",contact:"Operations Email",email:"prenotazioni@ixpira.it",phone:"39 090 57 31 761"},
+  {supplier:"Ixpira",contact:"Operations Email",email:"booking@ixpira.it",phone:"39 06 90 25 321"},
+  {supplier:"Ixpira",contact:"Emergency",email:"",phone:"39 06 97 62 0512"},
+  {supplier:"Hotelbeds",contact:"Operations Email",email:"online.middleeast@hotelbeds.com",phone:"Integrated with Five9"},
+  {supplier:"Hotelbeds",contact:"Operations Email",email:"Europe.english@hotelbeds.com",phone:""},
+  {supplier:"Hotelbeds",contact:"Post Stay",email:"complaints.middleeast@hotelbeds.com",phone:""},
+  {supplier:"Priceline",contact:"Operations Email",email:"executivecare.ppn@cs.priceline.com",phone:"Integrated with Five9"},
+  {supplier:"Priceline",contact:"Failed / Ghost Bookings",email:"hotel@cs.travelweb.com",phone:""},
+  {supplier:"Priceline",contact:"Relocation Requests",email:"relocationrequest@email.priceline.com",phone:""},
+  {supplier:"Elevate",contact:"Customer Service Reservation",email:"elana.victorio@elevatedmc.com",phone:"97142160600 / 971585880623"},
+  {supplier:"Elevate",contact:"Escalation 1",email:"res.team@elevatedmc.com",phone:"971569992874"},
+  {supplier:"Elevate",contact:"Escalation 2",email:"sylvia.mascarenhas@elevatedmc.com",phone:"971526765933"},
+  {supplier:"Elevate",contact:"Escalation 3",email:"anna.gavrilyuk@elevatedmc.com",phone:"971557958682"},
+  {supplier:"Elevate",contact:"Accounting Manager",email:"maricel.andal@elevatedmc.com",phone:"971508705301"},
+  {supplier:"Elevate",contact:"Chief Financial Officer",email:"mohamed.sorour@elevatedmc.com",phone:"971559565010"},
+  {supplier:"Italcamel",contact:"Operations Email",email:"reservation@italcamel.com",phone:"Integrated with Five9"},
+  {supplier:"American Tours International",contact:"Los Angeles HQ",email:"lax@americantours.com",phone:"310 641 9953"},
+  {supplier:"American Tours International",contact:"Florida Region",email:"mco@americantours.com",phone:"407 370 3701"},
+  {supplier:"American Tours International",contact:"Hawaii Region",email:"hawaii@americantours.com",phone:"808 922 2841"},
+  {supplier:"American Tours International",contact:"Confirmations",email:"confirmations@americantours.com",phone:""},
+  {supplier:"American Tours International",contact:"72h / In Resort",email:"passenger_service@americantours.com",phone:"310 641 9953"},
+  {supplier:"American Tours International",contact:"Post Stay",email:"customer_services@americantours.com",phone:""},
+  {supplier:"EzLink",contact:"Operations Email",email:"crc9@ezlink.net.br",phone:""},
+  {supplier:"Peak Point",contact:"Operations Email",email:"support@peakpoint.travel",phone:"908502265017"},
+  {supplier:"Peak Point",contact:"Emergency",email:"",phone:"90 506 646 3773 / 90 543 241 0015"},
+  {supplier:"HotelDO",contact:"Operations Email",email:"operations.row@hoteldo.com",phone:"529988818396"},
+  {supplier:"HotelDO",contact:"Emergency",email:"",phone:"54 11 5552 8384"},
+  {supplier:"PAXIMUM",contact:"Operations Email",email:"sales@paximum.com",phone:"0090 8507770729"},
+  {supplier:"PAXIMUM",contact:"Emergency",email:"",phone:"0090 5308557439"},
+  {supplier:"LCI MTC",contact:"Operations Email",email:"operations@lci-mtc.com",phone:"1 786 744 1844"},
+  {supplier:"LCI MTC",contact:"Escalations",email:"escalations@lci-mtc.com",phone:""},
+  {supplier:"LCI MTC",contact:"In Resort",email:"onspot@lci-mtc.com",phone:"34 871 24 20 10"},
+  {supplier:"Abreu",contact:"Operations Email",email:"booking@abreuonline.com",phone:"351 21 415 6075"},
+  {supplier:"Abreu",contact:"Emergency",email:"customerservice@abreuonline.com",phone:"351 96 173 8903"},
+  {supplier:"Welcomebeds",contact:"Special Requests",email:"specialrequest@welcomebeds.com",phone:"34 971 921 498"},
+  {supplier:"Welcomebeds",contact:"Emergencies",email:"customercarewis@welcomebeds.com",phone:"34 971 928 593"},
+  {supplier:"Welcomebeds",contact:"Relocations",email:"relocation@welcomebeds.com",phone:"34 971 928 593"},
+  {supplier:"Welcomebeds",contact:"Escalations",email:"supervisionwis@welcomebeds.com",phone:"34 971 258 330"},
+  {supplier:"MTS Globe",contact:"Operations Email",email:"fit.am@otsglobe.com",phone:"+998 361 12 30 ext 521"},
+  {supplier:"MTS Globe",contact:"Operations Email",email:"reservations.pt@mtsglobe.com",phone:""},
+  {supplier:"MTS Globe",contact:"Emergency",email:"Manuel.kuman@otsglobe.com",phone:""},
+  {supplier:"SeeUsaTours",contact:"Operations Email",email:"hoteles@seeusatours.com",phone:"212 944 4919"},
+  {supplier:"SeeUsaTours",contact:"Emergency",email:"customerservice@seeusatours.com",phone:""},
+  {supplier:"Kaluah Tours",contact:"Operations Email",email:"FIT@kaluahtours.com",phone:"1 407 226 3510 / 1 877 777 6661"},
+  {supplier:"Fastpay",contact:"Operations Email",email:"",phone:"34 971 43 07 71"},
+  {supplier:"Fastpay",contact:"Operations Email",email:"",phone:"34 971 41 67 70"},
+  {supplier:"Fastpay",contact:"Emergency",email:"",phone:"44 14 31 90 50 54"},
+  {supplier:"Travco",contact:"Operations Email",email:"fit.res@travco.co.uk",phone:"Integrated with Five9"},
+  {supplier:"Go Global",contact:"Operations Email",email:"fitsk@goglobal.travel",phone:"359 2951 5127"},
+  {supplier:"Go Global",contact:"Emergency",email:"",phone:"359 887 513 541"},
+  {supplier:"Go Global",contact:"Emergency",email:"reservations.in@goglobal.travel",phone:"+44 204 525 9675"},
+  {supplier:"Select Travel Tours",contact:"Operations Email",email:"reservations@selectraveltours.com",phone:"00216 95 805 482"},
+  {supplier:"Select Travel Tours",contact:"Operations Email",email:"marwa.antoul@selectraveltours.com",phone:"00216 71 848 100"},
+  {supplier:"Select Travel Tours",contact:"Operations Email",email:"cyrine.maazouli@selectraveltours.com",phone:"00216 71 901 501"},
+  {supplier:"Select Travel Tours",contact:"Emergency",email:"Semi.tounsi@selectraveltours.com",phone:"00216 55 347 722"},
+  {supplier:"Dakkak Tours",contact:"Operations Email",email:"sawwad@dakkak.com",phone:"00962 6 560 1076 / 00962 79 676 7976"},
+  {supplier:"NAD Destination",contact:"Operations Email",email:"reservations@northamericadestinations.com",phone:"407 259 3330"},
+  {supplier:"NAD Destination",contact:"Operations Email",email:"merly@northamericadestinations.com",phone:""},
+  {supplier:"NAD Destination",contact:"Operations Email",email:"reservation1@northamericadestinations.com",phone:""},
+  {supplier:"NAD Destination",contact:"Emergency",email:"",phone:"1 888 639 2431"},
+  {supplier:"AKU Hotels",contact:"Operations Email",email:"operations@akuhotel.com",phone:"1 806 737 5653"},
+  {supplier:"ORINTER",contact:"Reservations",email:"suportevendas@orinter.com.br",phone:"55 11 99416 4889"},
+  {supplier:"ORINTER",contact:"Emergency 24/7",email:"suporteaocliente@orinter.com.br",phone:"55 11 3514 4400"},
+{supplier:"Teldar (infinite Hotels, Gekko)", contact:"operations Email", email:"reservation@infinitehotel.com", phone:"33 177 681 738"},
+  {supplier:"Teldar (infinite Hotels, Gekko)", contact:"Emergnecy", email:"", phone:"33 177 681 739"},
+  {supplier:"IllusionsXTG", contact:"operations Email", email:"precheckin@iol.world", phone:"(+94) 775 892 278 / 94 112308308"},
+  {supplier:"IllusionsXTG", contact:"Emergency", email:"instanthelp@iol.world", phone:"15188004989"},
+  {supplier:"Europlayas", contact:"operations Email", email:"operations@europlayas.es", phone:"34 971 716 212 / 34 971 079 446"},
+  {supplier:"Team america", contact:"operations Email", email:"fit@teamamericany.com", phone:"(212)697-7165"},
+  {supplier:"Team america", contact:"operations Email", email:"lfernandez@teamamericany.com", phone:"(212)697-7165"},
+  {supplier:"AOT", contact:"operations Email", email:"res@aot.com.au", phone:"613 9867 7233"},
+  {supplier:"AOT", contact:"Post travel", email:"customerservice@aot.com.au", phone:"600 649 926 5200"},
+  {supplier:"Tourmind", contact:"operations Email", email:"2965035744@qq.com", phone:"0086 755-36654666"},
+  {supplier:"Sunny Sunflower", contact:"operations Email", email:"sunnysunonline@sunnysunflower.com", phone:"62 879 2446 / 662 879 2458 / 662 879 2461"},
+  {supplier:"Sunny Sunflower", contact:"Emergency", email:"sunnysunonline@sunnysunflower.com", phone:"668 8227 5423"},
+  {supplier:"TBO", contact:"operations Email", email:"ops@tbo.com", phone:"integrated to five9"},
+  {supplier:"TBO", contact:"operations Email", email:"ops.l1@tbo.com", phone:"integrated to five9"},
+  {supplier:"TBO", contact:"Escalation 1", email:"sahil.anand@tbo.com & sushobhit.gandhi@tbo.com", phone:"integrated to five9"},
+  {supplier:"TBO", contact:"In Resort/Hotel Assistance", email:"Ops.me@tbo.com", phone:"integrated to five9"},
+  {supplier:"TBO", contact:"Escalation 2", email:"fouzi.chikh@tbo.com", phone:"integrated to five9"},
+  {supplier:"TBO", contact:"Post Travel (Refund & Waiver)", email:"Ops.me@tbo.com", phone:"integrated to five9"},
+  {supplier:"SideTours", contact:"operations Email", email:"reservasagp@sidetours.com", phone:"Malaga office +34 952 922 650"},
+  {supplier:"SideTours", contact:"operations Email", email:"reservasagp@sidetours.com", phone:"Ibiza office +34 971 307 363"},
+  {supplier:"Aitken", contact:"operations Email", email:"middleeast2@aitkenspence.lk", phone:"(+94) 775 892 278 / 94 112308308"},
+  {supplier:"Jumbo", contact:"operations Email", email:"operations.online@jumbotours.com", phone:"(+34 971212882)"},
+  {supplier:"Jumbo", contact:"Post stay", email:"customerservice@jumbotours.com", phone:"34 971 211 206"},
+  {supplier:"Jumbo", contact:"relocations", email:"relocations@jumbotours.com", phone:"(+34 971212882)"},
+  {supplier:"Jumbo", contact:"waiver", email:"ask4refund@jumbotours.com", phone:"(+34 971212882)"},
+  {supplier:"Jumbo", contact:"Cancellations", email:"cancellations@jumbotours.com", phone:"(+34 971212882)"},
+  {supplier:"Jumbo", contact:"Escalation 1st contact", email:"juanamaria.mas@jumbotours.com", phone:"(+34 971212882)"},
+  {supplier:"Jumbo", contact:"Escalation 2nd contact", email:"lautaro.castillo@jumbotours.com", phone:""},// أضف هذه المجموعة داخل مصفوفة data (يفضل وضعها بعد بيانات الجزء الأول مباشرة)
+  {supplier:"veturis", contact:"operations Email", email:"reservas@veturis.com", phone:"34 922 099 174"},
+  {supplier:"Adonis", contact:"Adonis as supplier", email:"sales@adonis.com", phone:"90 242 343 5717"},
+  {supplier:"Adonis", contact:"Adonis as client", email:"info@adonis.com", phone:"90 507 564 78 72"},
+  {supplier:"W2M", contact:"operations Email", email:"booking.requests@w2m.com", phone:"34 971 071 442"},
+  {supplier:"W2M", contact:"Booking discrepancies", email:"booking.discrepancies@w2m.com", phone:""},
+  {supplier:"W2M", contact:"waiver requests", email:"cxwaiver@w2m.com", phone:""},
+  {supplier:"W2M", contact:"complaints post travel", email:"complaints@w2m.com", phone:""},
+  {supplier:"W2M", contact:"inresort", email:"inresort@w2m.com", phone:"34971598945"},
+  {supplier:"W2M", contact:"Escalation", email:"aanchal.dhupen@w2m.com", phone:""},
+  {supplier:"Bonotel", contact:"operations Email", email:"bookings@bonotel.com", phone:"17029226193 / 17027965454"},
+  {supplier:"Miki", contact:"operations Email", email:"mikitravel.ae@group-miki.com", phone:"integrated to five 9"},
+{supplier:"OYO", contact:"operations Email", email:"usa.escalations@oyorooms.com", phone:"integrated to five 9"},
+{supplier:"OYO", contact:"Escalation", email:"usa.escalations@oyorooms.com", phone:"integrated to five 9"},
+  {supplier:"Miki", contact:"operations Email", email:"rupesh.pathak1@oyorooms.com. //shivam.batra@oyorooms.com //rohit.goel@oyorooms.com", phone:"integrated to five 9"},
+  {supplier:"Darina", contact:"operations Email", email:"reserve@darinaholidays.ae", phone:"971 56 62 82 808 / 971 56 60 34 334"},
+  {supplier:"Agoda", contact:"operations Email", email:"CS_PARTNERS@AGODA.COM", phone:"integrated to five 9"},
+  {supplier:"Rezlive", contact:"operations Email", email:"dubaiops@rezlive.com", phone:"971-55-7823570"},
+  {supplier:"Rezlive", contact:"operations Email", email:"24h@rezlive.com", phone:"+971-44565559 / +917966176000"},
+  {supplier:"Expedia", contact:"operations Email", email:"A2A@chat.expediapartnersolutions.com", phone:"integrated to five 9"},
+  {supplier:"Smyrooms", contact:"operations Email", email:"hotels@smyrooms.com", phone:"34922935408"},
+  {supplier:"booking.com", contact:"Escalation", email:"anne.wolff@booking.com", phone:""},
+  {supplier:"Getaroom", contact:"operations Email", email:"customercare@pps.priceline.com", phone:"4696755366"},
+  {supplier:"Getaroom", contact:"Escalation", email:"escalations@pps.priceline.com", phone:""},
+  {supplier:"Nuitee", contact:"XML bookings", email:"operations@nuitee.com", phone:"415 582 4477"},
+  {supplier:"Nuitee", contact:"Emergency", email:"", phone:"(+212) 661 66 8841"},
+  {supplier:"Nuitee", contact:"DMC bookings", email:"DMCMorocco@Nuitee.com", phone:"(212)522266969"},
+  {supplier:"Nuitee", contact:"Emergency", email:"", phone:"(212)698211215"},
+// --- بيانات من الصور (الجزء 3 والأخير) ---
+  {supplier:"Americanexecutive", contact:"operations Email", email:"asistencia@americanexecutive.com.ar", phone:"305-532-7375"},
+  {supplier:"Americanexecutive", contact:"operations Email", email:"operaciones1@americanexecutive.com.ar", phone:"305-532-7375"},
+  {supplier:"Americanexecutive", contact:"operations Email", email:"emilio@americanexecutive.net", phone:"305-532-7375"},
+  {supplier:"Americanexecutive", contact:"operations Email", email:"emma@americanexecutive.net", phone:"305-532-7375"},
+  {supplier:"Traveltino", contact:"in resort", email:"h24@smyrooms.com", phone:"34 922 935 408"},
+  {supplier:"Traveltino", contact:"operations Email", email:"customerservice@smyrooms.com", phone:""},
+  {supplier:"Escalabeds", contact:"operations Email", email:"bookings@escalabeds.com", phone:"1(305)707-6761"},
+  {supplier:"MGholidays", contact:"operations Email", email:"customer_support@mgbedbank.com", phone:"(62 21) 2922 3033"},
+  {supplier:"MGholidays", contact:"Account manager", email:"nam.nguyen@mgbedbank.com", phone:""},
+  {supplier:"MGholidays", contact:"Emergency", email:"", phone:"62 21 2922 3033 / 62 857 7777 3033"},
+  {supplier:"Prime", contact:"operations Email", email:"reservations@primetravel.com.tr", phone:"90 242 310 44 45 / 90 532 027 25 84"},
+  {supplier:"Prime", contact:"operations Email", email:"support@primetravel.com.tr", phone:""},
+  {supplier:"Prime", contact:"Ops manager", email:"o.borucu@primetravel.com.tr", phone:""},
+  {supplier:"Prime", contact:"operations Email", email:"escalation@primetravel.com.tr", phone:"90 5496252031 / 90 5303442636"},
+  {supplier:"Tompthons", contact:"operations Email", email:"joh@thompsons.co.za", phone:"021 117707860 / 27 11 770 7700"},
+  {supplier:"Tompthons", contact:"Emergency", email:"", phone:"27823300851"},
+  {supplier:"Yalago", contact:"operations Email", email:"customerservices@yalago.com", phone:"971 4 389 8710"},
+  {supplier:"Yalago", contact:"in resort", email:"customerservices@yalago.com", phone:"971 4 389 8710"},
+  {supplier:"Yalago", contact:"relocations", email:"customerservices@yalago.com", phone:"971 4 389 8710"},
+  {supplier:"Yalago", contact:"Post Travel", email:"customerservices@yalago.com", phone:"971 4 389 8710"},
+  {supplier:"Youtravel", contact:"operations Email", email:"admin@youtravel.com", phone:"588 9939 - option 1 / Emergency: 44 208 58"},
+  {supplier:"Youtravel", contact:"in resort", email:"inresort@youtravel.com", phone:"588 9939 - option 1 / Emergency: 44 208 58"},
+  {supplier:"Youtravel", contact:"Relocations", email:"accommodationchanges@youtravel.com", phone:"588 9939 - option 1 / Emergency: 44 208 58"},
+  {supplier:"Youtravel", contact:"Post Travel", email:"customerratations@youtravel.com", phone:"44 208 588 9939 - option 2"},
+  {supplier:"Nexus", contact:"operations Email", email:"bookings@nexustours.com", phone:"52 998 251 6527"},
+  {supplier:"Nexus", contact:"in resort", email:"lastminute@nexustours.com", phone:"52 1 998 251 6539"},
+  {supplier:"Nexus", contact:"Post stay", email:"posttravel@nexustours.com", phone:""},
+  {supplier:"Egypt Express - EET", contact:"Egypt Bookings", email:"callcenter.egypt@egyptespress-vl.net", phone:"1140665011"},
+  {supplier:"Egypt Express - EET", contact:"Dubai Bookings", email:"info@mztourism.com", phone:"1140665013"},
+  {supplier:"Egypt Express - EET", contact:"Saudi Arabia Bookings", email:"callcenter.ksa@eetglobal.net", phone:"1140665011"},
+  {supplier:"Egypt Express - EET", contact:"Malaysia Bookings", email:"callcenter.fe@eetglobal.net", phone:"1140665011"},
+  {supplier:"Egypt Express - EET", contact:"Rest of the world Bookings", email:"callcenter@eetglobal.net", phone:"1140665011"},
+  {supplier:"Egypt Express - EET", contact:"Asking for confirmation number", email:"confirmations@eetglobal.net", phone:"1140665011"},
+  {supplier:"Egypt Express - EET", contact:"Complaints", email:"complaints@eetglobal.net", phone:""},
+  {supplier:"Egypt Express - EET", contact:"Ops manager", email:"ahmed.s@egyptexpresstvl.com", phone:"1140665013"},
+  {supplier:"Egypt Express - EET", contact:"Product Manager", email:"heba@egyptexpresstvl.com", phone:"1140665011"},
+  {supplier:"Roibos", contact:"operations Email", email:"operations@roibos.com", phone:"+34 871 18 00 02"},
+  {supplier:"SelectTravel Tours", contact:"operations Email", email:"reservations@selectraveltours.com / marwa.antoul@sel", phone:"35 805 482 - 0021671848100 - 00216719"},
+  {supplier:"SelectTravel Tours", contact:"Emergency", email:"Semi.tounsi@selectraveltours.com", phone:"00216 55 347 722"},
+  {supplier:"Welcomebeds", contact:"General inquiries or special requests", email:"specialrequest@welcomebeds.com", phone:"34 971 921 498"},
+  {supplier:"Welcomebeds", contact:"Emergencies", email:"customercarewis@welcomebeds.com", phone:"34 971 928 593"},
+  {supplier:"Welcomebeds", contact:"Post travel", email:"Online TKT", phone:""},
+  {supplier:"Welcomebeds", contact:"Relocations", email:"relocation@welcomebeds.com", phone:"34 971 928 593"},
+  {supplier:"Welcomebeds", contact:"Escalations", email:"supervisionwis@welcomebeds.com", phone:"34 971 258 330"},
+  {supplier:"Welcomebeds", contact:"Failed bookings", email:"supervision.inter@welcomebeds.com", phone:""},
+  {supplier:"Welcomebeds", contact:"Failed bookings", email:"sales.wis@welcomebeds.com & fabian.nunez@welcomebeds.com", phone:""},
+  {supplier:"Welcomebeds", contact:"emergencies", email:"h24@welcomebeds.com", phone:""},
+  {supplier:"Dakkak Tours", contact:"operations Email", email:"sawwad@dakkak.com", phone:"0096265601076 / 00962796767976"},
+  {supplier:"NADdestenation", contact:"operations Email", email:"reservations@northamericadestinations.com / merly@n", phone:"407-259-3330"},
+  {supplier:"NADdestenation", contact:"Emergency", email:"", phone:"407-259-3330 / 1-888-639-2431"}
+];
+
+// ======= الإعدادات الأساسية =======
+const rowsPerPage = 10;
+let currentPage = 1;
+let currentData = [...data];
+let sortDir = 1;
+
+const tbody = document.getElementById("tbody");
+const pagination = document.getElementById("pagination");
+const search = document.getElementById("search");
+
+// ======= دوال مساعدة =======
+function createCell(value,type){
+  if(!value) return `<span class="empty">—</span>`;
+  if(type==="email") return `<a href="mailto:${value}">${value}</a>`;
+  if(type==="phone") return `<a href="tel:${value}">${value}</a>`;
+  return value;
+}
+
+function render(){
+  const start = (currentPage-1)*rowsPerPage;
+  const pageData = currentData.slice(start,start+rowsPerPage);
+  tbody.innerHTML = pageData.map(r=>`
+    <tr>
+      <td>${r.supplier}</td>
+      <td>${r.contact}</td>
+      <td>${createCell(r.email,"email")}</td>
+      <td>${createCell(r.phone,"phone")}</td>
+    </tr>`).join("");
+  renderPagination();
+}
+
+function renderPagination(){
+  pagination.innerHTML="";
+  const pages = Math.ceil(currentData.length / rowsPerPage);
+  for(let i=1;i<=pages;i++){
+    pagination.innerHTML+=`
+      <button class="${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+  }
+}
+
+function goPage(p){
+  currentPage=p;
+  render();
+}
+
+search.oninput=()=>{
+  const v = search.value.toLowerCase();
+  currentData = data.filter(r =>
+    Object.values(r).join(" ").toLowerCase().includes(v)
+  );
+  currentPage = 1;
+  render();
+};
+
+function sortBy(key){
+  sortDir *= -1;
+  currentData.sort((a,b)=>
+    a[key].localeCompare(b[key]) * sortDir
+  );
+  render();
+}
+
+function toggleTheme(){
+  document.body.classList.toggle("dark");
+}
+
+function goHome(){
+  window.location.href = 'index.html'; // رابط الصفحة الرئيسية
+}
+
+// ======= بداية التشغيل =======
+render();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent KPI – Ownership Steps</title>
+
+<style>
+/* ===== Body / Mountain Premium Background ===== */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+
+  /* Natural Mountain Background - brighter */
+  background:
+    linear-gradient(
+      rgba(255, 255, 255, 0.6),  /* أقل شفافية */
+      rgba(255, 255, 255, 0.6)
+    ),
+    url("https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260")
+    no-repeat center center fixed;
+
+  background-size: cover;
+}
+
+/* ===== Header ===== */
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.homeBtn, .backBtn {
+  background: #e60000;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 25px;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.homeBtn:hover { background: #b30000; }
+.backBtn { background: #34495e; }
+.backBtn:hover { background: #2c3e50; }
+
+/* ===== Title ===== */
+h1 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 25px;
+}
+
+/* ===== Steps Container ===== */
+.steps {
+  max-width: 900px;
+  margin: auto;
+}
+
+/* ===== Step Card ===== */
+.step {
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 12px;
+  margin-bottom: 18px;
+  border-left: 6px solid #3498db;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  backdrop-filter: blur(3px);
+  overflow: hidden;
+  transition: 0.3s;
+}
+
+/* ===== Step Header ===== */
+.stepHeader {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  cursor: pointer;
+  background: #ecf3fa;
+  transition: 0.3s;
+}
+
+.stepHeader:hover {
+  background: #dde9f5;
+}
+
+.icon {
+  font-size: 26px;
+}
+
+.stepHeader h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #2c3e50;
+}
+
+/* ===== Step Content ===== */
+.stepContent {
+  display: none;
+  padding: 16px 20px;
+  color: #333;
+}
+
+/* ===== Info Boxes ===== */
+.success {
+  background: #eafaf1;
+  border-left: 6px solid #2ecc71;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+.warning {
+  background: #fdecea;
+  border-left: 6px solid #e74c3c;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+.info {
+  background: #fff9e6;
+  border-left: 6px solid #f1c40f;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+.example {
+  background: #eef2f7;
+  border-left: 6px solid #7f8c8d;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+/* ===== Active Step ===== */
+.step.active .stepContent {
+  display: block;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== Header ===== -->
+<div class="header">
+  <a href="index.html" class="homeBtn">🏠 Home</a>
+  <a href="javascript:history.back()" class="backBtn">⬅ Back</a>
+</div>
+
+<h1>Agent KPI – Ownership Steps</h1>
+
+<div class="steps">
+
+<!-- STEP 1 -->
+<div class="step">
+  <div class="stepHeader">
+    <div class="icon">📥</div>
+    <h2>Step 1: Ticket Received</h2>
+  </div>
+  <div class="stepContent">
+    <ul>
+      <li>Follow up the call</li>
+      <li>Reopen ticket</li>
+      <li>Duplicate ticket</li>
+      <li>Waiver request</li>
+    </ul>
+    <div class="example">
+      📌 Example: Customer calls about a ticket that already exists.
+    </div>
+  </div>
+</div>
+
+<!-- STEP 2 -->
+<div class="step">
+  <div class="stepHeader">
+    <div class="icon">📂</div>
+    <h2>Step 2: Verify Original Ticket</h2>
+  </div>
+  <div class="stepContent">
+
+    <div class="success">
+      ✅ Original ticket is open
+      <ul>
+        <li>Do not change ownership</li>
+        <li>Mark new ticket as duplicate</li>
+      </ul>
+    </div>
+
+    <div class="warning">
+      ❌ Original ticket closed or missing follow-up
+      <ul>
+        <li>Agent must follow up properly</li>
+      </ul>
+    </div>
+
+    <div class="example">
+      📌 Example: Ticket #100 is open → Ticket #101 marked as Duplicate.
+    </div>
+  </div>
+</div>
+
+<!-- STEP 3 -->
+<div class="step">
+  <div class="stepHeader">
+    <div class="icon">🧠</div>
+    <h2>Step 3: Can the agent resolve it?</h2>
+  </div>
+  <div class="stepContent">
+
+    <div class="success">
+      ✅ Yes – resolved
+      <ul>
+        <li>Ownership moves to second agent if needed</li>
+        <li>Follow all linked tickets</li>
+      </ul>
+    </div>
+
+    <div class="warning">
+      ❌ No – unresolved
+      <ul>
+        <li>Leave clear notes</li>
+        <li>Original owner responsible</li>
+      </ul>
+    </div>
+
+    <div class="example">
+      📌 Example: Agent contacted the hotel and resolved the issue successfully.
+    </div>
+  </div>
+</div>
+
+<!-- STEP 4 -->
+<div class="step">
+  <div class="stepHeader">
+    <div class="icon">🔄</div>
+    <h2>Step 4: Reopen Ticket</h2>
+  </div>
+  <div class="stepContent">
+    <ul>
+      <li>Reopening does not change ownership</li>
+      <li>Original owner is responsible</li>
+    </ul>
+
+    <div class="example">
+      📌 Example: Customer replied after closure → same owner continues.
+    </div>
+  </div>
+</div>
+
+<!-- STEP 5 -->
+<div class="step">
+  <div class="stepHeader">
+    <div class="icon">📞</div>
+    <h2>Step 5: Waiver Request</h2>
+  </div>
+  <div class="stepContent">
+
+    <div class="info">
+      ⚠️ External contact required
+      <ul>
+        <li>Contact hotel / supplier</li>
+        <li>Record response clearly</li>
+      </ul>
+    </div>
+
+    <div class="example">
+      📌 Example: Free cancellation request after the deadline.
+    </div>
+  </div>
+</div>
+
+<!-- STEP 6 -->
+<div class="step">
+  <div class="stepHeader">
+    <div class="icon">📊</div>
+    <h2>Step 6: Impact on KPI Ownership</h2>
+  </div>
+  <div class="stepContent">
+    <ul>
+      <li>Ownership KPI counts only if agent resolved ticket</li>
+      <li>Clear documentation required</li>
+      <li>Do not count for original owner shifts</li>
+    </ul>
+  </div>
+</div>
+
+</div>
+
+<script>
+// Expand / Collapse Steps
+document.querySelectorAll(".stepHeader").forEach(header => {
+  header.addEventListener("click", () => {
+    header.parentElement.classList.toggle("active");
+  });
+});
+</script>
+
+</body>
+</html>

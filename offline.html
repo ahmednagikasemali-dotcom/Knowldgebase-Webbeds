@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Amendment - Name - WebBeds</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
+  background-size: cover;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+h1 { color: #ff0000; text-align: center; text-shadow: 0 0 5px #fff; margin-top: 40px; }
+#homeIcon {
+  position: fixed;
+  top: 20px; left: 20px;
+  width: 50px; height: 50px;
+  background: red; border-radius: 50%;
+  display: flex; justify-content: center; align-items: center;
+  cursor: pointer;
+}
+#homeIcon::before { content: "🏠"; font-size: 28px; color: white; }
+.contentBox {
+  background-color: rgba(255,255,255,0.9); border: 2px solid #ff0000; border-radius: 10px; padding: 20px; margin-top: 30px;
+}
+.collapseBox { margin-top: 15px; border: 1px solid #ff0000; border-radius: 8px; padding: 10px; background-color: #fff3e0; cursor: pointer; font-weight: bold; }
+.collapseContent { display: none; margin-top: 10px; padding: 10px; background-color: #ffe0b2; border-radius: 8px; }
+#rocketBot {
+  position: fixed; bottom: 20px; right: 20px; width: 70px; height: 70px;
+  background: url('https://cdn-icons-png.flaticon.com/512/992/992700.png') no-repeat center center; background-size: contain;
+  cursor: pointer; animation: float 2s ease-in-out infinite; z-index: 999;
+}
+@keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);} }
+</style>
+</head>
+<body>
+<div id="homeIcon" title="Go to Home" onclick="window.location.href='index.html'"></div>
+<h1>Amendment - Name</h1>
+<div class="contentBox">
+  <p>Insert English content for Amendment Name here.</p>
+  <div class="collapseBox" onclick="toggleCollapse()">❓ Click for extra info</div>
+  <div class="collapseContent">
+    <p>Extra helpful information or notes go here.</p>
+  </div>
+</div>
+<div id="rocketBot" title="WebBeds Assistant"></div>
+<script>
+function toggleCollapse() {
+  const content = document.querySelector('.collapseContent');
+  content.style.display = content.style.display === 'block' ? 'none' : 'block';
+}
+document.getElementById('rocketBot').onclick = function(){
+  alert('Hello! I am your WebBeds assistant. Ask me any question here.');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VCC Payment Issues - Full Detailed SOP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #0052cc;
+            --vcc-orange: #f57c00;
+            --bg-light: #f4f5f7;
+            --text-dark: #172b4d;
+            --word-blue: #2b579a;
+            --soft-blue: #deebff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; }
+
+        /* Navigation Toolbar */
+        .toolbar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            background: white;
+            padding: 10px;
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .nav-link:hover { background: var(--soft-blue); color: var(--primary-blue); }
+
+        .btn-home { border-color: var(--primary-blue); }
+        .btn-word { border-color: var(--word-blue); color: var(--word-blue); }
+        .btn-word:hover { background: var(--word-blue); color: white; }
+
+        header {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            border-left: 8px solid var(--primary-blue);
+        }
+
+        .search-wrapper {
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .search-wrapper input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: 2px solid #dfe1e6;
+            border-radius: 30px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .search-wrapper i {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7a869a;
+        }
+
+        /* Detailed Content Styling */
+        .content-section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        h2 { color: var(--primary-blue); border-bottom: 2px solid var(--soft-blue); padding-bottom: 10px; }
+        h3 { color: var(--vcc-orange); margin-top: 25px; }
+
+        .info-box {
+            background: #fff9db;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 5px solid #fcc419;
+            margin: 15px 0;
+        }
+
+        ul, ol { padding-left: 20px; }
+        li { margin-bottom: 10px; }
+
+        .contact-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .contact-table td, .contact-table th {
+            padding: 12px;
+            border: 1px solid #eee;
+            text-align: left;
+        }
+
+        .copy-btn {
+            background: var(--soft-blue);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            color: var(--primary-blue);
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .copy-btn:hover { background: var(--primary-blue); color: white; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="toolbar">
+        <a href="index.html" class="nav-link btn-home">
+            <i class="fas fa-home"></i> Home Page
+        </a>
+        <button class="nav-link" onclick="window.location.reload()" style="background:none; border: 1px solid #ddd; cursor:pointer;">
+            <i class="fas fa-sync-alt"></i> Refresh
+        </button>
+        <a href="VCC Payment Issues L1.docx" class="nav-link btn-word" download>
+            <i class="fas fa-file-word"></i> Download Full SOP (Offline)
+        </a>
+    </div>
+
+    <header>
+        <h1 style="margin:0;">VCC Payment Issues L1 - Detailed Guide</h1>
+        <p>Comprehensive Troubleshooting & Escalation Procedures</p>
+        <div class="search-wrapper">
+            <input type="text" id="searchInput" onkeyup="liveSearch()" placeholder="Search in full SOP details...">
+            <i class="fas fa-search"></i>
+        </div>
+    </header>
+
+    <div id="sopContent">
+        <section class="content-section">
+            <h2><i class="fas fa-info-circle"></i> Overview</h2>
+            <p>A provider may be unable to charge the Virtual Credit Card (VCC) we send for payment. This can happen for several reasons:</p>
+            <ul>
+                <li>The provider cannot locate the VCC details.</li>
+                <li>The VCC has insufficient funds loaded to cover the charge.</li>
+                <li>The VCC is not yet active because the loading time is set for a future date.</li>
+            </ul>
+            <p>In these cases, the provider contacts us to resolve the issue so that payment can be processed correctly.</p>
+        </section>
+
+        <section class="content-section">
+            <h2><i class="fas fa-robot"></i> Using the VCarly App</h2>
+            <p>The first step to take is to make use of the <b>VCarly app</b>, found on Microsoft Teams.</p>
+            <div class="info-box">
+                <b>Tip:</b> After finding it on Teams, right-click and <b>Pin</b> it for easier access.
+            </div>
+            <h3>How to activate and use:</h3>
+            <ol>
+                <li>Always start by writing a greeting like <b>“hi”</b> or <b>“hello”</b>.</li>
+                <li>vCarly will validate the format of the booking reference.</li>
+                <li>If the reference is correct, Dexter will display VCC Details request.</li>
+                <li>You will receive a <b>Secured URL</b> and a <b>Pass Code Link Request</b>.</li>
+                <li><b>Formatting:</b>
+                    <ul>
+                        <li><b>DOTW:</b> Provide digits only.</li>
+                        <li><b>Maker:</b> Provide the entire reference (e.g., including SH letters).</li>
+                    </ul>
+                </li>
+            </ol>
+            <p><i>Note: Before acting, ensure the booking can be confirmed. If not, pass the case to L2.</i></p>
+        </section>
+
+        <section class="content-section">
+            <h2><i class="fas fa-exclamation-triangle"></i> Resolution Scenarios</h2>
+            
+            <h3>Scenario 1: Provider cannot locate VCC details</h3>
+            <p><b>Steps:</b> Forward the email to the relevant VCC department and ask them to re-send the VCC to the provider.</p>
+            
+            <table class="contact-table">
+                <thead>
+                    <tr><th>Territory</th><th>VCC Email Address</th><th>Action</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>USA</td><td>vcc.global@webbeds.com</td><td><button class="copy-btn" onclick="copy('vcc.global@webbeds.com')">Copy</button></td></tr>
+                    <tr><td>MEA</td><td>vcc.global@webbeds.com</td><td><button class="copy-btn" onclick="copy('vcc.global@webbeds.com')">Copy</button></td></tr>
+                    <tr><td>APAC</td><td>vcc.global@webbeds.com</td><td><button class="copy-btn" onclick="copy('vcc.global@webbeds.com')">Copy</button></td></tr>
+                    <tr><td>EUR</td><td>vcc.global@webbeds.com</td><td><button class="copy-btn" onclick="copy('vcc.global@webbeds.com')">Copy</button></td></tr>
+                </tbody>
+            </table>
+
+            <h3>Scenario 2: Insufficient funds loaded</h3>
+            <p><b>Steps:</b> Check the amount the provider is trying to charge vs. the VCC amount:</p>
+            <ul>
+                <li>If charging more than loaded: Push back and mention the actual VCC sum.</li>
+                <li>If the provider still asks for more: Consider it a <b>Rate Error</b> and pass the case to <b>L2</b>.</li>
+            </ul>
+
+            <h3>Scenario 3: VCC not yet active (Future Loading)</h3>
+            <p><b>Steps:</b> Check the loading time using VCarly and inform the provider to charge the card on that specific date.</p>
+        </section>
+    </div>
+</div>
+
+<script>
+    function copy(text) {
+        navigator.clipboard.writeText(text);
+        alert("Email Copied: " + text);
+    }
+
+    function liveSearch() {
+        let input = document.getElementById('searchInput').value.toLowerCase();
+        let sections = document.querySelectorAll('.content-section');
+        
+        sections.forEach(section => {
+            let text = section.innerText.toLowerCase();
+            section.style.display = text.includes(input) ? "block" : "none";
+        });
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Suppliers Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f4f6f8;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #2c3e50;
+            padding: 12px 20px;
+            color: #fff;
+        }
+
+        .left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .home {
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        select, input {
+            padding: 7px;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .tabs {
+            overflow: hidden;
+            background-color: #f1f1f1;
+        }
+
+        .tabs button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            outline: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 25%;
+            text-align: center;
+        }
+
+        .tabs button:hover {
+            background-color: #3e8e41;
+        }
+
+        .tabs button.active {
+            background-color: #555;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background-color: white;
+            border-top: 1px solid #ccc;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        th {
+            background: #3498db;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+
+        tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <div class="left">
+        <a href="index.html" class="home">🏠 Home</a>
+    </div>
+
+    <input type="text" id="searchInput" placeholder="Search..." onkeyup="filterTable()">
+</div>
+
+<!-- Tab buttons -->
+<div class="tabs">
+    <button class="tab-button active" onclick="openTab('tab1')">AMERICAS SUPPLIERS</button>
+    <button class="tab-button" onclick="openTab('tab2')">APAC SUPPLIERS</button>
+    <button class="tab-button" onclick="openTab('tab3')">EUROPEAN SUPPLIERS</button>
+    <button class="tab-button" onclick="openTab('tab4')">MEA SUPPLIERS</button>
+</div>
+
+<!-- Tab content for AMERICAS SUPPLIERS -->
+<div id="tab1" class="tab-content active">
+    <h2>AMERICAS SUPPLIERS</h2>
+
+    <!-- Point of Contact -->
+    <h3>Point of Contact</h3>
+    <h4>Global Chains</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Contact</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Connectivity Queries (A)</td><td>angela.delpizzo@webbeds.com</td></tr>
+            <tr><td>Connectivity Queries (J)</td><td>jefferson.guerra@webbeds.com</td></tr>
+            <tr><td>Connectivity Queries (R)</td><td>rosa.miranda@webbeds.com</td></tr>
+            <tr><td>Escalations Global Chains</td><td>andre.desousa@webbeds.com</td></tr>
+            <tr><td>Escalations 3rd Party Suppliers (JM)</td><td>Jessica.Mitchell@webbeds.com</td></tr>
+            <tr><td>Escalations 3rd Party Suppliers (TM)</td><td>Tamara.Mantoani@webbeds.com</td></tr>
+        </tbody>
+    </table>
+
+    <!-- 3RD PARTY -->
+    <h3>3RD PARTY</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Supplier</th>
+                <th>Contact</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Bonotel</td><td>JM</td></tr>
+            <tr><td>Getaroom</td><td>JM</td></tr>
+            <tr><td>Hotel Do</td><td>TM</td></tr>
+            <tr><td>Hotel Trader</td><td>JM</td></tr>
+            <tr><td>Kaluah</td><td>TM</td></tr>
+            <tr><td>Orinter</td><td>TM</td></tr>
+            <tr><td>Priceline</td><td>JM</td></tr>
+            <tr><td>PriceTravel</td><td>TM</td></tr>
+            <tr><td>RoomBeast</td><td>TM</td></tr>
+            <tr><td>Travel Funders Network</td><td>JM</td></tr>
+        </tbody>
+    </table>
+
+    <!-- GLOBAL CHAINS -->
+    <h3>GLOBAL CHAINS</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Supplier</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Best Western</td></tr>
+            <tr><td>Choice Hotels + Radisson Americas</td></tr>
+            <tr><td>Four Seasons</td></tr>
+            <tr><td>Wyndham Hotels + Vienna House</td></tr>
+        </tbody>
+    </table>
+
+    <!-- DIRECT DYNAMIC CONTRACT -->
+    <h3>DIRECT DYNAMIC CONTRACT</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Supplier</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>SABRE Chains</td></tr>
+            <tr><td>Alterra Mountain, Aqua Hotels and Resorts, Benchmark Resorts and Hotels</td></tr>
+            <tr><td>Independent Hotels, Leading Hotels of the World, Preferred Hotel Group, Small Luxury of the World</td></tr>
+            <tr><td>Disney Hotels (J)</td></tr>
+            <tr><td>Alterra Mountain (J)</td></tr>
+            <tr><td>Atlantis (N/A)</td></tr>
+            <tr><td>Caesars Entertainment (J)</td></tr>
+            <tr><td>Golden Nugget (J)</td></tr>
+            <tr><td>Grupo Presidente (J)</td></tr>
+            <tr><td>Station Casinos (J)</td></tr>
+            <tr><td>Sandals (J)</td></tr>
+            <tr><td>Cosmopolitan Las Vegas (J)</td></tr>
+            <tr><td>Treasure Island (J)</td></tr>
+            <tr><td>Fontainebleau Las Vegas (J)</td></tr>
+            <tr><td>Resorts World Las Vegas (J)</td></tr>
+            <tr><td>Universal Hotels (J)</td></tr>
+            <tr><td>Venetian / Palazzo (J)</td></tr>
+            <tr><td>Wynn & Encore (J)</td></tr>
+            <tr><td>Rio Las Vegas (J)</td></tr>
+            <tr><td>Pacifica Hotels (J)</td></tr>
+            <tr><td>MGM Resorts (J)</td></tr>
+            <tr><td>Omnibees (J)</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Tab content for APAC SUPPLIERS -->
+<div id="tab2" class="tab-content">
+    <h2>APAC SUPPLIERS</h2>
+
+    <!-- Point of Contact -->
+    <h3>Point of Contact</h3>
+    <h4>Chains/Direct Dynamic Contract</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Contact</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Lynn.Yip@webbeds.com</td><td>Chains/Direct Dynamic Contract</td></tr>
+            <tr><td>Eileen.Tok@webbeds.com</td><td>Chains/Direct Dynamic Contract</td></tr>
+        </tbody>
+    </table>
+
+    <h4>3rd Party Suppliers</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>Supplier</th>
+                <th>Contact</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Vivian.Sung@webbeds.com</td><td>3rd Party</td></tr>
+            <tr><td>zulfi.ikhsan@webbeds.com</td><td>3rd Party</td></tr>
+            <tr><td>Eileen.tok@webbeds.com</td><td>3rd Party</td></tr>
+        </tbody>
+    </table>
+
+    <!-- 3RD PARTY -->
+    <h3>3RD PARTY</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Supplier</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Agoda</td></tr>
+            <tr><td>AKU</td></tr>
+            <tr><td>AKU Ctrip</td></tr>
+            <tr><td>AOT Group</td></tr>
+            <tr><td>AsianTrails</td></tr>
+            <tr><td>Dida</td></tr>
+            <tr><td>Expedia</td></tr>
+            <tr><td>Jalan</td></tr>
+            <tr><td>JTB</td></tr>
+            <tr><td>KliknBook</td></tr>
+            <tr><td>MG Holidays</td></tr>
+            <tr><td>Rakuten</td></tr>
+            <tr><td>Tourmind</td></tr>
+            <tr><td>Travel Boutique (TBO)</td></tr>
+            <tr><td>Travelbullz</td></tr>
+            <tr><td>Traveloka</td></tr>
+            <tr><td>Within Earth</td></tr>
+            <tr><td>Yanolja</td></tr>
+        </tbody>
+    </table>
+
+    <!-- GLOBAL CHAINS -->
+    <h3>GLOBAL CHAINS</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Supplier</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Ascott International</td></tr>
+            <tr><td>Artyzen Hospitality Group</td></tr>
+            <tr><td>Cinnamon Hotels & Resort</td></tr>
+            <tr><td>Centara Hotels & Resorts</td></tr>
+            <tr><td>COMO Hotels & Resorts (APAC)</td></tr>
+            <tr><td>Dusit International</td></tr>
+            <tr><td>Frasers Hospitality (APAC)</td></tr>
+            <tr><td>Design Hotels (APAC)</td></tr>
+            <tr><td>Leading Hotels of the World (APAC)</td></tr>
+            <tr><td>Mandarin Oriental Hotel Group</td></tr>
+            <tr><td>Oberoi Group</td></tr>
+            <tr><td>Okura Nikko Hotel Mgmt (APAC)</td></tr>
+            <tr><td>Onyx Hospitality Group</td></tr>
+            <tr><td>Pan Pacific Hotel Group (PPHG)</td></tr>
+            <tr><td>Paul John Resorts</td></tr>
+            <tr><td>Preferred Hotels & Resort (APAC)</td></tr>
+            <tr><td>The Peninsula</td></tr>
+            <tr><td>Rosewood Hotel and Resorts (APAC)</td></tr>
+            <tr><td>Shangri-la Hotels & Resorts</td></tr>
+            <tr><td>StayWell Hospitality Group</td></tr>
+            <tr><td>St Giles Hotels (APAC)</td></tr>
+            <tr><td>Swire Hotels (APAC)</td></tr>
+            <tr><td>S Hotels & Resorts (APAC)</td></tr>
+            <tr><td>Taj Group of Hotels</td></tr>
+            <tr><td>The Leela Palaces Hotels & Resorts</td></tr>
+            <tr><td>The Standard (APAC)</td></tr>
+            <tr><td>WelcomHeritage Hotels</td></tr>
+        </tbody>
+    </table>
+
+    <!-- DIRECT DYNAMIC CONTRACT -->
+    <h3>DIRECT DYNAMIC CONTRACT</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Supplier</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Marina Bay Sand (MBS)</td></tr>
+            <tr><td>Synxis – Independent Hotels</td></tr>
+        </tbody>
+    </table>
+</div>
+<!-- Tab content for EUROPEAN SUPPLIERS -->
+<div id="tab3" class="tab-content">
+    <h2>EUROPEAN SUPPLIERS</h2>
+
+    <!-- First Point of Contact -->
+    <h3>First point of contact:</h3>
+    <p><strong>For Chains:</strong> supplieroptimizationeu@webbeds.com</p>
+    <p><strong>For 3rd Party Suppliers:</strong> (S) santiago.cusnir@webbeds.com</p>
+
+    <!-- Escalation after 1st Point of Contact -->
+    <h3>Escalation after 1rst Point of contact:</h3>
+    <p>2nd: marta.lloret@webbeds.com</p>
+    <p>3rd: celia.rojas@webbeds.com</p>
+
+    <!-- 3RD PARTY -->
+    <h3>3RD PARTY</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Supplier</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Abreu (S)</td></tr>
+            <tr><td>Altura (S)</td></tr>
+            <tr><td>Avoris (S)</td></tr>
+            <tr><td>Booking.com (S)</td></tr>
+            <tr><td>Cosmobeds (S)</td></tr>
+            <tr><td>Creole (S)</td></tr>
+            <tr><td>Gekko-Infinite Hotels (S)</td></tr>
+            <tr><td>GoGlobal (S)</td></tr>
+            <tr><td>Guestincoming (S)</td></tr>
+            <tr><td>Hotelbeds (S)</td></tr>
+            <tr><td>Hpro (S)</td></tr>
+            <tr><td>HyperGuest (S)</td></tr>
+            <tr><td>Italcamel (DMC) (S)</td></tr>
+            <tr><td>Itravex (S)</td></tr>
+            <tr><td>JumboTours (S)</td></tr>
+            <tr><td>Miki Travel (S)</td></tr>
+            <tr><td>MTC Group (S)</td></tr>
+            <tr><td>MTS (S)</td></tr>
+            <tr><td>Olympia (S)</td></tr>
+            <tr><td>Ostrovok (S)</td></tr>
+            <tr><td>Restel (S)</td></tr>
+            <tr><td>Sidetours (S)</td></tr>
+            <tr><td>Smyrooms</td></tr>
+            <tr><td>Travco (S)</td></tr>
+            <tr><td>W2M (S)</td></tr>
+        </tbody>
+    </table>
+
+    <!-- GLOBAL CHAINS -->
+    <h3>GLOBAL CHAINS</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Supplier</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>ACCOR</td></tr>
+            <tr><td>H10</td></tr>
+            <tr><td>Hilton</td></tr>
+            <tr><td>Melia</td></tr>
+            <tr><td>Paradores</td></tr>
+            <tr><td>Premier Inn</td></tr>
+            <tr><td>Top International</td></tr>
+            <tr><td>TUI Robinson (Sabre)</td></tr>
+        </tbody>
+    </table>
+
+    <!-- DIRECT DYNAMIC CONTRACT -->
+    <h3>DIRECT DYNAMIC CONTRACT</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Supplier</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>SynXis – Independent Hotels</td></tr>
+            <tr><td>Corinthia Hotels & Resorts</td></tr>
+            <tr><td>Como Hotels & Resorts</td></tr>
+            <tr><td>Design Hotels</td></tr>
+            <tr><td>De Historiske – Historical Hotels</td></tr>
+            <tr><td>ExperienciaH</td></tr>
+            <tr><td>Icerlandair Hotels</td></tr>
+            <tr><td>Independent Hotels</td></tr>
+            <tr><td>Leading Hotels World (EU)</td></tr>
+            <tr><td>MacDonald Hotels</td></tr>
+            <tr><td>Manz Privacy (GlobRes)</td></tr>
+            <tr><td>NAV-Navarino Services</td></tr>
+            <tr><td>Onomo Group</td></tr>
+            <tr><td>Rocco Forte</td></tr>
+            <tr><td>Set Collection</td></tr>
+            <tr><td>Sokos</td></tr>
+            <tr><td>Thon</td></tr>
+            <tr><td>Utell Hotels & Resorts</td></tr>
+            <tr><td>Verdi Hotels</td></tr>
+        </tbody>
+    </table>
+</div>
+<!-- Tab content for MEA SUPPLIERS -->
+<div id="tab4" class="tab-content">
+    <h2>MEA SUPPLIERS</h2>
+
+    <!-- Point of contact -->
+    <h3>Point of contact:</h3>
+    <p><strong>Chains & Direct Contracts:</strong> Commercial: Nelly Gospodinova Dobcheva</p>
+    <p><strong>Connectivity & Optimization queries:</strong> Mohamed Abd El Tawab</p>
+
+    <!-- 3rd party suppliers -->
+    <h3>3rd party suppliers:</h3>
+    <p>Charles Razo</p>
+    <p>Ahmed Shokr</p>
+
+    <!-- 3RD PARTY -->
+    <h3>3RD PARTY</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Supplier</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Adonis</td></tr>
+            <tr><td>Darina Holidays</td></tr>
+            <tr><td>Egypt Express</td></tr>
+            <tr><td>ETS</td></tr>
+            <tr><td>Illusions</td></tr>
+            <tr><td>Nightsbridge</td></tr>
+            <tr><td>Nirvana</td></tr>
+            <tr><td>Paximum</td></tr>
+            <tr><td>Peakpoint</td></tr>
+            <tr><td>Prime Travel</td></tr>
+            <tr><td>Rezlive</td></tr>
+            <tr><td>Yalago</td></tr>
+            <tr><td>Elevate</td></tr>
+            <tr><td>Safa Online</td></tr>
+            <tr><td>Saudi Beds</td></tr>
+        </tbody>
+    </table>
+
+    <!-- CHAINS -->
+    <h3>CHAINS</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Supplier</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Emaar Hospitality Group</td></tr>
+            <tr><td>HMH</td></tr>
+            <tr><td>Kempinski International</td></tr>
+            <tr><td>Kerzner</td></tr>
+            <tr><td>Jaz Egypt</td></tr>
+            <tr><td>Jumeirah International</td></tr>
+            <tr><td>Rotana</td></tr>
+            <tr><td>Tsogo Sun (Southern Sun)</td></tr>
+            <tr><td>Address Hotels & Resorts</td></tr>
+            <tr><td>Jaz Cruises</td></tr>
+            <tr><td>Shaza & Mysk Hotels</td></tr>
+            <tr><td>Legacy Hotels & Resorts</td></tr>
+            <tr><td>JA Resorts</td></tr>
+            <tr><td>Time Hotels</td></tr>
+        </tbody>
+    </table>
+
+    <!-- DIRECT DYNAMIC CONTRACT -->
+    <h3>DIRECT DYNAMIC CONTRACT</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Supplier</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Synxis – Independent Hotels</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function openTab(tabId) {
+        // Hide all tab contents
+        const tabs = document.querySelectorAll('.tab-content');
+        tabs.forEach(tab => tab.classList.remove('active'));
+
+        // Remove active class from all buttons
+        const buttons = document.querySelectorAll('.tab-button');
+        buttons.forEach(button => button.classList.remove('active'));
+
+        // Show the clicked tab and add active class to the clicked button
+        document.getElementById(tabId).classList.add('active');
+        const clickedButton = document.querySelector(`.tab-button[onclick="openTab('${tabId}')"]`);
+        clickedButton.classList.add('active');
+    }
+
+    function filterTable() {
+        // الحصول على قيمة البحث المدخلة
+        const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+        
+        // جلب جميع الجداول داخل التبويبات المفتوحة
+        const activeTab = document.querySelector('.tab-content.active');
+        const rows = activeTab.querySelectorAll("table tbody tr");
+        
+        let found = false;
+
+        // التحقق من كل صف داخل الجدول
+        rows.forEach(row => {
+            const text = row.innerText.toLowerCase();
+            // إخفاء الصفوف التي لا تحتوي على النص المدخل في البحث
+            if (text.includes(searchTerm)) {
+                row.style.display = ""; // عرض الصف
+                found = true;
+            } else {
+                row.style.display = "none"; // إخفاء الصف
+            }
+        });
+
+        // إذا لم يتم العثور على تطابقات
+        if (!found && searchTerm) {
+            console.log("No matching results found.");
+        }
+    }
+</script>
+
+</body>
+</html>

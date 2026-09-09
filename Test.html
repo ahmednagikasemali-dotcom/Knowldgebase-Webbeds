@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebBeds - Persistent Hub v23.5</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        :root { --primary: #e60000; --success: #27ae60; --warning: #f39c12; --danger: #ff4757; }
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; color: white; display: flex; height: 100vh; overflow: hidden; background-color: #000; }
+        
+        #bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; transition: background-image 1s ease-in-out; background-size: cover; background-position: center; }
+        #bg-dimmer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: rgba(0,0,0,0.6); }
+
+        /* Sidebar */
+        #sidebar { width: 230px; background: rgba(0, 0, 0, 0.9); border-right: 2px solid var(--primary); padding: 15px; display: flex; flex-direction: column; z-index: 1000; overflow-y: auto; }
+        #logo { font-size: 1.4rem; font-weight: 900; text-align: center; margin-bottom: 10px; color: var(--primary); border-bottom: 1px solid #333; padding-bottom: 10px; }
+        
+        /* أيقونة البيت */
+        .home-icon-btn { background: #222; color: white; padding: 12px; text-align: center; border-radius: 8px; text-decoration: none; margin-bottom: 15px; border-bottom: 2px solid var(--primary); transition: 0.3s; font-size: 1.1rem; display: block; }
+        .home-icon-btn:hover { background: var(--primary); }
+
+        .timer-card { background: rgba(255,255,255,0.08); padding: 8px; border-radius: 8px; margin-bottom: 10px; text-align: center; border-left: 3px solid transparent; }
+        .timer-val { font-family: monospace; font-size: 1.2rem; font-weight: bold; }
+        .label { font-size: 0.6rem; color: #aaa; text-transform: uppercase; display: block; }
+
+        .btn-action { background: #222; border: 1px solid #444; color: white; padding: 10px; border-radius: 5px; cursor: pointer; width: 100%; margin-top: 5px; font-weight: bold; font-size: 0.75rem; }
+        .btn-action.active { background: var(--primary); box-shadow: 0 0 10px var(--primary); border-color: white; }
+        
+        #brkBox { margin-top: 10px; padding: 10px; border: 1px dashed var(--warning); border-radius: 8px; text-align: center; }
+        .btn-rep { background: var(--success); color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; font-size: 0.75rem; }
+        .btn-reset { background: transparent; color: #666; border: 1px solid #444; padding: 5px; border-radius: 5px; cursor: pointer; width: 100%; margin-top: 5px; font-size: 0.6rem; }
+
+        /* Main Content */
+        #main { flex-grow: 1; display: flex; flex-direction: column; align-items: center; padding: 25px; position: relative; overflow-y: auto; padding-bottom: 60px; }
+        #search-container { width: 100%; max-width: 500px; margin-bottom: 20px; position: relative; }
+        #search-container input { width: 100%; padding: 12px 45px; border-radius: 50px; border: 2px solid var(--primary); background: rgba(0,0,0,0.7); color: white; box-sizing: border-box; outline: none; }
+        #search-container i { position: absolute; left: 18px; top: 15px; color: var(--primary); }
+
+        #big-clock { font-size: 3.5rem; font-weight: 900; text-shadow: 0 5px 15px rgba(0,0,0,0.8); }
+        #real-date { font-size: 0.9rem; margin-bottom: 25px; background: rgba(0,0,0,0.4); padding: 5px 15px; border-radius: 20px; }
+
+        #tabs-row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; width: 100%; }
+        .tab-item { position: relative; padding-bottom: 10px; } 
+        .tab-trigger { background: rgba(0,0,0,0.8); color: white; border: 1.5px solid var(--primary); padding: 10px 18px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 0.8rem; }
+        
+        .dropdown { visibility: hidden; opacity: 0; position: absolute; top: 100%; left: 0; background: #fff; min-width: 230px; border-radius: 4px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); z-index: 5000; margin-top: -5px; padding-top: 5px; transition: opacity 0.2s; }
+        .tab-item:hover > .dropdown, .tab-item.searching > .dropdown { visibility: visible; opacity: 1; display: block; }
+        
+        .drop-link { display: block; padding: 12px 15px; color: #222; text-decoration: none; font-size: 0.85rem; border-bottom: 1px solid #eee; font-weight: 600; position: relative; background: #fff; }
+        .drop-link:hover { background: #f5f5f5; color: var(--primary); }
+
+        .has-sub { position: relative; }
+        .sub-dropdown { visibility: hidden; opacity: 0; position: absolute; left: 100%; top: 0; background: #fff; min-width: 200px; border-left: 3px solid var(--primary); padding-left: 5px; margin-left: -5px; transition: opacity 0.2s; }
+        .has-sub:hover > .sub-dropdown, .has-sub.searching > .sub-dropdown { visibility: visible; opacity: 1; display: block; }
+
+        #news-ticker { position: fixed; bottom: 0; right: 0; width: calc(100% - 230px); background: var(--primary); color: white; height: 35px; display: flex; align-items: center; overflow: hidden; z-index: 2000; }
+        .ticker-title { background: #000; padding: 0 15px; height: 100%; display: flex; align-items: center; font-weight: 900; font-size: 0.75rem; z-index: 2001; }
+        .ticker-content { white-space: nowrap; animation: ticker-scroll 80s linear infinite; font-size: 0.9rem; font-weight: bold; padding-left: 100%; }
+        @keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-350%); } }
+    </style>
+</head>
+<body>
+
+<div id="bg-overlay"></div>
+<div id="bg-dimmer"></div>
+
+<div id="sidebar">
+    <div id="logo">WEB<span style="color:white">BEDS</span></div>
+    
+    <a href="index.html" class="home-icon-btn"><i class="fas fa-home"></i></a>
+
+    <div class="timer-card"><span class="label">Shift Remaining</span><span id="shift-time" class="timer-val">09:00:00</span></div>
+    <div class="timer-card"><span class="label">Net Online</span><span id="online-time" class="timer-val" style="color:var(--success)">00:00:00</span></div>
+    <button id="ready-btn" class="btn-action" onclick="runT('ready')">GO READY</button>
+    <button id="off-btn" class="btn-action" onclick="runT('off')">OFFLINE HOUR</button>
+    <div id="brkBox">
+        <select id="brkSelect" class="btn-action" onchange="resetB()">
+            <option value="900">1st Break (15m)</option>
+            <option value="900">2nd Break (15m)</option>
+            <option value="3600">Lunch (1h)</option>
+        </select>
+        <span id="brk-display" class="timer-val" style="color:var(--warning); display:block; margin:5px 0">00:15:00</span>
+        <button id="brk-btn" class="btn-action" style="background:var(--warning); color:#000" onclick="runT('brk')">START BREAK</button>
+    </div>
+    <button class="btn-rep" onclick="exportToExcel()"><i class="fas fa-file-excel"></i> EXCEL REPORT</button>
+    <button class="btn-reset" onclick="hardReset()"><i class="fas fa-sync-alt"></i> Reset Day</button>
+</div>
+
+<div id="main">
+    <div id="search-container">
+        <i class="fas fa-search"></i>
+        <input type="text" id="sopSearch" placeholder="Search SOPs..." onkeyup="filterTabs()">
+    </div>
+    <div id="big-clock">00:00:00</div>
+    <div id="real-date">Loading...</div>
+    <div id="tabs-row"></div>
+    
+    <div id="news-ticker">
+        <div class="ticker-title">LIVE UPDATES</div>
+        <div class="ticker-content">
+            <span> 📢 ArabiaBeds Update ••• ❌ Peak Point Failed ••• 🕋 Nusuk App ••• 🤖 Prime Travel Automation. </span>
+        </div>
+    </div>
+</div>
+
+<script>
+// كل الـ 11 تصنيف موجودين هنا
+const tabsData = {
+  "Booking Creation": { subTabs: { "Booking Creation": { url: "booking_creation.html" }, "Tours & Transfers": { url: "tours_transfers.html" }, "Misc Creation": { url: "misc_creation.html" }, "Different Statuses": { url: "different_booking_statuses.html" } } },
+  "Answering Queries": { subTabs: { "Booking Confirmation": { url: "booking_confirmation.html" }, "Special Requests": { url: "special_requests.html" }, "Cancellation": { subTabs: { "Steps": { url: "booking_cancellation_Steps.html" }, "MOR": { url: "booking_cancellation_mor.html" } } }, "Amendment": { subTabs: { "Steps": { url: "amend_steps.html" }, "Kinds": { url: "kinds_of_Amend.html" } } } } },
+  "Issues Management": { subTabs: { "Loading Errors": { url: "Loading_Errors.html" }, "Relocation": { url: "relocation.html" }, "OTS": { url: "ots.html" }, "Payment Issue": { url: "payment_issue.html" }, "Mapping": { url: "mapping.html" } } },
+  "Booking Management": { subTabs: { "Info Update": { url: "hotel_customer_update.html" } } },
+  "Fraud": { subTabs: { "Fraud Handling": { url: "fraud_Handling.html" } } },
+  "Offline & Visa": { subTabs: { "Visa Procedures": { url: "visa_procedures.html" }, "Offline Procedures": { url: "offline_procedures.html" } } },
+  "Others": { subTabs: { "Finance": { url: "Finance_Escalations.html" }, "WebRev": { url: "WebRev.html" } } },
+  "Quality & KPI": { subTabs: { "Criteria": { url: "QA_Agent_Criteria.html" }, "KPI Report": { url: "Agent_KPI.html" } } },
+  "System": { subTabs: { "Freshdesk": { url: "Freshdesk_System.html" }, "Dotw": { url: "Dotw_System.html" } } },
+  "Important": { subTabs: { "Connectivity": { url: "Supplier_Connectivity.html" }, "Saudia DMC": { url: "Saudia_DMC.html" } } },
+  "Updates": { subTabs: { "Last Update": { url: "Last_update.html" } } }
+};
+
+let tm = { total: parseInt(localStorage.getItem('wb_total')) || 0, ready: parseInt(localStorage.getItem('wb_ready')) || 0, off: parseInt(localStorage.getItem('wb_off')) || 0, brk: parseInt(localStorage.getItem('wb_brk')) || 0, curr: null };
+
+function save() { localStorage.setItem('wb_total', tm.total); localStorage.setItem('wb_ready', tm.ready); localStorage.setItem('wb_off', tm.off); localStorage.setItem('wb_brk', tm.brk); }
+function updateUI() { document.getElementById('shift-time').innerText = fmt(Math.max(0, 32400 - tm.total)); document.getElementById('online-time').innerText = fmt(tm.ready + tm.off); }
+function fmt(s) { return new Date(s * 1000).toISOString().substr(11, 8); }
+function runT(m) { tm.curr = (tm.curr === m) ? null : m; document.querySelectorAll('.btn-action').forEach(b => b.classList.remove('active')); if(tm.curr) document.getElementById(m === 'brk' ? 'brk-btn' : m + '-btn').classList.add('active'); }
+function resetB() { tm.brk = 0; save(); updateUI(); }
+function hardReset() { if(confirm("Reset Day?")) { localStorage.clear(); location.reload(); } }
+
+setInterval(() => {
+    if(tm.curr) { tm.total++; if(tm.curr === 'ready') tm.ready++; if(tm.curr === 'off') tm.off++; if(tm.curr === 'brk') tm.brk++; save(); updateUI(); }
+    document.getElementById('big-clock').innerText = new Date().toLocaleTimeString('en-GB');
+    document.getElementById('real-date').innerText = new Date().toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'long'});
+}, 1000);
+
+function build(data, container, isRoot = false) {
+    for (let key in data) {
+        const item = data[key]; const div = document.createElement('div');
+        if (isRoot) {
+            div.className = 'tab-item'; div.innerHTML = `<div class="tab-trigger">${key}</div>`;
+            const drop = document.createElement('div'); drop.className = 'dropdown';
+            build(item.subTabs, drop, false); div.appendChild(drop);
+        } else {
+            if (item.subTabs) {
+                div.className = 'drop-link has-sub'; div.innerHTML = `<span>${key}</span> <i class="fas fa-caret-right" style="float:right"></i>`;
+                const sub = document.createElement('div'); sub.className = 'sub-dropdown';
+                build(item.subTabs, sub, false); div.appendChild(sub);
+            } else { 
+                div.innerHTML = `<a href="${item.url}" class="drop-link">${key}</a>`; 
+            }
+        }
+        container.appendChild(div);
+    }
+}
+
+function filterTabs() {
+    let q = document.getElementById('sopSearch').value.toLowerCase();
+    document.querySelectorAll('.tab-item').forEach(el => el.style.display = (q && !el.innerText.toLowerCase().includes(q)) ? 'none' : 'block');
+}
+
+window.onload = () => {
+    build(tabsData, document.getElementById('tabs-row'), true);
+    updateUI();
+    document.getElementById('bg-overlay').style.backgroundImage = `url('https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=1200')`;
+};
+</script>
+</body>
+</html>

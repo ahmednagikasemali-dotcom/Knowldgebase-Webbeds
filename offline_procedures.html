@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Offline Technique & Forms - Step by Step</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: url('hotel.jpg') no-repeat center top fixed;
+  background-size: cover;
+  margin: 0; padding: 60px 20px 40px;
+  color: #222;
+}
+
+/* Home button */
+#homeBtn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  z-index: 1000;
+}
+#homeBtn .homeIcon {
+  width: 40px; height: 40px;
+  background-color: red;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+}
+#homeBtn span {
+  font-weight: bold;
+  font-size: 18px;
+  color: #2c3e50;
+}
+
+/* Info Icon */
+#infoIcon {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 45px; height: 45px;
+  background-color: #3498db;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+/* Info Popup */
+#infoBox {
+  display: none;
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  width: 300px;
+  background-color: #ffffff;
+  border: 2px solid #3498db;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 1000;
+  font-size: 14px;
+}
+
+#closeInfo {
+  text-align: left;
+  cursor: pointer;
+  font-weight: bold;
+  color: red;
+}
+
+/* Search bar */
+#searchContainer {
+  max-width: 900px;
+  margin: 20px auto;
+  text-align: center;
+}
+#searchInput {
+  width: 100%;
+  max-width: 500px;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 2px solid #3498db;
+  outline: none;
+}
+
+/* Accordion style */
+.accordion {
+  background: rgba(255,255,255,0.9);
+  color: #2c3e50;
+  cursor: pointer;
+  padding: 14px 20px;
+  width: 100%;
+  max-width: 900px;
+  margin: 12px auto 0;
+  border: none;
+  border-radius: 10px;
+  text-align: left;
+  outline: none;
+  font-size: 17px;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: background-color 0.3s ease;
+}
+.accordion:hover { background-color: #d0e9f9; }
+.accordion.active { background-color: #3498db; color: white; }
+
+/* Panel for content */
+.panel {
+  max-width: 900px;
+  margin: 0 auto 10px;
+  background: rgba(255,255,255,0.95);
+  border-radius: 10px;
+  overflow: hidden;
+  max-height: 0;
+  padding: 0 20px;
+  transition: max-height 0.35s ease;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  font-weight: normal;
+  font-size: 15px;
+  color: #333;
+}
+.panel.open { padding: 15px 20px 20px; }
+.panel ol, .panel ul { padding-left: 20px; margin-top: 10px; }
+.panel ol li, .panel ul li { margin-bottom: 12px; line-height: 1.4; }
+.panel strong { color: #d32f2f; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .accordion, .panel { max-width: 100%; font-size: 16px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Home -->
+<div id="homeBtn" onclick="window.location.href='index.html'">
+  <div class="homeIcon">🏠</div>
+  <span>WebBeds</span>
+</div>
+
+<!-- Info Icon -->
+<div id="infoIcon" onclick="toggleInfo()">❓</div>
+
+<!-- Info Popup -->
+<div id="infoBox">
+  <div id="closeInfo" onclick="toggleInfo()">✖</div>
+  <p><strong>Page:</strong> Offline Technique & Forms</p>
+  <p><strong>Description:</strong> Step by step guide to handle offline requests and forms efficiently.</p>
+</div>
+
+<h1 style="text-align:center; color:#2c3e50; margin-bottom:10px;">Offline Technique & Forms</h1>
+
+<!-- Search -->
+<div id="searchContainer">
+  <input type="text" id="searchInput" placeholder="Search inside steps..." />
+</div>
+
+<!-- Steps Accordion -->
+<div id="stepsContainer">
+
+<button class="accordion">1. Check that the request is in full details</button>
+<div class="panel">
+  <ol>
+    <li>If it’s transfer request: we should have the full flight details and the destinations.</li>
+    <li>Accommodation request: must have full data like dates, how many pax, type of rooms, nationality & area if possible.</li>
+    <li>If there are children, ask the client to advise their age.</li>
+  </ol>
+</div>
+
+<button class="accordion">2. Give the request number</button>
+<div class="panel">
+  <p>To be able to make follow up or searching for the request easier.</p>
+</div>
+
+<button class="accordion">3. Acknowledge the new request</button>
+<div class="panel">
+  <p>Kindly note that we received your below request and are working on it and will update you shortly.</p>
+</div>
+
+<button class="accordion">4. Searching for availability for the new request</button>
+<div class="panel">
+  <p>Checking the call center, checking the other online websites such as Expedia.</p>
+</div>
+
+<button class="accordion">5. If we didn’t find availability online</button>
+<div class="panel">
+  <ul>
+    <li>New email to the supplier (preferred in the requested area).</li>
+    <li>New email to the hotel itself for the sales as they are always providing good rates.</li>
+  </ul>
+</div>
+
+<button class="accordion">6. Sending offline Quote to propriety</button>
+<div class="panel">
+  <p>We are an online B2B wholesale travel consolidator based in Dubai and a subsidiary of Webjet Australia & our IATA number is 02355662.</p>
+  <p>Kindly advise the best rates and availability for the below request:</p>
+  <ul>
+    <li>Hotel Name: (preferred hotel name, sometimes reservation department for many hotels).</li>
+    <li>Check in & Check out Date.</li>
+    <li>Room category.</li>
+    <li>Number of Pax.</li>
+    <li>Meal plan.</li>
+    <li>Please also advise the validity and cancellation policy.</li>
+  </ul>
+  <p>Waiting your urgent reply.</p>
+</div>
+
+<button class="accordion">7. Receiving the Quote from the supplier</button>
+<div class="panel">
+  <p>Compare which one is the best rate and recheck the full details as requested from the client then offer it to the client.</p>
+</div>
+
+<button class="accordion">8. Acknowledge Receiving the Quote</button>
+<div class="panel">
+  <p>Thank you so much for your offer. Kindly note that we are checking with our client regarding the below and we will update you shortly.</p>
+</div>
+
+<button class="accordion">9. Offer Form & conditions (Example)</button>
+<div class="panel">
+  <p>Kindly find the below Offer & advise your feedback please!</p>
+  <ul>
+    <li>Hotel Name: Apollonian Hotel Mykonos 5</li>
+    <li>Check in & Check out Date: 5 – 10 August</li>
+    <li>Room category: 2 Double rooms</li>
+    <li>Rates: 405 Euro, per room per night including the breakfast.</li>
+  </ul>
+  <p><strong>Booking Terms & Conditions:</strong></p>
+  <ul>
+    <li>The above is just a rate offer, also note that rates and availability are subject to change.</li>
+    <li>Not holding any booking for now, Please advise your feedback soon.</li>
+    <li>Once a non-refundable offer is confirmed from your side, the offer will be subject to full charge in case of amendment, cancellation, or no show.</li>
+  </ul>
+</div>
+
+<button class="accordion">10. Please advise the cancellation policy and validity</button>
+<div class="panel">
+  <p>If the agent needs to confirm please reconfirm the cancellation policy.</p>
+</div>
+
+<button class="accordion">11. Miscellaneous & Payment</button>
+<div class="panel">
+  <p>If the agent needs to confirm do MISC on the system then go ahead and do the payment to the hotel / supplier.</p>
+</div>
+
+</div>
+
+<script>
+// Accordion functionality
+const accordions = document.querySelectorAll(".accordion");
+accordions.forEach(acc => {
+  acc.addEventListener("click", () => {
+    acc.classList.toggle("active");
+    const panel = acc.nextElementSibling;
+    if (panel.style.maxHeight) {
+      panel.style.maxHeight = null;
+      panel.classList.remove("open");
+    } else {
+      panel.style.maxHeight = panel.scrollHeight + "px";
+      panel.classList.add("open");
+    }
+  });
+});
+
+// Info Popup
+function toggleInfo() {
+  const box = document.getElementById("infoBox");
+  box.style.display = box.style.display === "block" ? "none" : "block";
+}
+
+// Live Search
+const searchInput = document.getElementById("searchInput");
+searchInput.addEventListener("input", function() {
+  const filter = this.value.toLowerCase();
+  const steps = document.querySelectorAll("#stepsContainer .accordion, #stepsContainer .panel");
+  let currentAccordion = null;
+
+  steps.forEach(step => {
+    const text = step.textContent.toLowerCase();
+    if (step.classList.contains("accordion")) {
+      currentAccordion = step;
+      if (text.includes(filter)) {
+        step.style.display = "";
+      } else {
+        step.style.display = "";
+      }
+    } else if (step.classList.contains("panel")) {
+      if (text.includes(filter)) {
+        step.style.display = "block";
+        step.previousElementSibling.classList.add("active");
+        step.style.maxHeight = step.scrollHeight + "px";
+      } else {
+        step.style.display = "none";
+        step.previousElementSibling.classList.remove("active");
+        step.style.maxHeight = null;
+      }
+    }
+  });
+});
+</script>
+
+</body>
+</html>

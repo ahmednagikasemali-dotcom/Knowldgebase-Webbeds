@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supplier Refund & Expedia Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #0747a6;
+            --success-green: #00875a;
+            --excel-green: #1d6f42; /* لون الإكسيل الرسمي */
+            --bg-light: #f4f5f7;
+            --text-dark: #172b4d;
+            --border-color: #dfe1e6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        /* Toolbar with 3 Icons Now */
+        .toolbar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(244, 245, 247, 0.9);
+            padding: 10px 0;
+        }
+
+        .nav-btn {
+            text-decoration: none;
+            background: white;
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: 8px;
+            color: var(--text-dark);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-blue);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Excel Button Style */
+        .btn-excel {
+            border-color: var(--excel-green);
+            color: var(--excel-green);
+        }
+
+        .btn-excel:hover {
+            background: var(--excel-green);
+            color: white;
+        }
+
+        header {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            border-left: 10px solid var(--success-green);
+        }
+
+        .section-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        h2 { color: var(--primary-blue); border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        
+        .math-box {
+            background: #f0f7ff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px dashed var(--primary-blue);
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            background: var(--success-green);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-weight: bold;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 25px;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="toolbar">
+        <a href="index.html" class="nav-btn">
+            <i class="fas fa-home"></i> Home
+        </a>
+        <button class="nav-btn" onclick="window.location.reload()">
+            <i class="fas fa-sync-alt"></i> Refresh
+        </button>
+        <a href="Expedia Refund Calculator.xlsx" class="nav-btn btn-excel" download>
+            <i class="fas fa-file-excel"></i> Expedia Calculator
+        </a>
+    </div>
+
+    <header>
+        <h1 style="margin:0;">Refund Handling & Tools</h1>
+        <p>Step-by-step guide for supplier refunds and calculation tools.</p>
+    </header>
+
+    <input type="text" id="searchInput" class="search-box" onkeyup="filterContent()" placeholder="Search steps or refund rules...">
+
+    <div id="sopContent">
+        
+        <div class="section-card">
+            <h2><i class="fas fa-calculator"></i> Calculation Rule</h2>
+            <p>To process a refund correctly, always follow this formula:</p>
+            <div class="math-box">
+                Refund = (Original Price) - (Cancellation Fees)
+            </div>
+        </div>
+
+        <div class="section-card">
+            <h2><i class="fas fa-info-circle"></i> Quick Steps</h2>
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <div>Download the <b>Expedia Calculator</b> from the toolbar above for complex cases.</div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <div>Update the system with the new net amount and add comments.</div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <div>Notify the accounts department if a manual VCC refund is needed.</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function filterContent() {
+        let input = document.getElementById('searchInput').value.toLowerCase();
+        let sections = document.querySelectorAll('.section-card');
+        
+        sections.forEach(sec => {
+            let text = sec.innerText.toLowerCase();
+            sec.style.display = text.includes(input) ? "block" : "none";
+        });
+    }
+</script>
+
+</body>
+</html>
