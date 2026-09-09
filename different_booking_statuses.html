@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SOP - Booking Statuses - WebBeds</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 { 
+  color: #2c3e50; 
+  text-align: center; 
+  margin-top: 20px; 
+}
+h2 { color: #34495e; margin-top: 25px; }
+
+.contentBox {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+/* Accordion */
+.accordion {
+  background-color: #e8f6f3;
+  color: #2c3e50;
+  cursor: pointer;
+  padding: 14px 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 16px;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+.accordion.active { background-color: #d0ece7; }
+
+.panel {
+  padding: 0 18px;
+  display: none;
+  background-color: #fafafa;
+  margin-top: 5px;
+  border-left: 4px solid #3498db;
+  border-radius: 6px;
+}
+
+.note {
+  background: #e8f6f3;
+  padding: 8px;
+  margin-top: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+.warning {
+  background: #fce4e4;
+  padding: 8px;
+  margin-top: 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Icons */
+.iconsContainer {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 15px;
+}
+.iconBtn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #3498db;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+.iconBtn:hover { background-color: #2980b9; }
+
+/* Home */
+#homeBtn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+#homeBtn .homeIcon {
+  width: 40px;
+  height: 40px;
+  background-color: red;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+#homeBtn span {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+/* Info popup */
+#infoBox {
+  display: none;
+  position: fixed;
+  top: 90px;
+  right: 20px;
+  width: 300px;
+  background-color: #f9f9f9;
+  border: 2px solid #3498db;
+  padding: 15px;
+  border-radius: 8px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Home -->
+<div id="homeBtn" onclick="window.location.href='index.html'">
+  <div class="homeIcon">🏠</div>
+  <span>WebBeds</span>
+</div>
+
+<h1>SOP – Booking Statuses (DOTWConnect)</h1>
+
+<!-- Icons -->
+<div class="iconsContainer">
+  <a href="What are the different booking statuses.docx" download>
+    <div class="iconBtn" title="Download SOP Word">📄</div>
+  </a>
+  <div class="iconBtn" onclick="toggleInfo()">❓</div>
+</div>
+
+<div id="infoBox">
+  <strong>Total Booking Statuses:</strong> 6<br>
+  <strong>System:</strong> DOTWConnect
+</div>
+
+<div class="contentBox">
+
+<h2>Overview</h2>
+<p>
+There are <strong>6 possible booking statuses</strong> that a DOTWConnect booking can have,
+depending on the <strong>travel date</strong> or how the <strong>availability was taken</strong>.
+The booking status is always visible in the <strong>short booking summary</strong>.
+</p>
+
+<!-- CONFIRMED -->
+<button class="accordion">Status 1: CONFIRMED</button>
+<div class="panel">
+<p>
+Applies to any <strong>pre-travel booking</strong> taken from <strong>confirmed availability</strong>
+from suppliers.
+</p>
+<ul>
+  <li>WebBeds can request assistance from the hotel/supplier</li>
+  <li>WebBeds can request the hotel confirmation number</li>
+</ul>
+<div class="note">
+If a confirmed booking is rejected by the hotel, WebBeds has the right to
+request assistance or <strong>relocate the guest</strong> to another hotel.
+</div>
+<div class="note">
+If a booking is successfully amended with confirmed availability,
+the status becomes <strong>AMENDED CONFIRMED</strong>.
+</div>
+</div>
+
+<!-- ON REQUEST -->
+<button class="accordion">Status 2: ON REQUEST</button>
+<div class="panel">
+<p>
+Applies to any pre-travel booking taken:
+</p>
+<ul>
+  <li>Above confirmed availability or allocation</li>
+  <li>When hotel/room type is on <strong>stop sale</strong></li>
+</ul>
+<p>
+Hotels have the right to <strong>decline</strong> ON REQUEST bookings.
+</p>
+<div class="note">
+Hotels may accept the booking:
+<ul>
+  <li>On the same rate</li>
+  <li>On a higher room type</li>
+  <li>On a different rate</li>
+</ul>
+</div>
+<div class="warning">
+If the hotel cannot accept the booking, the customer must create a <strong>new booking</strong>.
+</div>
+</div>
+
+<!-- DENIED -->
+<button class="accordion">Status 3: DENIED</button>
+<div class="panel">
+<p>
+Applies to any <strong>ON REQUEST</strong> booking that has not been accepted by the hotel/supplier.
+</p>
+<ul>
+  <li>Rejected on same rate</li>
+  <li>Rejected on higher room type</li>
+  <li>Rejected on different rate</li>
+</ul>
+<div class="note">
+A WebBeds user can manually change the status from
+<strong>ON REQUEST</strong> to <strong>DENIED</strong>
+using the <strong>Enter Reference</strong> functionality.
+</div>
+</div>
+
+<!-- CANCELLED -->
+<button class="accordion">Status 4: CANCELLED</button>
+<div class="panel">
+<p>
+Applies to any booking cancelled <strong>before the travel date</strong>.
+</p>
+<ul>
+  <li>Cancelled Before Customer Deadline (No charges)</li>
+  <li>Cancelled After Customer Deadline (With charges)</li>
+</ul>
+<div class="note">
+The cancellation type will always be indicated in the booking status.
+</div>
+</div>
+
+<!-- ABORTED -->
+<button class="accordion">Status 5: ABORTED</button>
+<div class="panel">
+<p>
+Applies when a customer attempted to book but the booking was
+<strong>not completed</strong>.
+</p>
+<ul>
+  <li>Usually caused by technical issues</li>
+</ul>
+<div class="note">
+Equivalent to <strong>Failed Booking</strong> status in other WebBeds platforms.
+</div>
+</div>
+
+<!-- INVOICED -->
+<button class="accordion">Status 6: INVOICED (Deprecated)</button>
+<div class="panel">
+<p>
+An old booking status that applied to bookings:
+</p>
+<ul>
+  <li>Past check-in date/time</li>
+  <li>Not cancelled prior to travel</li>
+</ul>
+<p>
+Hotels/suppliers had the right to request payment for such bookings.
+</p>
+<div class="warning">
+Due to financial system updates, this status is <strong>no longer used</strong>
+for bookings created from <strong>2023 onwards</strong>.
+</div>
+</div>
+
+</div>
+
+<script>
+const acc = document.getElementsByClassName("accordion");
+for (let i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    const panel = this.nextElementSibling;
+    panel.style.display = panel.style.display === "block" ? "none" : "block";
+  });
+}
+
+function toggleInfo() {
+  const infoBox = document.getElementById("infoBox");
+  infoBox.style.display = infoBox.style.display === "block" ? "none" : "block";
+}
+</script>
+
+</body>
+</html>

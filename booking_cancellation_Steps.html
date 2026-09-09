@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cancellation Decision Tree – WebBeds</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background:#f5f5f5;
+  padding:20px;
+}
+h1 { text-align:center; color:#2c3e50; }
+h3 { color:#34495e; }
+.contentBox {
+  background:#fff;
+  border:1px solid #ccc;
+  border-radius:10px;
+  padding:20px;
+}
+.accordion {
+  background:#e8f6f3;
+  border:none;
+  padding:14px;
+  width:100%;
+  margin-top:10px;
+  border-radius:6px;
+  cursor:pointer;
+}
+.accordion:hover { background:#d0ece7; }
+.step { margin-top:15px; }
+.qa {
+  background:#fff3cd;
+  border-left:4px solid #f0ad4e;
+  padding:10px;
+  margin-top:10px;
+  font-size:14px;
+}
+textarea {
+  width:100%;
+  height:220px;
+  margin-top:10px;
+}
+
+/* Home Button */
+#homeBtn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  z-index: 1000;
+}
+#homeBtn .homeIcon {
+  width: 40px;
+  height: 40px;
+  background-color: red;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+}
+#homeBtn span {
+  font-weight: bold;
+  font-size: 18px;
+  color: #2c3e50;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Home Button -->
+<div id="homeBtn" onclick="window.location.href='index.html'">
+  <div class="homeIcon">🏠</div>
+  <span>WebBeds</span>
+</div>
+
+<h1>Cancellation Decision Tree</h1>
+
+<div class="contentBox">
+
+<!-- STEP 0 -->
+<div class="step" id="step0">
+<h3>Step 1: Select Booking Type</h3>
+<button class="accordion" onclick="setType('GSA')">GSA & VIP Booking</button>
+<button class="accordion" onclick="setType('MOR')">MOR Client Booking</button>
+</div>
+
+<!-- STEP 1 -->
+<div class="step" id="step1" style="display:none;">
+<h3>Step 2: Deadline Status</h3>
+<button class="accordion" onclick="goStep('outside')">Outside Deadline</button>
+<button class="accordion" onclick="goStep('inside')">Inside Deadline</button>
+<button class="accordion" onclick="goStep('step0')">🔄 Back</button>
+</div>
+
+<!-- OUTSIDE -->
+<div class="step" id="outside" style="display:none;">
+<h3>Outside Deadline – Steps</h3>
+<ol>
+<li>Cancel booking via system.</li>
+<li>Update booking status.</li>
+<li>Inform client.</li>
+</ol>
+
+<button class="accordion" onclick="showReply('outside')">🧾 Client Reply</button>
+<button class="accordion" onclick="goStep('step1')">🔄 Back</button>
+</div>
+
+<!-- INSIDE -->
+<div class="step" id="inside" style="display:none;">
+<h3>Inside Deadline – Steps</h3>
+<ol>
+<li>Inform client to cancel from their side.</li>
+<li>Accept charges & penalties.</li>
+<li>Request waiver (not guaranteed).</li>
+</ol>
+
+<button class="accordion" onclick="showReply('inside')">🧾 Client Reply</button>
+
+<h3>Supplier / Hotel Reply</h3>
+<button class="accordion" onclick="showReply('full')">Full Refund</button>
+<button class="accordion" onclick="showReply('partial')">Partial Refund</button>
+<button class="accordion" onclick="showReply('reject')">Rejected</button>
+
+<button class="accordion" onclick="goStep('step1')">🔄 Back</button>
+</div>
+
+<!-- REPLY -->
+<div class="step" id="replyBox" style="display:none;">
+<h3>Client Reply Template</h3>
+<textarea id="replyText"></textarea>
+<button class="accordion" onclick="copyReply()">📋 Copy</button>
+</div>
+
+</div>
+
+<script>
+let bookingType = "";
+
+function hideAll(){
+  document.querySelectorAll('.step').forEach(s => s.style.display='none');
+}
+
+function setType(type){
+  bookingType = type;
+  hideAll();
+  document.getElementById("step1").style.display="block";
+}
+
+function goStep(id){
+  hideAll();
+  document.getElementById(id).style.display="block";
+}
+
+function showReply(type){
+  let t = "";
+
+  const commonNote = "\n\n* Kindly reply on top of this same email without changing the subject or deleting the addresses attached to avoid creating duplicate cases. *";
+
+  if(type==="outside"){
+    t = `Dear Valued Partner,
+
+Greetings from WebBeds!
+
+We are pleased to confirm that the booking has been canceled FOC, and the system is updated accordingly.
+
+Please feel free to contact us if you have additional questions.${commonNote}`;
+  }
+
+  if(type==="inside"){
+    t = `Dear Partner,
+
+Greetings from WebBeds!
+
+Please go ahead and cancel the reservation from your end. Please accept the charges and penalties, then reply back to us to seek a waiver; however, it is not guaranteed.${commonNote}`;
+  }
+
+  if(type==="full"){
+    t = bookingType==="GSA" ?
+`Dear Valued Partner,
+
+Greetings from WebBeds!
+
+We are pleased to confirm that the booking has been canceled FOC, and the system is updated accordingly.
+
+Please feel free to contact us if you have additional questions.${commonNote}`
+:
+`Dear Team,
+
+Greetings from WebBeds!
+
+Please be advised that the refund has been raised for this booking in full amount. A credit note and the refund amount will be available once processed.
+
+For refund inquiries, please contact refunds.finance@webbeds.com.
+
+Should you require further assistance, we are here for you!`;
+  }
+
+  if(type==="partial"){
+    t = bookingType==="GSA" ?
+`Dear Valued Partner,
+
+Greetings from WebBeds!
+
+We are pleased to confirm that the booking has been canceled with partial refund and the new amount is (XXXXXXXX), and the system is updated accordingly.
+
+Please feel free to contact us if you have additional questions.${commonNote}`
+:
+`Dear Team,
+
+Greetings from WebBeds!
+
+Please be advised that a partial refund has been raised for this booking. A credit note will be available once processed.
+
+For refund inquiries, please contact refunds.finance@webbeds.com.
+
+Should you require further assistance, we are here for you!`;
+  }
+
+  if(type==="reject"){
+    t = `Dear Team,
+
+Greetings from WebBeds!
+
+Despite our best efforts, the hotel rejected our waiver request and insisted on charging the booking as per the policy.
+
+Please provide us with a written confirmation from the hotel staff who approved.
+
+Apologies for the negative reply.
+
+*** Kindly reply on top of this same email without changing the subject or deleting the addresses attached to avoid creating duplicate cases. ***`;
+  }
+
+  document.getElementById("replyText").value = t;
+  document.getElementById("replyBox").style.display="block";
+}
+
+function copyReply(){
+  const t = document.getElementById("replyText");
+  t.select();
+  document.execCommand("copy");
+  alert("Reply copied");
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Team Contacts</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{
+  --bg:#f8f9fa;
+  --card:#fff;
+  --text:#222;
+  --border:#ddd;
+  --primary:#0d6efd;
+}
+body.dark{
+  --bg:#121212;
+  --card:#1e1e1e;
+  --text:#f1f1f1;
+  --border:#333;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:"Segoe UI",Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+.container{
+  max-width:1300px;
+  margin:auto;
+  padding:20px;
+}
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  flex-wrap:wrap;
+}
+.search-box{
+  position:relative;
+}
+.search-box input{
+  width:280px;
+  padding:10px 35px 10px 12px;
+  border:1px solid var(--border);
+  border-radius:6px;
+  background:var(--card);
+  color:var(--text);
+}
+.search-box i{
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
+}
+.actions{
+  display:flex;
+  gap:15px;
+  font-size:20px;
+}
+.actions i{
+  cursor:pointer;
+  color:var(--primary);
+}
+.table-wrapper{
+  margin-top:15px;
+  background:var(--card);
+  border-radius:8px;
+  overflow-x:auto;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+}
+th,td{
+  padding:10px;
+  border-bottom:1px solid var(--border);
+  text-align:left;
+}
+th{
+  background:rgba(0,0,0,.03);
+  cursor:pointer;
+}
+tr:hover{
+  background:rgba(0,0,0,.04);
+}
+a{
+  color:var(--primary);
+  text-decoration:none;
+}
+.empty{color:#888;font-style:italic;}
+.pagination{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-top:15px;
+}
+.pagination button{
+  padding:6px 12px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  cursor:pointer;
+}
+.pagination button.active{
+  background:var(--primary);
+  color:#fff;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <div class="search-box">
+    <input id="search" placeholder="Search Name, Region, Position, Team, Email...">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </div>
+
+  <div class="actions">
+    <i class="fa-solid fa-house" title="Home" onclick="goHome()"></i>
+    <i class="fa-solid fa-moon" title="Dark mode" onclick="toggleTheme()"></i>
+  </div>
+</header>
+
+<div class="table-wrapper">
+<table>
+<thead>
+<tr>
+  <th onclick="sortBy('name')">Name</th>
+  <th onclick="sortBy('region')">Region</th>
+  <th onclick="sortBy('position')">Position</th>
+  <th onclick="sortBy('team')">Team</th>
+  <th onclick="sortBy('email')">Email</th>
+</tr>
+</thead>
+<tbody id="tbody"></tbody>
+</table>
+</div>
+
+<div class="pagination" id="pagination"></div>
+
+</div>
+
+<script>
+// ======= بيانات الفريق =======
+const data = [
+  { name: "Amanda Nichols", region: "AMERICAS", position: "Contract Manager", team: "West Coast", email: "Amanda.Nichols@webbeds.com" },
+  { name: "Amy Font", region: "AMERICAS", position: "Implentation Manager TPS Contracting", team: "", email: "amy.font@webbeds.com" },
+  { name: "Andre De Sousa", region: "AMERICAS", position: "Regional Director – Hotel Chains & Connectivity", team: "Americas", email: "" },
+  { name: "Antonio Jenkins", region: "AMERICAS", position: "Contract Manager", team: "Anaheim, California Coast, Oregon, Washington State", email: "antonio.jenkins@webbeds.com" },
+  { name: "Claire Haughney", region: "AMERICAS", position: "Contract Manager", team: "New York", email: "claire.haughney@webbeds.com" },
+  { name: "Daiana Banhara Vieira", region: "AMERICAS", position: "Optimization Manager Chains", team: "Brazil", email: "daiana.banhara@webbeds.com" },
+  { name: "Daniela Penha", region: "AMERICAS", position: "Contract Manager", team: "Florida", email: "Daniela.Penha@webbeds.com" },
+  { name: "Daniela Ventura", region: "AMERICAS", position: "Regional Director of TPS Contracting", team: "", email: "daniela.ventura@webbeds.com" },
+  { name: "Diana Leon", region: "AMERICAS", position: "Regional Manager Chains", team: "Latin America, Peru, and Caribbean (except Cuba)", email: "diana.leon@webbeds.com" },
+  { name: "Douglas Santos", region: "AMERICAS", position: "Contract Manager", team: "Brazil", email: "Douglas.Santos@webbeds.com" },
+  { name: "Elide Marin", region: "AMERICAS", position: "CM", team: "Americas", email: "" },
+  { name: "Elvis Alkhas", region: "AMERICAS", position: "Contract Manager", team: "Las Vegas, Los Angeles, and San Francisco", email: "selda.dodanli@webbeds.com" },
+  { name: "Fabio Holanda", region: "AMERICAS", position: "Contract Manager", team: "Sao Paulo, Minas Gerais, Santa Catarina, Rio Grande do Sul, Parana", email: "Fabio.Holanda@webbeds.com" },
+  { name: "Helen Woodward", region: "AMERICAS", position: "Contract Manager", team: "Americas", email: "" },
+  { name: "Janaina Maria", region: "AMERICAS", position: "Regional Director, Contracting", team: "", email: "janaina.maria@webbeds.com" },
+  { name: "Jefferson Ribeiro Guerra", region: "AMERICAS", position: "Connectivity Manager Contracting", team: "", email: "jefferson.guerra@webbeds.com" },
+  { name: "Jessica Mitchell", region: "AMERICAS", position: "Key Account Manager TPS Contracting", team: "", email: "jessica.mitchell@webbeds.com" },
+  { name: "Kathy Formosa", region: "AMERICAS", position: "Senior Contracting Manager", team: "North East America not including New York", email: "kathy.formosa@webbeds.com" },
+  { name: "Kimberly Kinkaid", region: "AMERICAS", position: "Senior Contract Manager", team: "West Coast", email: "Kimberly.Kinkaid@webbeds.com" },
+  { name: "Lizette Hernandez", region: "AMERICAS", position: "Contract Manager", team: "Mexico (All except Cancun and Riviera Maya)", email: "lizette.hernandez@webbeds.com" },
+  { name: "Lucas Santos", region: "AMERICAS", position: "Contract Manager", team: "Canada", email: "lucas.santos@webbeds.com" },
+  { name: "Marcelo Godeiro", region: "AMERICAS", position: "Contract Manager", team: "Northeast Brazil", email: "marcelo.godeiro@webbeds.com" },
+  { name: "Maria Cecilia Dupont", region: "AMERICAS", position: "Contract Manager", team: "South America including Chile", email: "Cecilia.Dupont@webbeds.com" },
+  { name: "Marisa Marson", region: "AMERICAS", position: "Product Manager", team: "", email: "marisa.marson@webbeds.com" },
+  { name: "Mayra Ruiz", region: "AMERICAS", position: "Product Manager", team: "Caribbean", email: "Mayra.Ruiz@webbeds.com" },
+  { name: "Michelle DaSilva", region: "AMERICAS", position: "Regional Director, Contracting", team: "", email: "michelle.dasilva@webbeds.com" },
+  { name: "Monica Coto", region: "AMERICAS", position: "Contract Manager", team: "", email: "monica.coto@webbeds.com" },
+  { name: "Nicole Placencio", region: "AMERICAS", position: "Senior Contracts Manager", team: "Orlando", email: "Nicole.Placencio@webbeds.com" },
+  { name: "Oleg Likhashkin", region: "AMERICAS", position: "Regional Manager", team: "Regional Chains", email: "oleg.likhashkin@webbeds.com" },
+  { name: "Olivia Maximo", region: "AMERICAS", position: "Product Manager Contracting", team: "", email: "olivia.maximo@webbeds.com" },
+  { name: "Pablo Doncel Manzano", region: "AMERICAS", position: "Contract Manager Chains", team: "Caribbean", email: "Pablo.Manzano@webbeds.com" },
+  { name: "Pedro Coelho", region: "AMERICAS", position: "Contract Manager", team: "Rio de Janeiro, Brazil", email: "pedro.coelho@webbeds.com" },
+  { name: "Raquel Pinheiro", region: "AMERICAS", position: "Connectivity Manager Purchasing", team: "", email: "raquel.pinheiro@webbeds.com" },
+  { name: "Regiane Plaza da Silva", region: "AMERICAS", position: "Contract Manager", team: "Cancun, Mexico", email: "Regiane.Silva@webbeds.com" },
+  { name: "Renata Cenni", region: "AMERICAS", position: "Senior Vice President Sourcing", team: "Orlando", email: "Renata.cenni@webbeds.com" },
+  { name: "Renato Duarte", region: "AMERICAS", position: "Contract Manager", team: "Argentina, Miami, Fort Lauderdale, Uruguay, Colombia, Peru", email: "Renato.Duarte@webbeds.com" },
+  { name: "Reyna Trejo", region: "AMERICAS", position: "Senior Contracting Manager", team: "New York", email: "Reyna.Trejo@webbeds.com" },
+  { name: "Sabrina Pizzamiglio", region: "AMERICAS", position: "Optimization Manager Purchasing", team: "", email: "sabrina.pizzamiglio@webbeds.com" },
+  { name: "Selda Dodanli", region: "AMERICAS", position: "Senior Contracts Manager", team: "Hawaii", email: "selda.dodanli@webbeds.com" },
+  { name: "Siobhain McArdie", region: "AMERICAS", position: "Regional Director", team: "Orlando", email: "Siobhain.Mcardle@webbeds.com" },
+  { name: "Yumi Nakayama", region: "AMERICAS", position: "Regional Director Sourcing", team: "Latam & Caribbean (except Cuba)", email: "yumi.nakayama@webbeds.com" },
+  { name: "Zurine Saralegui", region: "AMERICAS", position: "Contract Manager", team: "Dominican Republic, Madrid and other Caribbean Islands", email: "Zurine.Saralegui@webbeds.com" },
+  { name: "Reka Bartos", region: "AMERICAS / CIS", position: "Administrative Transfers Executive Destination Services", team: "Transfers and Tours", email: "reka.bartos@webbeds.com" },
+  { name: "Ada Ng", region: "APAC", position: "Head of Sourcing - Hong Kong & Taiwan Contracting", team: "Hong Kong & Taiwan", email: "ada.ng@webbeds.com" },
+  { name: "Andreas Sulaeman", region: "APAC", position: "General Manager - Indonesia", team: "Bali and Indonesia", email: "Bali and Indonesia" },
+  { name: "Ashutosh Dogra", region: "APAC", position: "General Manager India", team: "India/Nepal/Bangladesh", email: "India/Nepal/Bangladesh" },
+  { name: "Chatchai Promthong (Boyd)", region: "APAC", position: "Market Manager Contracting", team: "", email: "chatchai.promthong@webbeds.com" },
+  { name: "Cherry Rodriguez", region: "APAC", position: "Senior Contracts Manager", team: "Philippines", email: "Cherry.Rodriguez@webbeds.com" },
+  { name: "Christine Baltussen", region: "APAC", position: "Hotel Procurement Manager", team: "Pacific", email: "Pacific" },
+  { name: "Chuck Sun", region: "APAC", position: "Regional Product Manager", team: "Shanghai, China", email: "Chuck.Sun@webbeds.com" },
+  { name: "Daniel Mahathir", region: "APAC", position: "Contract Manager", team: "Malaysia", email: "Daniel.Mahathir@webbeds.com" },
+  { name: "Dave Yang", region: "APAC", position: "Contracts Manager Hotels", team: "", email: "dave.yang@webbeds.com" },
+  { name: "Don Koh", region: "APAC", position: "Senior Product Manager Hotels", team: "", email: "don.koh@webbeds.com" },
+  { name: "Elaine Garcia", region: "APAC", position: "Contract Manager", team: "Philippines", email: "Elaine.Garcia@webbeds.com" },
+  { name: "Enson Zhang", region: "APAC", position: "Contract Manager - North China Hotels", team: "China Exclude Hong Kong and Macau", email: "enson.zhang@webbeds.com" },
+  { name: "Gary Zhang", region: "APAC", position: "Contract Manager", team: "China", email: "Gary.Zhang@webbeds.com" },
+  { name: "Giada Kim", region: "APAC", position: "Contracts Manager Hotels", team: "", email: "giada.kim@webbeds.com" },
+  { name: "Hideki Urabe", region: "APAC", position: "Senior Contract Manager Hotels", team: "", email: "hideki.urabe@webbeds.com" },
+  { name: "Jaime Wong", region: "APAC", position: "Contract Manager", team: "Singapore", email: "Jaime.Wong@webbeds.com" },
+  { name: "Jason Fong", region: "APAC", position: "Senior Contracts Manager", team: "Singapore", email: "Jason.Fong@webbeds.com" },
+  { name: "Jintana Porntanapat", region: "APAC", position: "General Manager", team: "Thailand - Indochina", email: "Jintana.Porntanapat@webbeds.com" },
+  { name: "Joanne Zhu", region: "APAC", position: "Director of Sourcing Hotels", team: "China", email: "joanne.zhu@webbeds.com" },
+  { name: "John Stucci", region: "APAC", position: "President - Pacific, India and Indonesia", team: "Pacific, India and Indonesia", email: "Pacific, India and Indonesia" },
+  { name: "Joy Huang", region: "APAC", position: "Managing Director - China", team: "China", email: "China" },
+  { name: "Kamolchanok Panayong (Fai)", region: "APAC", position: "Assistant Market Manager Contracting", team: "", email: "kamolchanok.panayong@webbeds.com" },
+  { name: "Kamolwan Mardcharus", region: "APAC", position: "Market Manager Hotels", team: "", email: "kamolwan.mardcharus@webbeds.com" },
+  { name: "Katsiree Tanapant", region: "APAC", position: "Market Manager Contracting", team: "", email: "katsiree.tanapant@webbeds.com" },
+  { name: "Kelly Cao", region: "APAC", position: "Manager - Northern China", team: "China Exclude Hong Kong and Macau", email: "China Exclude Hong Kong and Macau" },
+  { name: "Linda Kim", region: "APAC", position: "General Manager - South Korea", team: "South Korea", email: "South Korea" },
+  { name: "May Li", region: "APAC", position: "Business Development Manager Sales and Marketing", team: "China Exclude Hong Kong and Macau", email: "may.li@webbeds.com" },
+  { name: "Michelle Sawtell", region: "APAC", position: "Contract Manager - Pacific Hotels", team: "", email: "michelle.sawtell@webbeds.com" },
+  { name: "Misa Namba", region: "APAC", position: "Contract Manager Contracting", team: "", email: "misa.namba@webbeds.com" },
+  { name: "Mitha Olys Uloli", region: "APAC", position: "Contract Manager Hotels", team: "", email: "mitha.uloli@webbeds.com" },
+  { name: "Nattanan Tongmaneechareonlarb", region: "APAC", position: "Senior Market Manager", team: "", email: "" },
+  { name: "Nattharin Yaem-Uthai", region: "APAC", position: "Senior Market Manager Hotels", team: "", email: "nattharin.yaemuthai@webbeds.com" },
+  { name: "Nicole Watson", region: "APAC", position: "Contracts Manager", team: "Pacific", email: "Pacific" },
+  { name: "Nirapai Nuttasaeng", region: "APAC", position: "Contract Manager", team: "", email: "nirapai.nuttasaeng@webbeds.com" },
+  { name: "Nurul Faezah Binti Razali", region: "APAC", position: "Contract Manager", team: "Malaysia", email: "Nurul.Razali@webbeds.com" },
+  { name: "Paizal Nafis", region: "APAC", position: "Senior Contract Manager Hotels", team: "", email: "paizal.nafis@webbeds.com" },
+  { name: "Palupi Tri Lukitosari", region: "APAC", position: "Contract Manager Hotels", team: "", email: "palupitri.lukitosari@webbeds.com" },
+  { name: "Philip (Sehun) Jeong", region: "APAC", position: "Contracts Manager Hotels", team: "", email: "philip.jeong@webbeds.com" },
+  { name: "Pimmada Arecheevasuk (Praew)", region: "APAC", position: "Market Manager Contracting", team: "", email: "pimmada.arecheevasuk@webbeds.com" },
+  { name: "PooiYen Wong", region: "APAC", position: "Contracts Manager Hotels", team: "", email: "pooiyen.wong@webbeds.com" },
+  { name: "Pratiwi Chandraningtyas", region: "APAC", position: "Contract Manager Contracting", team: "", email: "pratiwi.chandraningtyas@webbeds.com" },
+  { name: "Rizky Fauzi", region: "APAC", position: "Assistant Contracts Manager", team: "Indonesia", email: "Indonesia" },
+  { name: "Shanice Chen", region: "APAC", position: "Contracts Manager", team: "", email: "" },
+  { name: "Sourabh Katoch", region: "APAC", position: "Senior Executive Contracting", team: "India", email: "Sourabh.K@webbeds.com" },
+  { name: "Talvinderjit Singh", region: "APAC", position: "Contract Manager", team: "Malaysia", email: "Talvinderjit.Singh@webbeds.com" },
+  { name: "Thi Minh Thu Nguyen (Ms. Wendy)", region: "APAC", position: "Contract Manager Hotels", team: "", email: "minhthu.nguyen@webbeds.com" },
+  { name: "Tirachat Virojskulchai (Yon)", region: "APAC", position: "Market Manager Contracting", team: "", email: "tirachat.virojskulchai@webbeds.com" },
+  { name: "Toby Chan", region: "APAC", position: "Contract Manager", team: "Hong Kong", email: "Toby.Chan@webbeds.com" },
+  { name: "Vimonmas Potirach (May)", region: "APAC", position: "Market Manager Contracting", team: "", email: "vimonmas.potirach@webbeds.com" },
+  { name: "Yoshinobu Takase", region: "APAC", position: "Head of Sourcing, Japan Hotels", team: "Japan", email: "yoshinobu.takase@webbeds.com" },
+  { name: "Yudha Manggala", region: "APAC", position: "Contract Manager", team: "Bali", email: "Yudha.Manggala@webbeds.com" },
+  { name: "Yuki Yano", region: "APAC", position: "Contracts Manager Hotels", team: "", email: "yuki.yano@webbeds.com" },
+  { name: "Yusuke Hakamada", region: "APAC", position: "Contracts Manager Hotels", team: "", email: "yusuke.hakamada@webbeds.com" },
+  { name: "Supara Kongthongsamut", region: "APAC / MENA", position: "Senior Contracting Manager Transfers & Activities", team: "", email: "supara.kongthongsamut@webbeds.com" },
+  { name: "Roman Malov", region: "CIS", position: "Contract Manager", team: "CIS countries ( RUSSIA SUSPENDED - Russia - Moscow, East Russia, North Russia, West Russia)", email: "roman.malov@webbeds.com" },
+  { name: "Ina Klecovskaja", region: "CIS / EUROPE", position: "Product Manager", team: "Milan & North Italy, Baltics & CIS", email: "ina.klecovskaja@webbeds.com" },
+  { name:"Alexandra Beltran", region:"EUROPE", position:"Product Manager", team:"Madrid and Secondary Cities Spain", email:"alexandra.beltran@webbeds.com" },
+  { name:"Alexia Papakonstantinou", region:"EUROPE", position:"Product Manager", team:"Greece", email:"alexia.papakonstantinou@webbeds.com" },
+  { name:"Alicia Callejon", region:"EUROPE", position:"Product Manager", team:"DMC Spain, Portugal and Cuba", email:"alicia.callejon@webbeds.com" },
+  { name:"Amandine Saillard", region:"EUROPE", position:"Product Manager", team:"Iceland, Finland, Sweden, Norway, Denmark and Faroe Islands", email:"amandine.saillard@webbeds.com" },
+  { name:"Ana Cano", region:"EUROPE", position:"Contract Manager", team:"Spain: Andalusia (cities), Extremadura and Castilla La Mancha", email:"ana.cano@webbeds.com" },
+  { name:"Ana Jimenez", region:"EUROPE", position:"Regional Team Manager", team:"South and East Europe and Indian Ocean", email:"Ana.Jimenez@webbeds.com" },
+  { name:"Andrea Giuncato", region:"EUROPE", position:"Contract Manager", team:"Italy: Latium (Rome), Molise, Marche and Abruzzo", email:"andrea.giuncato@webbeds.com" },
+  { name:"Aneta Drozd", region:"EUROPE", position:"Contract Manager", team:"Poland, Belarus, Moldova, Ukraine, Romania", email:"aneta.drozd@webbeds.com" },
+  { name:"Arantxa Pons", region:"EUROPE", position:"Contract Manager", team:"Spain: Mallorca and Menorca", email:"arantxa.pons@webbeds.com" },
+  { name:"Aris Efstathiou", region:"EUROPE", position:"Contract Manager", team:"Greece - Kos, Rhodes + Hotel chains and hotel management companies all Greece", email:"aris.efstathiou@webbeds.com" },
+  { name:"Aude Speyser", region:"EUROPE", position:"Product Manager", team:"Regional France (south) and Switzerland", email:"Aude.Speyser@webbeds.com" },
+  { name:"Billy Wong", region:"EUROPE", position:"Product Manager", team:"", email:"billy.wong@webbeds.com" },
+  { name:"Cecilia Losa", region:"EUROPE", position:"Product Manager", team:"Europe", email:"Europe" },
+  { name:"Cennet Polat", region:"EUROPE", position:"Migration1", team:"", email:"cennet.polat@webbeds.com" },
+  { name:"Charmaine Kindley", region:"EUROPE", position:"Contract Manager", team:"Spain: Mallorca, Ibiza and Formentera", email:"charmaine.kindley@webbeds.com" },
+  { name:"Christina Papagiannakou", region:"EUROPE", position:"Contract Manager", team:"Greece, Ionian Islands", email:"christina.papagiannakou@webbeds.com" },
+  { name:"Christodoulos Stavrou", region:"EUROPE", position:"Contract Manager", team:"Cyprus & Malta", email:"Christodoulos.Stavrou@webbeds.com" },
+  { name:"Cindy Baudouin", region:"EUROPE", position:"Contract Manager", team:"Paris + Disneyland", email:"cindy.baudouin@webbeds.com" },
+  { name:"Clara Maffioletti", region:"EUROPE", position:"Contract Manager", team:"Italy: Lombardy, Piedmont, Aosta Valley and Lakes area", email:"clara.maffioletti@webbeds.com" },
+  { name:"Claudia Prasser", region:"EUROPE", position:"Contract Manager", team:"Germany (excluding major cities & regional chains)", email:"claudia.prasser@webbeds.com" },
+  { name:"Cynthia Lazar", region:"EUROPE", position:"Contract Support Executive", team:"", email:"cynthia.lazar@webbeds.com" },
+  { name:"Daniel Serrano", region:"EUROPE", position:"Regional Team Manager", team:"Spain mainland: Cities and Coasts", email:"daniel.serrano@webbeds.com" },
+  { name:"Daniel Villar Fabelo", region:"EUROPE", position:"Product Manager", team:"London and Ireland", email:"daniel.fabelo@webbeds.com" },
+  { name:"Despina Tirekoglou", region:"EUROPE", position:"Product Manager", team:"Europe", email:"Europe" },
+  { name:"Diana Peña Romano", region:"EUROPE", position:"Contract Manager", team:"Spain: Comunidad de Madrid", email:"diana.pena@webbeds.com" },
+  { name:"Dionysis Golfinos", region:"EUROPE", position:"Contract Manager", team:"Greece - Cyclades, Peloponnese, Athens", email:"dionysis.golfinos@webbeds.com" },
+  { name:"Domenica Fierro", region:"EUROPE", position:"Contract Manager", team:"DMC Italy", email:"domenica.fierro@webbeds.com" },
+  { name:"Effie Terzi", region:"EUROPE", position:"Contract Manager", team:"Cyprus, Malta, Israel, South Europe & Caribbean", email:"effie.terzi@webbeds.com" },
+  { name:"Emilia Wiech", region:"EUROPE", position:"Product Manager", team:"", email:"emila.wiech@webbeds.com" },
+  { name:"Emmanuel Marinakis", region:"EUROPE", position:"Senior Contracts Manager", team:"Greece - Crete East", email:"emmanuel.marinakis@webbeds.com" },
+  { name:"Eva Calero", region:"EUROPE", position:"Contract Manager", team:"Algarve, Madeira, Azores", email:"eva.calero@webbeds.com" },
+  { name:"Fabrizia Amoroso", region:"EUROPE", position:"Product Manager", team:"Southern Italy and Venice", email:"Fabrizia.amoroso@webbeds.com" },
+  { name:"Francesca Pecci", region:"EUROPE", position:"Product Manager", team:"", email:"francesca.pecci@webbeds.com" },
+  { name:"George Mourlas", region:"EUROPE", position:"Contract Manager", team:"Greece - Multiple Islands", email:"george.mourlas@webbeds.com" },
+  { name:"Giovanni Pellegrino", region:"EUROPE", position:"Regional Team Manager", team:"Italy (multiple regions)", email:"giovanni.pellegrino@webbeds.com" },
+  { name:"Guillermo Tuckey", region:"EUROPE", position:"Contract Manager", team:"Europe", email:"Europe" },
+  { name:"Guillermo Venero", region:"EUROPE", position:"Product Manager", team:"South of the UK", email:"Guillermo.venero@webbeds.com" },
+  { name:"Gustavo Molinari", region:"EUROPE", position:"Contract Manager", team:"Spain", email:"gustavo.molinari@webbeds.com" },
+  { name:"Hegla Alemi", region:"EUROPE", position:"Product Manager", team:"", email:"hegla.alemi@webbeds.com" },
+  { name:"Irene Gonzalez", region:"EUROPE", position:"Contract Manager", team:"Spain: Andalusia (coasts)", email:"irene.gonzalez@webbeds.com" },
+  { name:"Jan Williams", region:"EUROPE", position:"Contract Manager", team:"Ireland & NI", email:"jan.williams@webbeds.com" },
+  { name:"Jeremie Casal", region:"EUROPE", position:"Senior Contract Manager", team:"", email:"jeremie.casal@webbeds.com" },
+  { name:"Joana Llasses", region:"EUROPE", position:"Contract Manager", team:"", email:"joana.llasses@webbeds.com" },
+  { name:"Johanna de Boysson", region:"EUROPE", position:"Contract Manager", team:"Germany & Liechtenstein", email:"johanna.Deboysson@webbeds.com" },
+  { name:"Juan Merchan Alba", region:"EUROPE", position:"Product Manager", team:"", email:"juan.merchan@webbeds.com" },
+  { name:"Juan Soto Jurado", region:"EUROPE", position:"Contract Manager", team:"Belgium, Luxembourg, Austria", email:"juan.soto@webbeds.com" },
+  { name:"Kasia Marciniak", region:"EUROPE", position:"Contract Manager", team:"London", email:"kasia.marciniak@webbeds.com" },
+  { name:"Kristina Kala", region:"EUROPE", position:"Contract Manager", team:"Greece - Crete West", email:"kristina.kala@webbeds.com" },
+  { name:"Laury Hervas", region:"EUROPE", position:"Contract Manager", team:"France South + Monaco", email:"laury.hervas@webbeds.com" },
+  { name:"Lidia Vaglica", region:"EUROPE", position:"Yield/Product Manager", team:"", email:"lidia.vaglica@webbeds.com" },
+  { name:"Liliana Ivanova", region:"EUROPE", position:"Contract Manager", team:"Iceland & Finland", email:"liliana.ivanova@webbeds.com" },
+  { name:"Lisa Doherty", region:"EUROPE", position:"Contract Manager", team:"Switzerland", email:"lisa.doherty@webbeds.com" },
+  { name:"Lisa Holder", region:"EUROPE", position:"Director of Product", team:"Europe and Indian Ocean", email:"lisa.holder@webbeds.com" },
+  { name:"Lisa Kerr", region:"EUROPE", position:"Contract Manager", team:"Scotland", email:"Lisa.Kerr@webbeds.com" },
+  { name:"Lorena Moya", region:"EUROPE", position:"Product Manager", team:"Key accounts - Inter Regional chains", email:"lorena.moya@webbeds.com" },
+  { name:"Maguelone Dumoulin", region:"EUROPE", position:"Contract Manager", team:"Paris", email:"maguelone.dumoulin@webbeds.com" },
+  { name:"Mar Martin", region:"EUROPE", position:"Contract Manager", team:"Canary Islands & Cape Verde", email:"mar.martin@webbeds.com" },
+  { name:"Marc Escandell", region:"EUROPE", position:"Product Manager", team:"Balearics", email:"marc.escandell@sunhotels.com" },
+  { name:"Maria Papakonstantinou", region:"EUROPE", position:"Contract Manager", team:"Greece", email:"Maria.Papakonstantinou@webbeds.com" },
+  { name:"Marianna Santachiara", region:"EUROPE", position:"Product Manager", team:"Greece", email:"marianna.santachiara@webbeds.com" },
+  { name:"Mariella De Lorenzo", region:"EUROPE", position:"Product Manager", team:"Rome", email:"mariella.delorenzo@webbeds.com" },
+  { name:"Marietta Fox", region:"EUROPE", position:"Director of Contracting", team:"Central Europe (France, Belgium, Netherlands, Luxembourg, Germany, Austria, Switzerland)", email:"marietta.fox@webbeds.com" },
+  { name:"Martin Cerha", region:"EUROPE", position:"Contract Manager", team:"Czech Republic, Slovakia, Hungary", email:"Martin.Cerha@webbeds.com" },
+  { name:"Marzena Grzegorczyk", region:"EUROPE", position:"Product Manager", team:"Regional UK", email:"marzena.grzegorczyk@webbeds.com" },
+  { name:"Mattias Lindqvist", region:"EUROPE", position:"Contract Manager", team:"Sweden, Norway, Denmark and Faroe Islands", email:"mattias.lindqvist@webbeds.com" },
+  { name:"Miguel Piscitelli", region:"EUROPE", position:"Product Manager", team:"Central Italy (excl Venice) & Balkans", email:"Miguel.Piscitelli@webbeds.com" },
+  { name:"Mikaela Minicozzi", region:"EUROPE", position:"Contract Manager", team:"", email:"mikaela.minicozzi@webbeds.com" },
+  { name:"Monika Muslika", region:"EUROPE", position:"Contract Manager", team:"London", email:"monika.muslika@webbeds.com" },
+  { name:"Natalia Garcia", region:"EUROPE", position:"Contract Manager", team:"Spain: Galicia, Asturias, Cantabria, Pais Vasco, La Rioja Castilla Leon, Aragón, Navarra", email:"natalia.garcia@webbeds.com" },
+  { name:"Natalia Petrova", region:"EUROPE", position:"Contract Manager", team:"Bulgaria", email:"Natalia.Petrova@webbeds.com" },
+  { name:"Nikol Photaki", region:"EUROPE", position:"Product Manager", team:"Crete, Cyprus, Malta and Israel", email:"nikol.photaki@webbeds.com" },
+  { name:"Nora Szegedi", region:"EUROPE", position:"Product Manager", team:"London", email:"nora.szegedi@webbeds.com" },
+  { name:"Olga Evseenko", region:"EUROPE", position:"Contract Manager", team:"Russia - St. Petersburg, South Russia (MATERNITY LEAVE)", email:"olga.evseenko@webbeds.com" },
+  { name:"Orhideea Rosu", region:"EUROPE", position:"Product Manager", team:"Austria and Benelux", email:"Orhideea.rosu@webbeds.com" },
+  { name:"Paola Pocetti", region:"EUROPE", position:"Contracting & Product Support Manager", team:"Europe and Indian Ocean", email:"Paola.pocetti@webbeds.com" },
+  { name:"Pedro Coelho", region:"EUROPE", position:"Contract Manager", team:"Rio de Janeiro, Brazil", email:"pedro.coelho@webbeds.com" },
+  { name:"Phin Foldes", region:"EUROPE", position:"Regional Team Manager", team:"Belgium, Netherlands, Luxembourg, Austria, Switzerland", email:"phin.foldes@webbeds.com" },
+  { name:"Polina Grigoryants", region:"EUROPE", position:"Contract Manager", team:"Spain: Costa Brava, Maresme, Dorada, Catalunya and Andorra", email:"Polina.Grigoryants@webbeds.com" },
+  { name:"Polina Vasilyeva", region:"EUROPE", position:"Contract Manager", team:"Estonia, Latvia, Lithuania, (RUSSIA SUSPENDED - St Petersburg, South Russia)", email:"polina.vasilyeva@webbeds.com" },
+  { name:"Raquel Craviotto", region:"EUROPE", position:"Product Manager", team:"Costas (except Costa del Sol and Costa de la Luz) and Andorra", email:"raquel.craviotto@webbeds.com" },
+  { name:"Rasim Keles", region:"EUROPE", position:"Product Manager", team:"Bulgaria", email:"rasim.keles@Webbeds.com" },
+  { name:"Riccardo Tubiana", region:"EUROPE", position:"Contract Manager", team:"London", email:"riccardo.tubiana@webbeds.com" },
+  { name:"Rita Cristobal", region:"EUROPE", position:"Director of Contracting", team:"NORTH", email:"rita.cristobal@webbeds.com" },
+  { name:"Rossano Biagini", region:"EUROPE", position:"Contract Manager", team:"Italy: Emilia-Romagna, Tuscany, Umbria and Liguria", email:"rossano.biagini@webbeds.com" },
+  { name:"Sabrina Merzouki", region:"EUROPE", position:"Product Manager", team:"", email:"sabrina.merzouki@webbeds.com" },
+  { name:"Sandra Arencibia", region:"EUROPE", position:"Contract Manager", team:"Spain: Grand Canaria, Fuerteventura", email:"sandra.arencibia@webbeds.com" },
+  { name:"Sandra Chioralia", region:"EUROPE", position:"Product Manager", team:"", email:"sandra.chioralia@webbeds.com" },
+  { name:"Sandrine Lestringuez", region:"EUROPE", position:"Contract Manager", team:"Paris", email:"sandrine.lestringuez@webbeds.com" },
+  { name:"Sara Gower", region:"EUROPE", position:"Contract Manager", team:"London", email:"Sara.Gower@webbeds.com" },
+  { name:"Sindy Correa", region:"EUROPE", position:"Contract Manager", team:"France (North, North East, North West) + Corsica + Regional Chains", email:"sindy.Correa@webbeds.com" },
+  { name:"Sophie Berassen", region:"EUROPE", position:"Product Manager", team:"", email:"sophie.berassen@webbeds.com" },
+  { name:"Stavros Saroulakis", region:"EUROPE", position:"Contract Manager", team:"Albania, Bosnia & Herzegovina, Macedonia, Montenegro, Serbia, Slovenia", email:"stavros.saroulakis@webbeds.com" },
+  { name:"Stephanie Blore", region:"EUROPE", position:"Product Manager", team:"UK, Greece and Israel", email:"stephanie.blore@webbeds.com" },
+  { name:"Stephanie Startup", region:"EUROPE", position:"Regional Team Manager", team:"North and Central Europe", email:"stephanie.startup@webbeds.com" },
+  { name:"Stephanie Tan", region:"EUROPE", position:"Product Manager", team:"", email:"stephanie.tan@webbeds.com" },
+  { name:"Tarek Asbahee", region:"EUROPE", position:"Contract Manager", team:"Czech Republic, Slovakia, Hungary", email:"tarek.asbahee@webbeds.com" },
+  { name:"Tiago Tonicha", region:"EUROPE", position:"Contract Manager", team:"", email:"tiago.tonicha@webbeds.com" },
+  { name:"Tunde Guner", region:"EUROPE", position:"Director of Contracting", team:"East Europe, East Med, Indian Ocean? and Israel", email:"tunde.guner@webbeds.com" },
+  { name:"Valentina Floris", region:"EUROPE", position:"Contract Manager", team:"maternity", email:"valentina.floris@webbeds.com" },
+  { name:"Valerio Di Patrizi", region:"EUROPE", position:"Contract Manager", team:"Italy: Apulia, Basilicata, Calabria, Sicily, and Campania (covering Venice)", email:"valerio.dipatrizi@webbeds.com" },
+  { name:"Veronica Carfagno", region:"EUROPE", position:"Product Manager", team:"Canary Islands & Cape Verde", email:"veronica.carfagno@webbeds.com" },
+  { name:"Werner Bilgram", region:"EUROPE", position:"Contract Manager", team:"Croatia", email:"werner.bilgram@webbeds.com" },
+  { name:"Nader Jegham", region:"EUROPE / MENA", position:"Contract Manager", team:"Morocco", email:"nader.jegham@webbeds.com" },
+  { name:"Majdouline Guerroud", region:"EUROPE / MENA / OCEANS", position:"Product Manager", team:"Morocco, Tunisia and Indian Ocean plus Italy Mamberto and Master group", email:"majdouline.guerroud@webbeds.com" },
+  { name:"Leonardo Spicker", region:"EUROPE / OCEANS", position:"Transfer Contracting Manager", team:"Global Transfers and Tours", email:"leonardo.spicker@webbeds.com" },
+  { name:"Navneet Kaushal", region:"OCEANS", position:"Contract Manager", team:"Mauritius, Seychelles, Reunion, Madagascar, Sri Lanka", email:"amabile.fileccia@webbeds.com" },
+  { name:"Eugenia Tyrinova", region:"OCEANS", position:"Contract Manager", team:"DMC CIS, Baltics, Malta and Balkans", email:"eugenia.tyrinova@webbeds.com" },
+  { name:"Iris Miliouto", region:"OCEANS", position:"Head of Contracting DMC", team:"DMC Austria, Cyprus and Sri Lanka", email:"Iris.miliouto@webbeds.com" },
+  { name:"Karin Berndt", region:"OCEANS", position:"Regional Head of Contracting", team:"East Europe, Baltics, CIS, Indian Ocean (DC: Maldives)", email:"karin.berndt@webbeds.com" },
+  { name:"Lidia Ramirez", region:"OCEANS", position:"Product Manager", team:"", email:"lidia.ramirez@webbeds.com" },
+  { name:"Roxana Filotti", region:"OCEANS", position:"Product Manager", team:"Oceans", email:"roxana.filotti@webbeds.com" },
+  { name:"Vicente Martinez", region:"OCEANS", position:"Contract Manager", team:"Maldives", email:"vicente.martinez@webbeds.com" },
+  { name:"Ahmed Hosny", region:"Saudi Arabia", position:"Regional Commercial Manager Contracting", team:"Makkah/Madinah", email:"ahmed.hosny@uhitravel.com" },
+  { name:"Anna Korshunova", region:"UAE", position:"Contracts Manager Contracting", team:"Dubai / Fujairah / Khorfakkan / RAK / Sharjah / UMQ", email:"anna.korshunova@webbeds.com" },
+  { name:"David Kennedy", region:"MEA", position:"Head of Sourcing - Africa Contracting", team:"Africa", email:"david.kennedy@webbeds.com" },
+  { name:"Didem Saldak", region:"Turkey", position:"Director of Contracting", team:"Istanbul, Bursa & Black sea region", email:"didem.saldak@webbeds.com" },
+  { name:"Engin Bozok", region:"Turkey", position:"Contracts Manager Contracting", team:"Marmaris/İzmir/Kuşadası", email:"engin.bozok@webbeds.com" },
+  { name:"Hossam Abbas", region:"Egypt", position:"Senior Contracts Manager Contracting", team:"All Cities except Luxor, Aswan , Red sea &Sharm Elsheikh", email:"hossam.abbas@webbeds.com" },
+  { name:"Isa Senturk", region:"MEA", position:"Contracts Manager", team:"MEA", email:"MEA" },
+  { name:"Janice Mariella D'Souza", region:"MEA", position:"Contracts Manager Contracting", team:"", email:"janice.dsouza@webbeds.com" },
+  { name:"Kashif Rafiq", region:"MEA", position:"Consultant", team:"", email:"kashif.rafiq@webbeds.com" },
+  { name:"Leonard D'Costa", region:"UAE", position:"Director of Contracting UAE Contracting", team:"Ajman / Dubai / Fujairah / RAK / UMQ", email:"leonard.dcosta@webbeds.com" },
+  { name:"Levent Guner", region:"MEA", position:"Contract Manager", team:"", email:"levent.guner@webbeds.com" },
+  { name:"Lina Tantawy", region:"Egypt", position:"Senior Contracts Manager Contracting", team:"Luxor , Aswan , Red sea cities & Sharm Elsheikh", email:"lina.tantawy@webbeds.com" },
+  { name:"Mahmoud Khatib", region:"MEA", position:"Contract Manager", team:"", email:"" },
+  { name:"Mehtap Atkin Buyuksahin", region:"MEA", position:"Contracts Manager Contracting", team:"", email:"mehtap.buyuksahin@webbeds.com" },
+  { name:"Mohamed Azazy Farag Morsy", region:"MEA", position:"Contracts Manager Contracting", team:"Qatar, Iraq, Bahrain, Oman, Jordan, Kuwait, Iran, Lebanon", email:"mohamed.morsy@webbeds.com" },
+  { name:"Renee Cloete", region:"South Africa", position:"Contracts Manager Contracting", team:"South Africa", email:"renee.cloete@webbeds.com" },
+  { name:"Thomas Letoya", region:"Rest of Africa", position:"Contracts Manager Contracting", team:"Rest of Africa", email:"thomas.letoya@webbeds.com" },
+  { name:"Yana Andonova", region:"MEA", position:"Contracts Manager Contracting", team:"", email:"yana.andonova@webbeds.com" },
+  { name:"Ashraf Noaman", region:"Saudi Arabia", position:"Contracts Manager Contracting", team:"Makkah/Madinah", email:"" },
+  { name:"Hani Fayoumi", region:"Saudi Arabia", position:"Contracts Manager Contracting", team:"Jeddah/Taif", email:"" },
+  { name:"Dahab Mohamed", region:"Saudi Arabia", position:"Contracts Manager Contracting", team:"all other cities", email:"" },
+  { name:"Shahin Fayed", region:"Saudi Arabia", position:"Contracts Manager Contracting", team:"Riyadh", email:"" },
+  { name:"Merve Olgun", region:"Turkey", position:"Contracts Manager Contracting", team:"Istanbul", email:"merve.olgun@webbeds.com" },
+  { name:"Levent Guner", region:"Turkey", position:"Contracts Manager Contracting", team:"Bodrum/Fethiye/Dalaman", email:"" },
+  { name:"Mehtap Atkın", region:"Turkey", position:"Contracts Manager Contracting", team:"Antalya", email:"" },
+  { name:"Janice D'Souza", region:"UAE", position:"Contracts Manager Contracting", team:"Dubai / Fujairah", email:"" },
+  { name:"Yana Andonova", region:"UAE", position:"Contracts Manager Contracting", team:"Abu Dhabi / Dubai / Fujairah /Al Ain/RAK", email:"" }
+];
+
+
+
+
+// ======= إعدادات =======
+const rowsPerPage = 10;
+let currentPage = 1;
+let currentData = [...data];
+let sortDir = 1;
+
+const tbody = document.getElementById("tbody");
+const pagination = document.getElementById("pagination");
+const search = document.getElementById("search");
+
+// ======= دوال مساعدة =======
+function createCell(value,type){
+  if(!value) return `<span class="empty">—</span>`;
+  if(type==="email") return `<a href="mailto:${value}">${value}</a>`;
+  return value;
+}
+
+function render(){
+  const start = (currentPage-1)*rowsPerPage;
+  const pageData = currentData.slice(start,start+rowsPerPage);
+  tbody.innerHTML = pageData.map(r=>`
+    <tr>
+      <td>${r.name}</td>
+      <td>${r.region}</td>
+      <td>${r.position}</td>
+      <td>${r.team}</td>
+      <td>${createCell(r.email,"email")}</td>
+    </tr>`).join("");
+  renderPagination();
+}
+
+function renderPagination(){
+  pagination.innerHTML="";
+  const pages = Math.ceil(currentData.length / rowsPerPage);
+  for(let i=1;i<=pages;i++){
+    pagination.innerHTML+=`
+      <button class="${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+  }
+}
+
+function goPage(p){
+  currentPage=p;
+  render();
+}
+
+search.oninput=()=>{
+  const v = search.value.toLowerCase();
+  currentData = data.filter(r =>
+    Object.values(r).join(" ").toLowerCase().includes(v)
+  );
+  currentPage = 1;
+  render();
+};
+
+function sortBy(key){
+  sortDir *= -1;
+  currentData.sort((a,b)=>
+    (a[key] || "").localeCompare(b[key] || "") * sortDir
+  );
+  render();
+}
+
+function toggleTheme(){
+  document.body.classList.toggle("dark");
+}
+
+function goHome(){
+  window.location.href = 'index.html'; // رابط الصفحة الرئيسية
+}
+
+// ======= بداية التشغيل =======
+render();
+</script>
+
+</body>
+</html>

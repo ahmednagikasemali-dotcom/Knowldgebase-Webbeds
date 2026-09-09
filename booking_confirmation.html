@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HCN – Reconfirmation Process - WebBeds</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 { 
+  color: #2c3e50; 
+  text-align: center; 
+  margin-top: 20px; 
+}
+h2 { color: #34495e; margin-top: 25px; }
+
+.contentBox {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+/* Accordion */
+.accordion {
+  background-color: #e8f6f3;
+  color: #2c3e50;
+  cursor: pointer;
+  padding: 14px 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  font-size: 16px;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+.accordion.active {
+  background-color: #d0ece7;
+}
+
+.panel {
+  padding: 10px 18px;
+  display: none;
+  background-color: #fafafa;
+  margin-top: 5px;
+  border-left: 4px solid #3498db;
+  border-radius: 6px;
+}
+
+.note {
+  background: #e8f6f3;
+  padding: 8px;
+  margin-top: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.warning {
+  background: #fce4e4;
+  padding: 8px;
+  margin-top: 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Home button */
+#homeBtn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  z-index: 1000;
+}
+#homeBtn .homeIcon {
+  width: 40px;
+  height: 40px;
+  background-color: red;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+}
+#homeBtn span {
+  font-weight: bold;
+  font-size: 18px;
+  color: #2c3e50;
+}
+
+/* Info Icon */
+#infoIcon {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 45px;
+  height: 45px;
+  background-color: #3498db;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+/* Info Popup */
+#infoBox {
+  display: none;
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  width: 280px;
+  background-color: #ffffff;
+  border: 2px solid #3498db;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 1000;
+  font-size: 14px;
+}
+
+#infoBox strong {
+  color: #2c3e50;
+}
+
+#closeInfo {
+  text-align: left;
+  cursor: pointer;
+  font-weight: bold;
+  color: red;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Home -->
+<div id="homeBtn" onclick="window.location.href='index.html'">
+  <div class="homeIcon">🏠</div>
+  <span>WebBeds</span>
+</div>
+
+<!-- Info Icon -->
+<div id="infoIcon" onclick="toggleInfo()">❓</div>
+
+<!-- Info Popup -->
+<div id="infoBox">
+  <div id="closeInfo" onclick="toggleInfo()">✖</div>
+  <p><strong>Main Tab:</strong> Answering Queries</p>
+  <p><strong>Sub Tab:</strong> HCN – Reconfirmation</p>
+  <p><strong>Description:</strong><br>
+  Handling hotel confirmation numbers, reconfirming bookings,
+  and ensuring correct communication with clients and suppliers.
+  </p>
+</div>
+
+<h1>HCN – Reconfirmation Process</h1>
+
+<div class="contentBox">
+
+<h2>Overview</h2>
+<p>
+This SOP explains how to handle <strong>HCN (Hotel Confirmation Number)</strong>
+requests, reconfirm bookings, and communicate correctly with clients and suppliers.
+</p>
+
+<button class="accordion">Step 1: Understanding HCN & Reconfirmation</button>
+<div class="panel">
+<ul>
+  <li>All bookings are confirmed by default except On-Request or errored bookings.</li>
+  <li>Confirmed does not mean fully secured.</li>
+  <li>The technical term is <strong>Reconfirmation</strong>.</li>
+  <li>Reconfirmation means validating all booking details and obtaining:
+    <ul>
+      <li>Hotel Confirmation Number (HCN)</li>
+      <li>Hotelier’s name</li>
+    </ul>
+  </li>
+</ul>
+<div class="note">Proper reconfirmation reduces Operations workload by more than 50%.</div>
+</div>
+
+<button class="accordion">Step 2: Check the Booking Status</button>
+<div class="panel">
+<ul>
+  <li>Open the booking on its platform.</li>
+  <li>Verify if the booking is already confirmed.</li>
+</ul>
+</div>
+
+<button class="accordion">Step 3: Capture HCN</button>
+<div class="panel">
+<ul>
+  <li>If confirmed → capture the HCN.</li>
+  <li>Capture hotelier’s name if available.</li>
+</ul>
+</div>
+
+<button class="accordion">Step 4: Run Dexter (If Needed)</button>
+<div class="panel">
+<ul>
+  <li>If booking is not confirmed → run <strong>Dexter</strong>.</li>
+</ul>
+</div>
+
+<button class="accordion">Step 5: Contact the Provider</button>
+<div class="panel">
+<ul>
+  <li>Check provider’s platform if access is available.</li>
+  <li>Otherwise, contact the provider via official email.</li>
+</ul>
+</div>
+
+<button class="accordion">Step 6: Update System & Client</button>
+<div class="panel">
+<ul>
+  <li>Update booking with HCN & hotelier’s name.</li>
+  <li>Inform the client clearly.</li>
+</ul>
+</div>
+
+</div>
+
+<script>
+/* Accordion */
+const acc = document.getElementsByClassName("accordion");
+for (let i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    const panel = this.nextElementSibling;
+    panel.style.display = panel.style.display === "block" ? "none" : "block";
+  });
+}
+
+/* Toggle Info */
+function toggleInfo() {
+  const box = document.getElementById("infoBox");
+  box.style.display = box.style.display === "block" ? "none" : "block";
+}
+</script>
+
+</body>
+</html>

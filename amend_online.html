@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to Amend Booking Online - DOTWConnect</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 { 
+  color: #2c3e50; 
+  text-align: center; 
+  margin-top: 20px; 
+}
+h2 { color: #34495e; margin-top: 25px; }
+
+.contentBox {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+/* Accordion */
+.accordion {
+  background-color: #e8f6f3;
+  color: #2c3e50;
+  cursor: pointer;
+  padding: 14px 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  font-size: 16px;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+.accordion.active { background-color: #d0ece7; }
+
+.panel {
+  padding: 10px 18px;
+  display: none;
+  background-color: #fafafa;
+  margin-top: 5px;
+  border-left: 4px solid #3498db;
+  border-radius: 6px;
+}
+
+.note {
+  background: #e8f6f3;
+  padding: 8px;
+  margin-top: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.warning {
+  background: #fce4e4;
+  padding: 8px;
+  margin-top: 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Home button */
+#homeBtn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  z-index: 1000;
+}
+#homeBtn .homeIcon {
+  width: 40px;
+  height: 40px;
+  background-color: red;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+}
+#homeBtn span {
+  font-weight: bold;
+  font-size: 18px;
+  color: #2c3e50;
+}
+
+/* Top icons */
+#topIcons {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  z-index: 1000;
+}
+
+/* Info icon */
+#infoIcon {
+  width: 45px;
+  height: 45px;
+  background-color: #3498db;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* Word book icon */
+#wordBook {
+  width: 45px;
+  height: 45px;
+  background-color: #2b579a;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  text-decoration: none;
+}
+#wordBook:hover { background-color: #1e3f73; }
+
+/* Info Popup */
+#infoBox {
+  display: none;
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  width: 280px;
+  background-color: #ffffff;
+  border: 2px solid #3498db;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 1000;
+  font-size: 14px;
+}
+
+#infoBox strong { color: #2c3e50; }
+#closeInfo {
+  text-align: left;
+  cursor: pointer;
+  font-weight: bold;
+  color: red;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Home -->
+<div id="homeBtn" onclick="window.location.href='index.html'">
+  <div class="homeIcon">🏠</div>
+  <span>WebBeds</span>
+</div>
+
+<!-- Info + Word Icons -->
+<div id="topIcons">
+  <div id="infoIcon" onclick="toggleInfo()">❓</div>
+  <a id="wordBook"
+     href="How to Amend Booking Online.docx"
+     target="_blank"
+     title="Open SOP in Word (Offline)">📘</a>
+</div>
+
+<!-- Info Popup -->
+<div id="infoBox">
+  <div id="closeInfo" onclick="toggleInfo()">✖</div>
+  <p><strong>Main Tab:</strong> Answering Queries</p>
+  <p><strong>Sub Tab:</strong> Amend</p>
+  <p><strong>Description:</strong><br>
+  Online booking amendments through the Amend Booking workflow
+  in DOTWConnect.
+  </p>
+</div>
+
+<h1>How to Amend Booking Online</h1>
+
+<div class="contentBox">
+
+<h2>Overview</h2>
+<p>
+This SOP explains how to perform an <strong>online booking amendment</strong>
+using the <strong>Amend Booking</strong> functionality in DOTWConnect.
+</p>
+
+<div class="note">
+This applies to bookings from <strong>Direct Hotel Contracts</strong> or
+<strong>DMC / Local Suppliers</strong>.  
+Dynamic, Third Party, or Channel Manager bookings must be amended offline.
+</div>
+
+<button class="accordion">Step 1: Check Booking Eligibility</button>
+<div class="panel">
+<ul>
+  <li>Booking source must be Direct Contract or DMC/Local Supplier.</li>
+  <li>Booking must be pre-travel.</li>
+  <li>Amendment deadline must not have passed.</li>
+</ul>
+</div>
+
+<button class="accordion">Step 2: Click Amend Booking</button>
+<div class="panel">
+<ul>
+  <li>Open the booking in DOTWConnect.</li>
+  <li>Scroll to the bottom of the page.</li>
+  <li>Click <strong>Amend Booking</strong>.</li>
+  <li>If unavailable, check <strong>Amend Offline</strong>.</li>
+</ul>
+</div>
+
+<button class="accordion">Step 3: Review Booking Summary</button>
+<div class="panel">
+<ul>
+  <li>Review booking summary displayed at the top.</li>
+  <li>Note the <strong>Room Cost / Selling Price</strong>.</li>
+</ul>
+</div>
+
+<button class="accordion">Step 4: Select Amendment Type</button>
+<div class="panel">
+<ul>
+  <li>Name correction</li>
+  <li>Date amendment</li>
+  <li>Occupancy amendment</li>
+  <li>Meal plan amendment (subject to contract availability)</li>
+</ul>
+</div>
+
+<button class="accordion">Step 5: Handle Special Requests</button>
+<div class="panel">
+<ul>
+  <li>Special requests via system may reprice the booking.</li>
+</ul>
+<div class="warning">
+Send special requests directly to the hotel or supplier
+to avoid price recalculation.
+</div>
+</div>
+
+<button class="accordion">Step 6: Calculate Additional Selling Price</button>
+<div class="panel">
+<ul>
+  <li>Click <strong>Proceed with the Amendment</strong>.</li>
+  <li>Review rate plans, cancellation deadlines, and prices.</li>
+</ul>
+</div>
+
+<button class="accordion">Step 7: Check Rate Plan Status</button>
+<div class="panel">
+<ul>
+  <li>Only offer rate plans with <strong>Room Available</strong> status.</li>
+  <li>Confirm with hotel if status is <strong>Room on Request</strong>.</li>
+</ul>
+</div>
+
+<button class="accordion">Step 8: Finalize Amendment</button>
+<div class="panel">
+<ul>
+  <li>Advise customer of additional selling price.</li>
+  <li>Confirm amendment penalty and new cancellation deadline.</li>
+  <li>Proceed once customer agrees.</li>
+</ul>
+</div>
+
+<button class="accordion">Step 9: Post-Amendment Updates</button>
+<div class="panel">
+<ul>
+  <li>VCC and invoices update automatically.</li>
+  <li>Monthly invoicing updates supplier & client invoices.</li>
+</ul>
+</div>
+
+</div>
+
+<script>
+const acc = document.getElementsByClassName("accordion");
+for (let i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    const panel = this.nextElementSibling;
+    panel.style.display = panel.style.display === "block" ? "none" : "block";
+  });
+}
+
+function toggleInfo() {
+  const box = document.getElementById("infoBox");
+  box.style.display = box.style.display === "block" ? "none" : "block";
+}
+</script>
+
+</body>
+</html>

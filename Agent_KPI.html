@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UCC Evaluation – WebBeds</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 { 
+  color: #2c3e50; 
+  text-align: center; 
+  margin-top: 20px; 
+}
+h2 { color: #34495e; margin-top: 25px; }
+h3 { color: #4a4a4a; margin-top: 15px; }
+
+.contentBox {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+/* Accordion style */
+.accordion {
+  background-color: #e8f6f3;
+  color: #2c3e50;
+  cursor: pointer;
+  padding: 14px 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 16px;
+  border-radius: 6px;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+
+.accordion.active {
+  background-color: #d0ece7;
+}
+
+.panel {
+  padding: 0 18px;
+  display: none;
+  background-color: #fafafa;
+  overflow: hidden;
+  margin-top: 5px;
+  border-left: 4px solid #3498db;
+  border-radius: 6px;
+}
+
+/* Notes & warnings inside panel */
+.note {
+  background: #e8f6f3;
+  padding: 8px;
+  margin-top: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.warning {
+  background: #fce4e4;
+  padding: 8px;
+  margin-top: 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Home button */
+#homeBtn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+#homeBtn .homeIcon {
+  width: 40px;
+  height: 40px;
+  background-color: red;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+}
+
+#homeBtn span {
+  font-weight: bold;
+  font-size: 18px;
+  color: #2c3e50;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Home button -->
+<div id="homeBtn" onclick="window.location.href='index.html'">
+  <div class="homeIcon">🏠</div>
+  <span>WebBeds</span>
+</div>
+
+<h1>UCC Evaluation – Starting January 2026</h1>
+
+<div class="contentBox">
+
+<h2>1. Ethics & Integrity (5/5)</h2>
+
+<button class="accordion">Loss (Same Month) – 2 Points</button>
+<div class="panel">
+<ul>
+  <li>Loss of $1 or above → <strong>0/2</strong></li>
+  <li>No Loss → <strong>2/2</strong></li>
+</ul>
+</div>
+
+<button class="accordion">Mishandling (Same Month) – 2 Points</button>
+<div class="panel">
+<ul>
+  <li>Case that might lead to a loss → <strong>0/2</strong></li>
+  <li>No cases → <strong>2/2</strong></li>
+</ul>
+</div>
+
+<button class="accordion">FD / F9 Availability (Previous Month) – 1 Point</button>
+<div class="panel">
+<ul>
+  <li>Less than 7.5 hrs on F9 OR less than 6.5 hrs on FD → <strong>0/1</strong></li>
+  <li>7.5 hrs or more on F9 AND 6.5 hrs or more on FD → <strong>1/1</strong></li>
+</ul>
+</div>
+
+<h2>2. Communication (5/5)</h2>
+
+<button class="accordion">QA Score (Same Month) – 2 Points</button>
+<div class="panel">
+<ul>
+  <li>85% or above → <strong>2/2</strong></li>
+  <li>75% to less than 85% → <strong>1/2</strong></li>
+  <li>Less than 75% OR 2 Auto-Failed Calls → <strong>0/2</strong></li>
+</ul>
+</div>
+
+<button class="accordion">Ownership (Previous Month) – 1 Point</button>
+<div class="panel">
+<ul>
+  <li>85% or above → <strong>1/1</strong></li>
+  <li>Less than 85% → <strong>0/1</strong></li>
+</ul>
+</div>
+
+<button class="accordion">General Communication – 2 Points</button>
+<div class="panel">
+<ul>
+  <li>Meets communication standards → <strong>2/2</strong></li>
+</ul>
+</div>
+
+<h2>3. Adaptability</h2>
+
+<button class="accordion">Adherence (Same Month) – 2 Points</button>
+<div class="panel">
+<ul>
+  <li>More than 1 emergency → <strong>0/1</strong></li>
+  <li>Flexibility with shifts → <strong>1/1</strong></li>
+</ul>
+</div>
+
+<button class="accordion">Aged / Unresolved Cases (Same Month) – 2 Points</button>
+<div class="panel">
+<ul>
+  <li>More than 10 incidents pending for over 10 days → <strong>0/2</strong></li>
+  <li>Within acceptable limits → <strong>2/2</strong></li>
+</ul>
+</div>
+
+<button class="accordion">SLA Achievement (Same Month) – 1 Point</button>
+<div class="panel">
+<ul>
+  <li>SLA achieved (90%) for 72 hours → <strong>1/1</strong></li>
+</ul>
+</div>
+
+</div>
+
+<script>
+// Accordion functionality
+const acc = document.getElementsByClassName("accordion");
+for (let i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    const panel = this.nextElementSibling;
+    panel.style.display = panel.style.display === "block" ? "none" : "block";
+  });
+}
+</script>
+
+</body>
+</html>

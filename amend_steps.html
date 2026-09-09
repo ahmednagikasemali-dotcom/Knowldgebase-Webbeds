@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Amendment Decision Tree – WebBeds</title>
+<style>
+body { font-family: Arial, sans-serif; background:#f5f5f5; padding:20px; }
+h1,h2 { text-align:center; color:#2c3e50; }
+h3 { color:#34495e; margin-bottom:5px; }
+.contentBox { background:#fff; border:1px solid #ccc; border-radius:10px; padding:20px; margin-bottom:20px; }
+
+/* Accordion */
+.accordion { background:#e8f6f3; border:none; padding:12px 14px; width:100%; margin-top:5px; border-radius:6px; cursor:pointer; text-align:left; font-weight:bold; transition:0.2s; }
+.accordion:hover { background:#d0ece7; }
+.panel { display:none; background:#fdfdfd; border-left:3px solid #2c3e50; margin-left:20px; padding:10px 15px; border-radius:5px; }
+.step { margin-top:15px; }
+textarea { width:100%; height:180px; margin-top:10px; }
+.note { background:#fff3cd; border-left:4px solid #f0ad4e; padding:10px; margin-top:10px; font-size:14px; }
+
+/* Home Button */
+#homeBtn { position: fixed; top: 20px; left: 20px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+#homeBtn .homeIcon { width: 40px; height: 40px; background-color: red; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 20px; }
+#homeBtn span { font-weight: bold; font-size: 18px; }
+
+/* Back Button */
+.backBtn { margin-top: 10px; background: #d0d0d0; border: none; border-radius: 6px; padding: 8px 12px; cursor: pointer; font-weight: bold; }
+.backBtn:hover { background: #b0b0b0; }
+
+/* Important points */
+.important-point { color:#c0392b; font-weight:bold; margin-bottom:8px; }
+.important-note { color:#2980b9; font-weight:bold; margin-top:10px; }
+</style>
+</head>
+<body>
+
+<!-- Home -->
+<div id="homeBtn" onclick="window.location.href='index.html'">
+  <div class="homeIcon">🏠</div>
+  <span>WebBeds</span>
+</div>
+
+<h1>Amendment Decision Tree</h1>
+
+<div class="contentBox">
+<h2>Commentary & Tips</h2>
+<ul>
+  <li>Amendments include any modification: extras, supplements, refunds, compensation, etc.</li>
+  <li>10% mark-up applies on any added service (min 5 EUR/USD or equivalent).</li>
+  <li>Handling depends on: Cancellation Policy, Booking Type, Cash Direction, System Feasibility.</li>
+  <li>Offline services must be "Accepted & Confirmed" to avoid auto-cancellation.</li>
+  <li>Always link added services to the original booking.</li>
+  <li>Pre-payment clients must settle payment before using VCC to settle provider.</li>
+  <li>If currency differs, convert first, then apply mark-up.</li>
+  <li>Always confirm MISC services after client payment/settlement.</li>
+</ul>
+</div>
+
+<!-- Important Amendments for Saudi Arabia -->
+<div class="contentBox">
+<button class="accordion">⚠️ Important Amendments for DMC in Saudi Arabia</button>
+<div class="panel">
+  <ul>
+    <li class="important-point">[VERY IMPORTANT] In case we receive an amendment request for the same day of check-in for a booking with a DMC in Saudi Arabia, please reject it, do not process.</li>
+    <li class="important-point">[VERY IMPORTANT] In case we receive a request for an amendment before check-in by 24 hours and the booking was made through a DMC in Saudi Arabia, and we did not get a reply by email by midnight Saudi time, please reject the amendment request and send an email to the DMC to ignore the request.</li>
+    <li class="important-point">[VERY IMPORTANT] Any amendment request sent to a DMC in Saudi Arabia must include: “We will not consider the amendment approved unless we get a clear reply from you by email confirming the amendment before check-in time.”</li>
+    <li class="important-point">[VERY IMPORTANT] In case we were processing an amendment request and there is no update from the provider/DMC before check-in by 24 hours, we will reject the amendment and send an email and call the supplier to cancel the amendment request due to delayed response.</li>
+  </ul>
+  <p class="important-note">Please adhere to this amendment process to avoid a bad client experience or complications.</p>
+</div>
+</div>
+
+<div class="contentBox">
+<h2>Amendment Flow</h2>
+
+<!-- Booking Type -->
+<button class="accordion">1️⃣ Select Booking Type</button>
+<div class="panel" id="bookingTypePanel">
+  <button class="accordion" onclick="setType('GSA')">GSA & VIP Booking</button>
+  <button class="accordion" onclick="setType('MOR')">MOR Client Booking</button>
+</div>
+
+<!-- Amendment Policy -->
+<button class="accordion">2️⃣ Amendment Policy Status</button>
+<div class="panel" id="amendmentPolicyPanel">
+  <button class="accordion" onclick="showPanel('allowedPanel')">Amendment Allowed ✅</button>
+  <button class="accordion" onclick="showPanel('notAllowedPanel')">Amendment Not Allowed ❌</button>
+</div>
+
+<!-- Allowed -->
+<div id="allowedPanel" class="panel">
+  <h3 id="allowedTitle">Allowed – Steps</h3>
+  <ol id="allowedSteps">
+    <li>Check if amendment is free or chargeable.</li>
+    <li>If required, send amendment request to supplier and wait for confirmation.</li>
+    <li>Process amendment in the system (add mark-up, update prices & data).</li>
+    <li>Inform client and ensure MISC/Offline service is confirmed or Generic is "Confirm without taking from allotment".</li>
+    <li>For pre-payment clients, ensure payment is settled before VCC use.</li>
+    <li>Link the service to the original booking.</li>
+    <li>Update client with confirmation and HCN if applicable.</li>
+  </ol>
+  <button class="accordion" onclick="showReply('approved')">🧾 Client Reply</button>
+  <button class="backBtn" onclick="goBackToPolicy()">🔄 Back</button>
+</div>
+
+<!-- Not Allowed -->
+<div id="notAllowedPanel" class="panel">
+  <h3>Not Allowed – Steps</h3>
+  <ol>
+    <li>Check policy (Non-refundable / restricted amendment).</li>
+    <li>Inform client amendment cannot be processed.</li>
+    <li>Offer alternatives if available.</li>
+  </ol>
+  <button class="accordion" onclick="showReply('rejected')">🧾 Client Reply</button>
+  <button class="backBtn" onclick="goBackToPolicy()">🔄 Back</button>
+</div>
+
+<!-- Platform/System Flow -->
+<button class="accordion">3️⃣ Platform / System Flow</button>
+<div class="panel">
+  <button class="accordion" onclick="showPanel('DOTWPanel')">DOTW</button>
+  <button class="accordion" id="shButton" onclick="showPanel('SHPanel')">SH</button>
+</div>
+
+<!-- DOTW -->
+<div id="DOTWPanel" class="panel">
+  <h3>DOTW Amendment Flow</h3>
+  <ol>
+    <li>Online Amend: add service using booking engine under same ITN.</li>
+    <li>Offline Amend: request supplier quotation, apply mark-up, offer to client.</li>
+    <li>Client approves → create offline booking if cash goes to new entity.</li>
+    <li>Ensure service is "Accepted & Confirmed" to avoid auto-cancellation.</li>
+    <li>Update system (data + price) and client.</li>
+  </ol>
+  <button class="accordion" onclick="showReply('approved')">🧾 Client Reply</button>
+  <button class="accordion" onclick="showReply('rejected')">❌ Rejection Reply</button>
+  <button class="backBtn" onclick="goBackToPolicy()">🔄 Back</button>
+</div>
+
+<!-- SH -->
+<div id="SHPanel" class="panel">
+  <h3>SH Amendment Flow</h3>
+  <ol>
+    <li>Mostly offline handling required.</li>
+    <li>Request quotation from supplier, apply mark-up, offer to client.</li>
+    <li>Client approves → confirm service, update system and client.</li>
+  </ol>
+  <button class="accordion" onclick="showReply('approved')">🧾 Client Reply</button>
+  <button class="accordion" onclick="showReply('rejected')">❌ Rejection Reply</button>
+  <button class="backBtn" onclick="goBackToPolicy()">🔄 Back</button>
+</div>
+
+<!-- Client Reply -->
+<div id="replyBox" class="panel">
+  <h3>Client Reply Template</h3>
+  <textarea id="replyText"></textarea>
+  <button class="accordion" onclick="copyReply()">📋 Copy</button>
+  <button class="backBtn" onclick="goBackToPolicy()">🔄 Back</button>
+</div>
+
+<script>
+// Accordion logic
+const acc = document.getElementsByClassName("accordion");
+for (let i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    if(this.nextElementSibling && this.nextElementSibling.classList.contains("panel")){
+      this.classList.toggle("active");
+      const panel = this.nextElementSibling;
+      panel.style.display = panel.style.display === "block" ? "none" : "block";
+      if(panel.querySelectorAll('.accordion').length){
+        window.scrollTo(0, panel.offsetTop-20);
+      }
+    }
+  });
+}
+
+// Booking Type Logic
+let bookingType = "";
+function setType(type){
+  bookingType = type;
+  const allowedTitle = document.getElementById('allowedTitle');
+  const allowedSteps = document.getElementById('allowedSteps');
+  const shBtn = document.getElementById('shButton');
+  if(type === 'MOR'){
+    allowedTitle.textContent = 'MOR Client Amendment';
+    allowedSteps.innerHTML = `
+      <li>No amendments or changes with a higher price.</li>
+      <li>For any amendment with a lower rate / refund / partial refund:</li>
+      <ul>
+        <li>Confirm by mail to client.</li>
+        <li>Send request to refund team to raise refund and adjust system.</li>
+      </ul>
+    `;
+    alert('MOR client selected – only DOTW actions applicable');
+    shBtn.style.display = 'none';
+    showPanel('allowedPanel');
+  } else {
+    allowedTitle.textContent = 'Allowed – Steps';
+    allowedSteps.innerHTML = `
+      <li>Check if amendment is free or chargeable.</li>
+      <li>If required, send amendment request to supplier and wait for confirmation.</li>
+      <li>Process amendment in the system (add mark-up, update prices & data).</li>
+      <li>Inform client and ensure MISC/Offline service is confirmed or Generic is "Confirm without taking from allotment".</li>
+      <li>For pre-payment clients, ensure payment is settled before VCC use.</li>
+      <li>Link the service to the original booking.</li>
+      <li>Update client with confirmation and HCN if applicable.</li>
+    `;
+    shBtn.style.display = 'inline-block';
+    showPanel('allowedPanel');
+  }
+}
+
+function showPanel(id){
+  document.querySelectorAll('.panel').forEach(p => p.style.display='none');
+  const panel = document.getElementById(id);
+  if(panel) panel.style.display='block';
+  window.scrollTo(0, panel.offsetTop-20);
+}
+
+function showReply(type){
+  const note = "\n\n* Kindly reply on top of this same email without changing the subject or deleting the addresses attached to avoid creating duplicate cases. *";
+  let t = "";
+  if(type==="approved"){
+    t = `Dear Valued Partner,
+
+Greetings from WebBeds!
+
+We are pleased to confirm that the requested amendment has been successfully processed, and the booking has been updated accordingly.
+
+Please feel free to contact us if you need further assistance.${note}`;
+  }
+  if(type==="rejected"){
+    t = `Dear Valued Partner,
+
+Greetings from WebBeds!
+
+Kindly note that the requested amendment cannot be processed as per the booking policy or system limitations.
+
+Please let us know if you would like to explore alternative options.${note}`;
+  }
+  document.getElementById("replyText").value = t;
+  showPanel('replyBox');
+}
+
+function copyReply(){
+  const t = document.getElementById("replyText");
+  t.select();
+  document.execCommand("copy");
+  alert("Reply copied");
+}
+
+function goBackToPolicy(){
+  showPanel('amendmentPolicyPanel');
+}
+</script>
+</body>
+</html>

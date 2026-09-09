@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Call Quality – WebBeds</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 { 
+  color: #2c3e50; 
+  text-align: center; 
+  margin-top: 30px; 
+}
+
+/* ===== Home Button ===== */
+#homeBtn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+#homeBtn .homeIcon {
+  width: 40px;
+  height: 40px;
+  background-color: #1abc9c;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+}
+
+#homeBtn span {
+  font-weight: bold;
+  font-size: 18px;
+  color: #2c3e50;
+}
+
+/* ===== Content Box ===== */
+.contentBox {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 40px;
+}
+
+/* ===== Accordion ===== */
+.accordion {
+  background-color: #e8f6f3;
+  color: #2c3e50;
+  cursor: pointer;
+  padding: 14px 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  font-size: 16px;
+  border-radius: 6px;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+
+.accordion.active {
+  background-color: #d0ece7;
+}
+
+/* ===== Panel ===== */
+.panel {
+  padding: 10px 18px;
+  display: none;
+  background-color: #fafafa;
+  overflow: hidden;
+  margin-top: 5px;
+  border-left: 4px solid #3498db;
+  border-radius: 6px;
+}
+
+/* ===== Notes & Warnings ===== */
+.note {
+  background: #e8f6f3;
+  padding: 8px;
+  margin-top: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.warning {
+  background: #fce4e4;
+  padding: 8px;
+  margin-top: 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* ===== Forbidden Words Table ===== */
+.forbiddenTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.forbiddenTable th, .forbiddenTable td {
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+.forbiddenTable th {
+  background-color: #d35400;
+  color: white;
+}
+
+.red { background-color: #f8d7da; color: #721c24; }
+.amber { background-color: #fff3cd; color: #856404; }
+.undesired { background-color: #e2e3e5; color: #383d41; }
+
+/* Important icon */
+.importantIcon {
+  font-size: 18px;
+  color: #e74c3c;
+  margin-right: 8px;
+  font-weight: bold;
+}
+
+/* ===== Search Box ===== */
+#searchBox {
+  width: 100%;
+  max-width: 500px;
+  margin: 20px auto;
+  display: block;
+  padding: 12px 15px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Home Button -->
+<div id="homeBtn" onclick="window.location.href='index.html'">
+  <div class="homeIcon">🏠</div>
+  <span>WebBeds</span>
+</div>
+
+<h1>Call Quality – Inbound Calls (WebBeds)</h1>
+
+<!-- Search Box -->
+<input type="text" id="searchBox" placeholder="🔍 Search by keyword, phrase, or description...">
+
+<div class="contentBox">
+
+<!-- Section 1 -->
+<button class="accordion">Section 1: Opening Greeting</button>
+<div class="panel">
+<ul>
+  <li>Confirm the caller reached WebBeds.</li>
+  <li>Professional greeting and name introduction.</li>
+  <li>Friendly and confident tone.</li>
+</ul>
+<div class="note">
+📝 <strong>Script:</strong><br>
+“Thank you for calling WebBeds. My name is (Agent Name). How may I help you?”
+</div>
+</div>
+
+<!-- Section 2 -->
+<button class="accordion">Section 2: Verification & Validation (Booking Recap)</button>
+<div class="panel">
+<ul>
+  <li>Travel agency name confirmed.</li>
+  <li>Guest names verified.</li>
+  <li>Hotel name and travel dates confirmed.</li>
+</ul>
+<div class="warning">
+⚠️ Do not confirm booking details on behalf of the client.
+</div>
+</div>
+
+<!-- Section 3 -->
+<button class="accordion">Section 3: Call Action – Understanding the Request</button>
+<div class="panel">
+<ul>
+  <li>Client request clearly identified.</li>
+  <li>Clarifying questions asked if needed.</li>
+  <li>Client approval obtained before action.</li>
+</ul>
+</div>
+
+<!-- Section 4 -->
+<button class="accordion">Section 4: Call Action – On Hold</button>
+<div class="panel">
+<ul>
+  <li>Permission requested before hold.</li>
+  <li>Reason and duration explained.</li>
+  <li>Client updated regularly.</li>
+</ul>
+<div class="note">
+📝 <strong>Script:</strong><br>
+“May I place you on hold for 2–3 minutes while I check this for you?”
+</div>
+<div class="warning">
+⚠️ Never place a client on hold without permission.
+</div>
+</div>
+
+<!-- Section 5 -->
+<button class="accordion">Section 5: Transferring the Call</button>
+<div class="panel">
+<ul>
+  <li>Client informed before transfer.</li>
+  <li>All relevant details shared.</li>
+  <li>Seamless handover ensured.</li>
+</ul>
+</div>
+
+<!-- Section 6 -->
+<button class="accordion">Section 6: Receiving a Transferred Call</button>
+<div class="panel">
+<ul>
+  <li>Caller information reviewed.</li>
+  <li>No repetition of questions.</li>
+  <li>Immediate assistance provided.</li>
+</ul>
+</div>
+
+<!-- Section 7 -->
+<button class="accordion">Section 7: Ending the Call</button>
+<div class="panel">
+<ul>
+  <li>All actions completed.</li>
+  <li>Nothing missed.</li>
+  <li>Positive final impression delivered.</li>
+</ul>
+<div class="note">
+📝 <strong>Script:</strong><br>
+“Is there anything else I can help you with?<br>
+Thank you for calling WebBeds. Have a good day!”
+</div>
+</div>
+
+<!-- Section 8 -->
+<button class="accordion">Section 8: Things to Avoid</button>
+<div class="panel">
+<ul>
+  <li>No raised voice or sarcasm.</li>
+  <li>No negative language.</li>
+  <li>Always show empathy.</li>
+</ul>
+<div class="note">
+✅ <strong>Use Instead:</strong><br>
+“I understand how frustrating this must be.”<br>
+“Let me check that for you.”
+</div>
+</div>
+
+<!-- ===== New Forbidden Words Section (Full List) ===== -->
+<button class="accordion"><span class="importantIcon">⚠️</span> Rule: Forbidden Words – Full List</button>
+<div class="panel">
+  <p>These words and phrases must be avoided when speaking with customers. They are grouped by severity level:</p>
+  <table class="forbiddenTable">
+    <thead>
+      <tr>
+        <th>Severity</th>
+        <th>Description</th>
+        <th>Examples / Phrases</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="red">
+        <td>RED 🔴</td>
+        <td>Completely unacceptable. Do not use under any circumstances.</td>
+        <td>
+          “Shut up”, “Annoying”, “I don’t care”, “Calm down”, “Check yourself”,<br>
+          “Don’t shout at me”, “I will hang up”, “Absurd”, “What is it this time”,<br>
+          “Stop calling”, “Stop chasing”, “Listen to me”, “You listen”,<br>
+          Any equivalent phrase in all languages
+        </td>
+      </tr>
+      <tr class="amber">
+        <td>AMBER 🟠</td>
+        <td>Strongly discouraged. Sounds rude, defensive, or dismissive.</td>
+        <td>
+          “I don’t want to”, “I have said already”, “I told you before”, “I told you many times”,<br>
+          “I will not do that”, “I won’t do that”, “Not my duty”, “Not my job”,<br>
+          “Not my responsibility”, “Not my problem”, “Let me tell you”, “You are wrong”,<br>
+          “You should have checked”, “You should have done”, “What do you want”
+        </td>
+      </tr>
+      <tr class="undesired">
+        <td>UNDESIRED ⚫</td>
+        <td>Not forbidden, but creates a negative customer experience.</td>
+        <td>
+          “Cannot do”, “Can’t do”, “Can’t help”, “Cannot help”, “Cannot assist”,<br>
+          “I can’t assist”, “[XXX] is not here”, “I do not know”, “I don’t know”,<br>
+          “Do it on our website”, “Not my case”, “Not possible”, “Impossible”,<br>
+          “You need to send”, “Our policy”, “Our company policy”,<br>
+          “Not something I can help”, “Not something I can do”, “Not my area”, “I repeat”
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</div> <!-- end of contentBox -->
+
+<script>
+// Accordion functionality
+const acc = document.getElementsByClassName("accordion");
+for (let i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    const panel = this.nextElementSibling;
+    panel.style.display = panel.style.display === "block" ? "none" : "block";
+  });
+}
+
+// Search functionality
+document.getElementById("searchBox").addEventListener("keyup", function() {
+  const filter = this.value.toLowerCase();
+  const sections = document.querySelectorAll(".accordion");
+  sections.forEach(section => {
+    const panel = section.nextElementSibling;
+    const text = (section.innerText + panel.innerText).toLowerCase();
+    if (text.includes(filter)) {
+      section.style.display = "";
+    } else {
+      section.style.display = "none";
+      panel.style.display = "none";
+      section.classList.remove("active");
+    }
+  });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "about_who": {
+    "agent": {
+      "short": "WebBeds is a global B2B travel distribution company.",
+      "full": "WebBeds is a global B2B travel distribution company providing hotel content and technology solutions exclusively to licensed travel agents worldwide."
+    },
+    "partner": {
+      "short": "WebBeds provides B2B accommodation distribution.",
+      "full": "WebBeds operates as a global B2B accommodation distributor working with approved travel partners and suppliers worldwide."
+    }
+  },
+  "booking_confirm": {
+    "agent": {
+      "short": "Booking confirmation is generated after successful booking.",
+      "full": "Booking confirmation is generated once the reservation is successfully completed and can be viewed on the WebBeds platform."
+    },
+    "partner": {
+      "short": "Confirmation is issued once booking is completed.",
+      "full": "Once the booking process is completed successfully, confirmation details will be available on the platform."
+    }
+  }
+}

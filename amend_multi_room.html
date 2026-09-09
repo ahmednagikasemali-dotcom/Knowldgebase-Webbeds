@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to Amend Multi-Room Bookings - DOTWConnect</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 { 
+  color: #2c3e50; 
+  text-align: center; 
+  margin-top: 20px; 
+}
+h2 { color: #34495e; margin-top: 25px; }
+
+.contentBox {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+/* Accordion */
+.accordion {
+  background-color: #e8f6f3;
+  color: #2c3e50;
+  cursor: pointer;
+  padding: 14px 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  font-size: 16px;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+.accordion.active { background-color: #d0ece7; }
+
+.panel {
+  padding: 10px 18px;
+  display: none;
+  background-color: #fafafa;
+  margin-top: 5px;
+  border-left: 4px solid #3498db;
+  border-radius: 6px;
+}
+
+.note {
+  background: #e8f6f3;
+  padding: 8px;
+  margin-top: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.warning {
+  background: #fce4e4;
+  padding: 8px;
+  margin-top: 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Home button */
+#homeBtn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  z-index: 1000;
+}
+#homeBtn .homeIcon {
+  width: 40px;
+  height: 40px;
+  background-color: red;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+}
+#homeBtn span {
+  font-weight: bold;
+  font-size: 18px;
+  color: #2c3e50;
+}
+
+/* Top icons */
+#topIcons {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  z-index: 1000;
+}
+
+/* Info icon */
+#infoIcon {
+  width: 45px;
+  height: 45px;
+  background-color: #3498db;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* Word book icon */
+#wordBook {
+  width: 45px;
+  height: 45px;
+  background-color: #2b579a;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  text-decoration: none;
+}
+#wordBook:hover { background-color: #1e3f73; }
+
+/* Info Popup */
+#infoBox {
+  display: none;
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  width: 280px;
+  background-color: #ffffff;
+  border: 2px solid #3498db;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 1000;
+  font-size: 14px;
+}
+
+#infoBox strong { color: #2c3e50; }
+#closeInfo {
+  text-align: left;
+  cursor: pointer;
+  font-weight: bold;
+  color: red;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Home -->
+<div id="homeBtn" onclick="window.location.href='index.html'">
+  <div class="homeIcon">🏠</div>
+  <span>WebBeds</span>
+</div>
+
+<!-- Info + Word Icons -->
+<div id="topIcons">
+  <div id="infoIcon" onclick="toggleInfo()">❓</div>
+  <a id="wordBook"
+     href="How to amend Multi-Room Bookings.docx"
+     target="_blank"
+     title="Open SOP in Word">📘</a>
+</div>
+
+<!-- Info Popup -->
+<div id="infoBox">
+  <div id="closeInfo" onclick="toggleInfo()">✖</div>
+  <p><strong>Main Tab:</strong> Answering Queries</p>
+  <p><strong>Sub Tab:</strong> Amend</p>
+  <p><strong>Description:</strong><br>
+  Multi-Room Bookings (MRBs) amendment procedures in DOTWConnect.
+  </p>
+</div>
+
+<h1>How to Amend MRB (Multi-Room Bookings)</h1>
+
+<div class="contentBox">
+
+<h2>Overview</h2>
+<p>
+This SOP explains how to perform amendments on Multi-Room Bookings (MRBs)
+in DOTWConnect, depending on the client type and supplier type.
+</p>
+
+<div class="note">
+MRBs made by XML clients or WebBeds Admin users are handled per room, like individual bookings. Both Amend Booking and Amend Offline are available.
+</div>
+
+<button class="accordion">MRBs by POS Clients with Direct Contract / DMC / Channel Manager</button>
+<div class="panel">
+<ul>
+  <li>Date Amendments apply to <strong>all rooms</strong> in the booking. Cannot change dates for one room only.</li>
+  <li>Only the first room allows date adjustments.</li>
+  <li>Other rooms have date fields deactivated.</li>
+  <li>All other amendments can be done on a <strong>per room basis</strong> without affecting other rooms.</li>
+</ul>
+</div>
+
+<button class="accordion">MRBs by POS Clients with Dynamic, Third-Party or Intercompany Supplier</button>
+<div class="panel">
+<ul>
+  <li>Name Amendments: Per room basis without affecting other rooms.</li>
+  <li>All other amendments: Can only be changed on a <strong>per booking basis</strong>, affecting all rooms.</li>
+  <li>Nightly booking cost, selling price, and compensation show totals for all rooms.</li>
+</ul>
+</div>
+
+</div>
+
+<script>
+const acc = document.getElementsByClassName("accordion");
+for (let i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    const panel = this.nextElementSibling;
+    panel.style.display = panel.style.display === "block" ? "none" : "block";
+  });
+}
+
+function toggleInfo() {
+  const box = document.getElementById("infoBox");
+  box.style.display = box.style.display === "block" ? "none" : "block";
+}
+</script>
+
+</body>
+</html>

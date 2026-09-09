@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOTWConnect Comprehensive Manual 2025</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #c2185b; 
+            --secondary: #263238;
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --text: #334155;
+            --accent: #ff80ab;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            margin: 0;
+            display: flex;
+            background-color: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 320px;
+            background: var(--secondary);
+            color: white;
+            height: 100vh;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .sidebar h2 {
+            padding: 20px;
+            font-size: 1rem;
+            text-align: center;
+            border-bottom: 1px solid #37474f;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #cfd8dc;
+            padding: 12px 20px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #37474f;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .sidebar a:hover, .sidebar a.active {
+            background: var(--primary);
+            color: white;
+            padding-left: 30px;
+        }
+
+        /* Content Area Container */
+        .main-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .header-tools {
+            background: var(--white);
+            padding: 15px 40px;
+            border-bottom: 3px solid var(--primary);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .button-row { display: flex; gap: 10px; }
+
+        .search-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .search-container i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
+        /* Buttons Styling */
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            border: none;
+            font-size: 0.85rem;
+            transition: 0.3s;
+        }
+
+        .btn-home { background: #475569; color: white; }
+        .btn-refresh { background: var(--primary); color: white; }
+        .btn-pdf { background: #ef4444; color: white; }
+
+        /* Content Sections */
+        .content-body {
+            padding: 40px;
+            overflow-y: auto;
+            flex-grow: 1;
+            scroll-behavior: smooth;
+        }
+
+        section {
+            display: none;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            animation: fadeIn 0.4s ease;
+            margin-bottom: 20px;
+        }
+
+        section.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 { color: var(--secondary); border-left: 6px solid var(--primary); padding-left: 15px; margin-top: 0; font-size: 1.8rem; }
+        h2 { color: var(--primary); border-bottom: 1px solid #eee; padding-bottom: 10px; margin-top: 30px; }
+        h3 { color: #1e293b; background: #f1f5f9; padding: 8px 12px; border-radius: 4px; margin-top: 20px; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .card {
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #f8fafc;
+        }
+
+        .highlight-box {
+            background: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; }
+        th { background: #f1f5f9; color: var(--secondary); font-weight: bold; }
+
+        .welcome-screen {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .welcome-screen i { font-size: 5rem; color: var(--primary); margin-bottom: 20px; }
+
+        strong { color: #0f172a; }
+        
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>DOTWConnect 2025</h2>
+        <a onclick="showSection('welcome')"><i class="fas fa-info-circle"></i> User Interface Overview</a>
+        <a onclick="showSection('main-menu')">1. Main Menu Tabs</a>
+        <a onclick="showSection('finance-tab')">2. Finance & E-Commerce</a>
+        <a onclick="showSection('products-acc')">3. Products: Accommodation</a>
+        <a onclick="showSection('property-details')">4. Property & Setup Info</a>
+        <a onclick="showSection('products-tour')">5. Products: Tours & Transfers</a>
+        <a onclick="showSection('customers-tab')">6. Customers Setup & XML</a>
+        <a onclick="showSection('operations-cro')">7. Operations & Booking Search</a>
+        <a onclick="showSection('new-booking')">8. New Booking Process</a>
+    </div>
+
+    <div class="main-container">
+        
+        <div class="header-tools">
+            <div class="button-row">
+                <a href="index.html" class="btn btn-home">
+                    <i class="fas fa-home"></i> Main Page
+                </a>
+                
+                <button onclick="location.reload()" class="btn btn-refresh">
+                    <i class="fas fa-sync-alt"></i> Refresh Manual
+                </button>
+
+                <a href="2025 DOTWConnect Functionality Manual V012025.pdf" target="_blank" class="btn btn-pdf">
+                    <i class="fas fa-file-pdf"></i> Open 2025 PDF
+                </a>
+            </div>
+            
+            <div class="search-container">
+                <i class="fas fa-search"></i>
+                <input type="text" id="manualSearch" onkeyup="searchManual()" placeholder="Live Search: Type keywords (e.g. 'VCC', 'Nationality', 'SLA')...">
+            </div>
+        </div>
+
+        <div class="content-body">
+            
+            <section id="welcome" class="active">
+                <div class="welcome-screen">
+                    <i class="fas fa-desktop"></i>
+                    <h1>DOTWConnect Manual V012025</h1>
+                    <p>Comprehensive guide for Sales, Contracting, and Customer Service teams.</p>
+                    <div class="highlight-box" style="text-align: left;">
+                        <strong>Homepage Overview:</strong> The middle part of the site displays Bookings Info, Products Info, and Customers Info reports. Access level determines visibility for Sales and Management.
+                    </div>
+                </div>
+            </section>
+
+            <section id="main-menu">
+                <h1>MAIN MENU DESCRIPTIONS</h1>
+                <p>Located at the top of the page, providing access to core functionalities:</p>
+                <div class="grid">
+                    <div class="card"><strong>USERS:</strong> Search and view profiles of MyAdmin users and their granted accesses.</div>
+                    <div class="card"><strong>FINANCE:</strong> Conversion rate logs, buffers, and transaction reports.</div>
+                    <div class="card"><strong>PRODUCTS:</strong> View lists of suppliers for Accommodation, Transfers, and Tours.</div>
+                    <div class="card"><strong>CUSTOMERS:</strong> Search client profiles and account management.</div>
+                    <div class="card"><strong>MARKUP:</strong> Access customer/network markups for specific territories.</div>
+                    <div class="card"><strong>OPERATIONS:</strong> Search, view, and action existing bookings; run reports.</div>
+                    <div class="card"><strong>REPORTS:</strong> Pull reports on Cancellation Deadlines and Forward bookings.</div>
+                </div>
+            </section>
+
+            <section id="finance-tab">
+                <h2>FINANCE: E-COMMERCE TRANSACTIONS</h2>
+                <p>Used to track failed bookings due to credit card issues (B2B2C clients).</p>
+                <h3>How to pull the report:</h3>
+                <p>Click Finance Tab > Ecommerce Transactions Link.</p>
+                <h3>Common Filters:</h3>
+                <ul>
+                    <li><strong>Customer Name:</strong> Search by specific client.</li>
+                    <li><strong>Amount Between:</strong> Filter by the specific amount range.</li>
+                    <li><strong>Card Status:</strong> Filter for authorization failures or issues.</li>
+                    <li><strong>Filter Dates By:</strong> Select <u>Payment Dates</u> (Recommended for card failures).</li>
+                    <li><strong>Payment Date Range:</strong> Start from 1 day before and 1 day after the mentioned charge date.</li>
+                </ul>
+                <div class="highlight-box">
+                    <strong>Output:</strong> Choice of "VIEW REPORT" (on-page) or "VIEW IN EXCEL". Look at <u>STATUS</u> and <u>TRANSACTION ID</u> for error reasons.
+                </div>
+            </section>
+
+            <section id="products-acc">
+                <h2>PRODUCTS: ACCOMMODATION SUPPLIERS</h2>
+                <p>Access supplier profiles, contracts, and payment information.</p>
+                <h3>Filtering Profiles:</h3>
+                <p>Search via Country, City, Chain, Brand, Accommodation Status (Live/Non-Live), or Unit Name.</p>
+                <h3>Status Categories:</h3>
+                <div class="grid">
+                    <div class="card"><span class="tag">ACTIVE</span> Open for bookings.</div>
+                    <div class="card"><span class="tag">NON-ACTIVE</span> Currently disabled.</div>
+                    <div class="card"><span class="tag" style="background:#ffc107">TEMP CLOSED</span> Temporarily unavailable.</div>
+                </div>
+                <h3>Booking Channels (Supplier Types):</h3>
+                <ul>
+                    <li><strong>OFFLINE (DOTW):</strong> Direct Contract (DC) or Local Suppliers/DMC.</li>
+                    <li><strong>DIRECT:</strong> Dynamic / Hotel Chain connections.</li>
+                    <li><strong>THIRD PARTY:</strong> Intercompany or external 3rd party providers.</li>
+                    <li><strong>CHANNEL MANAGERS:</strong> Direct connections through Channel Manager software.</li>
+                </ul>
+            </section>
+
+            <section id="property-details">
+                <h2>PROPERTY & SETUP INFORMATION</h2>
+                <h3>Property Set-up (Middle Page):</h3>
+                <ul>
+                    <li><strong>Account Manager:</strong> WebBeds Manager handling the property.</li>
+                    <li><strong>Property Type:</strong> Defines if it's a Hotel or Serviced Apartment.</li>
+                    <li><strong>Default Currency:</strong> Currency used for payments to the hotel.</li>
+                    <li><strong>Star Rating:</strong> Official rating with short description.</li>
+                </ul>
+                <h3>Contact Details:</h3>
+                <p>Available for Direct Contracts (DC). Includes <strong>Main Reservation Email</strong> (for LPOs), <strong>Finance contact</strong>, and <strong>Hotel Website</strong>.</p>
+                <h3>Payments Section:</h3>
+                <ul>
+                    <li><strong>Market Policy:</strong> Rate basis (Guest Nationality, Residence, or Client Location).</li>
+                    <li><strong>Use VCC:</strong> Shows if the hotel accepts Virtual Credit Cards.</li>
+                    <li><strong>Loading Time:</strong> When the VCC is loaded with the full amount.</li>
+                </ul>
+            </section>
+
+            <section id="products-tour">
+                <h2>TRANSFER AND TOUR SUPPLIERS</h2>
+                <p>Filter via Country, City, Status, or Supplier Name.</p>
+                <h3>Service Search:</h3>
+                <p>Search by <strong>Supplier Profiles</strong> or <strong>Services Offered</strong>. Live suppliers appear first in results.</p>
+                <div class="grid">
+                    <div class="card">
+                        <strong>VIEW Button:</strong> Summary of the service without entering booking module.
+                    </div>
+                    <div class="card">
+                        <strong>RATES Button:</strong> Check live rates for specific dates.
+                    </div>
+                </div>
+                <h3>Payments Section:</h3>
+                <p><strong>Use VCC: Yes</strong> (Accepts VCC) | <strong>Use VCC: No</strong> (Bank Transfer required).</p>
+            </section>
+
+            <section id="customers-tab">
+                <h2>CUSTOMERS TAB & SETUP</h2>
+                <p>Search via Company Name, Country, City, or Account Manager.</p>
+                <h3>Account Management Sections:</h3>
+                <ul>
+                    <li><strong>Default Currency:</strong> Client's main payment currency.</li>
+                    <li><strong>Payment Method:</strong> Pre-pay, Credit, or Credit Card.</li>
+                    <li><strong>Credit Line:</strong> Shows Available Credit and Billing Limit (for Credit clients).</li>
+                </ul>
+                <h3>XML & Booking Setup:</h3>
+                <ul>
+                    <li><strong>XML Access:</strong> Confirms if client is connected via XML Documentation.</li>
+                    <li><strong>Restrictions:</strong> Shows restricted rates or minimum night stay requirements.</li>
+                    <li><strong>Markups/Discounts:</strong> Details additional percentages added for specific hotels or travel periods.</li>
+                </ul>
+            </section>
+
+            <section id="operations-cro">
+                <h2>OPERATIONS: CENTRAL RESERVATIONS (CRO)</h2>
+                <p>The core section for actioning bookings.</p>
+                <table>
+                    <tr><th>Search Priority</th><th>Filter Details</th></tr>
+                    <tr><td><strong>DOTW Ref #</strong></td><td>Itinerary or Booking Ref # in the green box.</td></tr>
+                    <tr><td><strong>Guest Names</strong></td><td>Pax First/Last Name + Travel Dates (From/To).</td></tr>
+                    <tr><td><strong>Supplier Ref</strong></td><td>Advanced Filters > Service Data section.</td></tr>
+                    <tr><td><strong>Customer Ref</strong></td><td>Advanced Filters > Source Data section.</td></tr>
+                    <tr><td><strong>Booking Status</strong></td><td>Filter via dropdown (Confirmed, Pending, etc).</td></tr>
+                </table>
+            </section>
+
+            <section id="new-booking">
+                <h2>NEW BOOKING CREATION</h2>
+                <p>Two types: <strong>New Booking</strong> (Live Availability) and <strong>Offline/Misc</strong> (Manual creation).</p>
+                <h3>Accommodation Search Steps:</h3>
+                <ol>
+                    <li>Click <strong>New Booking</strong> > <strong>Accommodation Booking</strong>.</li>
+                    <li>Select <strong>Customer Profile</strong> (Use 'Main User' if not specified).</li>
+                    <li>Input <strong>Destination</strong> (City, Hotel, or Landmark).</li>
+                    <li>Input <strong>Dates & Occupancy</strong> (Child ages are required).</li>
+                    <li>Set <strong>Nationality & Residence</strong> (For accurate market-specific rates).</li>
+                </ol>
+                <div class="highlight-box">
+                    <strong>Note:</strong> You can search for <u>Multiple Rooms</u> by clicking the Blue Plus button. All rooms must be in the same hotel and for the same dates.
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('section');
+            sections.forEach(s => s.classList.remove('active'));
+
+            const links = document.querySelectorAll('.sidebar a');
+            links.forEach(l => l.classList.remove('active'));
+
+            const target = document.getElementById(sectionId);
+            if(target) {
+                target.classList.add('active');
+                // Scroll to top of the content body when switching
+                document.querySelector('.content-body').scrollTop = 0;
+            }
+
+            links.forEach(l => {
+                if(l.getAttribute('onclick')?.includes(sectionId)) {
+                    l.classList.add('active');
+                }
+            });
+            document.getElementById('manualSearch').value = "";
+        }
+
+        function searchManual() {
+            let input = document.getElementById('manualSearch').value.toLowerCase();
+            if (input === "") return;
+
+            let sections = document.querySelectorAll('section');
+            for (let i = 0; i < sections.length; i++) {
+                if (sections[i].id === "welcome") continue;
+                
+                let text = sections[i].innerText.toLowerCase();
+                if (text.includes(input)) {
+                    showSection(sections[i].id);
+                    break; 
+                }
+            }
+        }
+    </script>
+</body>
+</html>

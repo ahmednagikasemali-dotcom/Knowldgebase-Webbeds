@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SOP – MOR Client Cancellation Requests</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 { 
+  color: #2c3e50; 
+  text-align: center; 
+  margin-top: 20px; 
+}
+h2 { color: #34495e; margin-top: 25px; }
+h3 { color: #4a4a4a; margin-top: 15px; }
+
+.contentBox {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+/* Accordion style */
+.accordion {
+  background-color: #e8f6f3;
+  color: #2c3e50;
+  cursor: pointer;
+  padding: 14px 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 16px;
+  border-radius: 6px;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+
+.accordion.active {
+  background-color: #d0ece7;
+}
+
+.panel {
+  padding: 0 18px;
+  display: none;
+  background-color: #fafafa;
+  overflow: hidden;
+  margin-top: 5px;
+  border-left: 4px solid #3498db;
+  border-radius: 6px;
+}
+
+/* Notes & warnings inside panel */
+.note {
+  background: #e8f6f3;
+  padding: 8px;
+  margin-top: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.warning {
+  background: #fce4e4;
+  padding: 8px;
+  margin-top: 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Icons container */
+.iconsContainer {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 15px;
+  z-index: 1000;
+}
+
+/* Icon buttons */
+.iconBtn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #3498db;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.iconBtn:hover {
+  background-color: #2980b9;
+}
+
+/* Home button */
+#homeBtn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+#homeBtn .homeIcon {
+  width: 40px;
+  height: 40px;
+  background-color: red;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+}
+
+#homeBtn span {
+  font-weight: bold;
+  font-size: 18px;
+  color: #2c3e50;
+}
+
+/* Info popup */
+#infoBox {
+  display: none;
+  position: fixed;
+  top: 90px;
+  right: 20px;
+  width: 280px;
+  background-color: #f9f9f9;
+  border: 2px solid #3498db;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+</style>
+</head>
+
+<body>
+
+<!-- Home button -->
+<div id="homeBtn" onclick="window.location.href='index.html'">
+  <div class="homeIcon">🏠</div>
+  <span>WebBeds</span>
+</div>
+
+<h1>SOP – MOR Client Cancellation Requests</h1>
+
+<!-- Icons -->
+<div class="iconsContainer">
+  <!-- Info icon -->
+  <div class="iconBtn" title="Case Info" onclick="toggleInfo()">❓</div>
+</div>
+
+<!-- Info popup -->
+<div id="infoBox">
+  <p><strong>Main Tab:</strong> Answering Queries</p>
+  <p><strong>Sub Tab:</strong> Cancellation</p>
+  <p><strong>Description:</strong><br>
+  Step-by-step guide for handling cancellations and waivers in DOTWConnect.</p>
+</div>
+
+
+<div class="contentBox">
+
+<h2>Purpose</h2>
+<p>
+This guide explains the steps to handle <strong>MOR client cancellation requests</strong>, system rules, verbiages, and QA process.
+</p>
+
+<!-- Existing Steps as accordion -->
+<button class="accordion">Step 1: Client Sends Cancellation/Waiver Email</button>
+<div class="panel">
+<ul>
+  <li><strong>Travel Pass Group:</strong> Cancel booking on client’s behalf, inform of applicable charges, check for waiver, update client with final resolution.</li>
+  <li><strong>Reservations.com & Deal Peak:</strong> Ask client to accept policy or cancel themselves. Once client replies with "PLEASE CANCEL THIS RESERVATION AND PROCEED WITH ESCALATION", cancel, assist waiver, update client.</li>
+</ul>
+<div class="note">Client must send clear verbiage to proceed.</div>
+</div>
+
+<button class="accordion">Step 2: Client Requests FOC Cancellation or Waiver</button>
+<div class="panel">
+<ul>
+  <li><strong>Travel Pass Group:</strong> Ask client to accept penalty or cancel themselves. Cancel only if explicitly requested.</li>
+  <li><strong>Reservations.com & Deal Peak:</strong> Ask client to accept penalty or cancel themselves to assist with waiver.</li>
+</ul>
+</div>
+
+<button class="accordion">Step 3: System Updates for Refunds</button>
+<div class="panel">
+<ul>
+  <li><strong>Waiver Partial Refund:</strong> Process per supplier authorization.</li>
+  <li><strong>Waiver Full Refund:</strong> Process per supplier authorization.</li>
+</ul>
+</div>
+
+<button class="accordion">Step 4: Standard Verbiages for Refunds</button>
+<div class="panel">
+<ul>
+  <li><strong>Cancelled before deadline:</strong> "Booking cancelled free of charge, preauthorization reversed, no charges applied."</li>
+  <li><strong>Cancelled after deadline, full refund:</strong> "Booking cancelled free of charge, refund processed shortly. Follow up: DOTWrefunds@webbeds.com"</li>
+  <li><strong>Cancelled with partial refund:</strong> "Booking cancelled with XXX night charge, refund for remaining nights processed shortly. Follow up: DOTWrefunds@webbeds.com"</li>
+  <li>Always send supplier authorization/proof to refunds team.</li>
+</ul>
+</div>
+
+<button class="accordion">Step 5: DOTW System Rules</button>
+<div class="panel">
+<ul>
+  <li>No offline cancellations allowed; only proceed via system.</li>
+  <li>Waiver requests only start if: 
+    <ul>
+      <li>Booking canceled from our side</li>
+      <li>Booking post-stay</li>
+      <li>Booking has cancellation error</li>
+    </ul>
+  </li>
+</ul>
+</div>
+
+<button class="accordion">Step 6: QA Process</button>
+<div class="panel">
+<ul>
+  <li>Any phone communication must also be confirmed via email.</li>
+  <li>If refund obtained and client informed by phone, reply via email and send to refunds team.</li>
+  <li>Same applies to HCN and other updates.</li>
+  <li>All final resolutions communicated by phone must also be shared by email.</li>
+</ul>
+</div>
+
+<!-- NEW Cancellation Steps Section -->
+<button class="accordion active">Cancellation Steps</button>
+<div class="panel" style="display:block;">
+<ul>
+  <li><strong>Step 1: Receive Cancellation Request</strong>
+    <ul>
+      <li>Receive cancellation request via email, booking platform, or customer support channel.</li>
+      <li>Record booking reference and client details.</li>
+    </ul>
+  </li>
+  <li><strong>Step 2: Verify Booking Details</strong>
+    <ul>
+      <li>Confirm booking reference.</li>
+      <li>Confirm client/company name.</li>
+      <li>Confirm hotel name and stay dates.</li>
+      <li>Ensure requester is an authorized contact for the client.</li>
+    </ul>
+  </li>
+  <li><strong>Step 3: Check Booking Status</strong>
+    <ul>
+      <li>Identify current booking status: Confirmed, On request, or Cancelled.</li>
+      <li>Check whether booking is refundable, non-refundable, or partially refundable.</li>
+    </ul>
+  </li>
+  <li><strong>Step 4: Review Cancellation Policy</strong>
+    <ul>
+      <li>Review hotel cancellation policy and WebBeds contractual terms.</li>
+      <li>Identify cancellation deadline and applicable fees.</li>
+    </ul>
+  </li>
+  <li><strong>Step 5: Communicate Terms to Client</strong>
+    <ul>
+      <li>Inform client whether cancellation is allowed.</li>
+      <li>Inform client of any cancellation charges.</li>
+      <li>Inform client of refund amount if applicable.</li>
+      <li>Obtain client confirmation to proceed.</li>
+    </ul>
+  </li>
+  <li><strong>Step 6: Process Cancellation in System</strong>
+    <ul>
+      <li>Cancel booking in WebBeds system.</li>
+      <li>Notify supplier if required.</li>
+      <li>Update booking status to Cancelled.</li>
+    </ul>
+  </li>
+  <li><strong>Step 7: Refund Handling (If Applicable)</strong>
+    <ul>
+      <li>Process refund based on original payment method and agreed commercial terms.</li>
+      <li>Advise client of expected refund timeline.</li>
+    </ul>
+  </li>
+  <li><strong>Step 8: Send Cancellation Confirmation</strong>
+    <ul>
+      <li>Send written cancellation confirmation to the client.</li>
+      <li>Include booking reference, cancellation date, fees charged (if any), and refund details.</li>
+    </ul>
+  </li>
+  <li><strong>Step 9: Record & Documentation</strong>
+    <ul>
+      <li>Log cancellation reason.</li>
+      <li>Save all client and supplier communication.</li>
+      <li>Ensure documentation is available for audit and reporting purposes.</li>
+    </ul>
+  </li>
+</ul>
+</div>
+
+</div>
+
+<script>
+// Accordion functionality
+const acc = document.getElementsByClassName("accordion");
+for (let i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    const panel = this.nextElementSibling;
+    panel.style.display = panel.style.display === "block" ? "none" : "block";
+  });
+}
+
+// Toggle info box
+function toggleInfo() {
+  const infoBox = document.getElementById('infoBox');
+  infoBox.style.display = infoBox.style.display === 'block' ? 'none' : 'block';
+}
+</script>
+
+</body>
+</html>
