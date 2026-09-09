@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Supplement & Extras Handling - WebBeds</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  color: #2c3e50;
+  text-align: center;
+  margin-top: 20px;
+}
+
+h2 { color: #34495e; margin-top: 25px; }
+
+.contentBox {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+/* Accordion */
+.accordion {
+  background-color: #e8f6f3;
+  color: #2c3e50;
+  cursor: pointer;
+  padding: 14px 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  font-size: 16px;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+.accordion.active {
+  background-color: #d0ece7;
+}
+
+.panel {
+  padding: 10px 18px;
+  display: none;
+  background-color: #fafafa;
+  margin-top: 5px;
+  border-left: 4px solid #3498db;
+  border-radius: 6px;
+}
+
+.note {
+  background: #e8f6f3;
+  padding: 8px;
+  margin-top: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.warning {
+  background: #fce4e4;
+  padding: 8px;
+  margin-top: 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* ⭐ Special Client Styles */
+.specialAccordion {
+  background-color: #fff3cd;
+  color: #856404;
+  font-weight: bold;
+  border: 2px solid #f0ad4e;
+}
+.specialAccordion.active {
+  background-color: #ffe8a1;
+}
+.specialPanel {
+  background-color: #fffbea;
+  border-left: 5px solid #f0ad4e;
+}
+.badge {
+  display: inline-block;
+  background-color: #f0ad4e;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  margin-left: 10px;
+}
+
+/* Home Button */
+#homeBtn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  z-index: 1000;
+}
+#homeBtn .homeIcon {
+  width: 40px;
+  height: 40px;
+  background-color: red;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+}
+#homeBtn span {
+  font-weight: bold;
+  font-size: 18px;
+  color: #2c3e50;
+}
+
+/* Info Icon */
+#infoIcon {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 45px;
+  height: 45px;
+  background-color: #3498db;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+/* Info Popup */
+#infoBox {
+  display: none;
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  width: 320px;
+  background-color: #ffffff;
+  border: 2px solid #3498db;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 1000;
+  font-size: 14px;
+}
+#closeInfo {
+  cursor: pointer;
+  font-weight: bold;
+  color: red;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Home -->
+<div id="homeBtn" onclick="window.location.href='index.html'">
+  <div class="homeIcon">🏠</div>
+  <span>WebBeds</span>
+</div>
+
+<!-- Info -->
+<div id="infoIcon" onclick="toggleInfo()">❓</div>
+
+<div id="infoBox">
+  <div id="closeInfo" onclick="toggleInfo()">✖</div>
+  <p><strong>Main Tab:</strong> Answering Queries</p>
+  <p><strong>Sub Tab:</strong> Supplement & Extras</p>
+  <p><strong>Description:</strong><br>
+  Handling paid supplements, extras, and special client exceptions.
+  </p>
+</div>
+
+<h1>Supplement & Extras Handling</h1>
+
+<div class="contentBox">
+
+<!-- STANDARD STEPS -->
+<button class="accordion">Step 1: Receive the Request</button>
+<div class="panel"><ul><li>Review email & booking details.</li></ul></div>
+
+<button class="accordion">Step 2: Identify Request Type</button>
+<div class="panel"><ul><li>Paid = Supplement / Free = Special Request.</li></ul></div>
+
+<button class="accordion">Step 3: Contact the Hotel</button>
+<div class="panel"><ul><li>Check availability & cost.</li></ul></div>
+
+<button class="accordion">Step 4: Review Hotel Response</button>
+<div class="panel"><ul><li>Review price, policy & deadline.</li></ul></div>
+
+<button class="accordion">Step 5: Inform Client / Sales</button>
+<div class="panel"><ul><li>Share supplement cost & payment terms.</li></ul></div>
+
+<button class="accordion">Step 6: Await Client Approval</button>
+<div class="panel"><ul><li>Approve → Pay / Decline → Close.</li></ul></div>
+
+<button class="accordion">Step 7: Confirm the Supplement</button>
+<div class="panel"><ul><li>Confirm with hotel & get HCN.</li></ul></div>
+
+<button class="accordion">Step 8: Update System & Client</button>
+<div class="panel"><ul><li>Update system & send confirmation.</li></ul></div>
+
+<!-- ⭐ AL RAIS TRAVEL -->
+<button class="accordion specialAccordion">
+  Special Client – AL RAIS TRAVEL
+  <span class="badge">⭐ Special Client</span>
+</button>
+
+<div class="panel specialPanel">
+<ul>
+  <li>Requests sent directly to hotel (no suppliers).</li>
+  <li>Avoid robotic responses.</li>
+  <li>Provide supplement cost from hotel.</li>
+  <li>TDF markup 5% | Other services 7%.</li>
+  <li>Coordinate TDF / City Taxes / Incidentals via VCC + MISC.</li>
+</ul>
+<div class="warning">
+Incidentals cases remain pending until final invoice.
+</div>
+</div>
+
+</div>
+
+<script>
+const acc = document.getElementsByClassName("accordion");
+for (let i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    const panel = this.nextElementSibling;
+    panel.style.display = panel.style.display === "block" ? "none" : "block";
+  });
+}
+
+function toggleInfo() {
+  const box = document.getElementById("infoBox");
+  box.style.display = box.style.display === "block" ? "none" : "block";
+}
+</script>
+
+</body>
+</html>

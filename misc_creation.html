@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title> Miscellaneous Booking - WebBeds</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 { 
+  color: #2c3e50; 
+  text-align: center; 
+  margin-top: 20px; 
+}
+h2 { color: #34495e; margin-top: 25px; }
+
+.contentBox {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+/* Accordion */
+.accordion {
+  background-color: #e8f6f3;
+  color: #2c3e50;
+  cursor: pointer;
+  padding: 14px 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 16px;
+  border-radius: 6px;
+  margin-top: 10px;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.accordion.active { background-color: #d0ece7; }
+
+.panel {
+  padding: 0 18px;
+  display: none;
+  background-color: #fafafa;
+  overflow: hidden;
+  margin-top: 5px;
+  border-left: 4px solid #3498db;
+  border-radius: 6px;
+}
+
+/* Notes & Warnings */
+.note {
+  background: #e8f6f3;
+  padding: 8px;
+  margin-top: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+.warning {
+  background: #fce4e4;
+  padding: 8px;
+  margin-top: 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #b33a3a;
+}
+
+/* Icons inside accordion */
+.accordion .icon {
+  font-size: 20px;
+}
+
+/* Radio buttons */
+.radio-group {
+  margin: 10px 0 15px 0;
+  font-size: 15px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+.radio-group label {
+  cursor: pointer;
+}
+.radio-group input[type="radio"] {
+  cursor: pointer;
+}
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+th, td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+th {
+  background-color: #3498db;
+  color: white;
+}
+
+/* Home */
+#homeBtn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+#homeBtn .homeIcon {
+  width: 40px;
+  height: 40px;
+  background-color: red;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+}
+#homeBtn span {
+  font-weight: bold;
+  font-size: 18px;
+  color: #2c3e50;
+}
+
+/* Word icon */
+.iconsContainer {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 15px;
+  z-index: 1000;
+}
+.iconBtn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #3498db;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+.iconBtn:hover { background-color: #2980b9; }
+
+/* Highlighted title for MISC */
+.miscTitle {
+  font-weight: bold;
+  color: #2980b9;
+  font-size: 20px;
+}
+.updateTag {
+  color: #e74c3c;
+  font-weight: bold;
+  margin-left: 10px;
+  font-size: 18px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Home -->
+<div id="homeBtn" onclick="window.location.href='index.html'">
+  <div class="homeIcon">🏠</div>
+  <span>WebBeds</span>
+</div>
+
+<!-- Word Icon -->
+<div class="iconsContainer">
+  <a href="How to amend a miscellaneous booking.docx" download>
+    <div class="iconBtn" title="Download SOP Word">📄</div>
+  </a>
+</div>
+
+<h1> Miscellaneous Booking (DOTWConnect)</h1>
+
+<div class="contentBox">
+
+<h2>Purpose</h2>
+<p>
+This SOP explains how to create a <strong>Miscellaneous Booking (MISC)</strong> in DOTWConnect
+when a booking cannot be created or amended online.
+</p>
+
+<!-- Original Steps Accordion -->
+<button class="accordion">Step 1: Access Miscellaneous Booking</button>
+<div class="panel">
+<ul>
+  <li>Go to <strong>Operations</strong></li>
+  <li>Click <strong>MISC</strong></li>
+  <li>Select <strong>BOOKINGS</strong></li>
+</ul>
+</div>
+
+<button class="accordion">Step 2: Select Customer Profile</button>
+<div class="panel">
+<ul>
+  <li>Enter client name in <strong>Company Name</strong></li>
+  <li>Select correct customer profile</li>
+  <li>Enter number of units</li>
+  <li>Click <strong>Filter Customers</strong></li>
+</ul>
+</div>
+
+<button class="accordion">Step 3: Choose User Account</button>
+<div class="panel">
+<ul>
+  <li>Select requested user account if specified</li>
+  <li>If not specified, select <strong>Main User</strong></li>
+</ul>
+</div>
+
+<button class="accordion">Step 4: Enter Miscellaneous Details</button>
+<div class="panel">
+<ul>
+  <li>Service Name (reason + DOTW reference)</li>
+  <li>Country & City</li>
+  <li>Booking description (max 255 characters)</li>
+  <li>Total number of occupants</li>
+</ul>
+</div>
+
+<button class="accordion">Step 5: Guest & Travel Information</button>
+<div class="panel">
+<ul>
+  <li>Main guest name</li>
+  <li>Travel dates</li>
+  <li>Preferred time (N/A if not applicable)</li>
+  <li>Internal reference (consultant name)</li>
+</ul>
+</div>
+
+<button class="accordion">Step 6: Save & Attach Supplier</button>
+<div class="panel">
+<ul>
+  <li>Click <strong>Save</strong></li>
+  <li>Open the generated Miscellaneous Number</li>
+  <li>Attach supplier</li>
+  <li>Payable currency auto-populates</li>
+</ul>
+<div class="note">Supplier currency cannot be changed.</div>
+</div>
+
+<button class="accordion">Step 7: Cost, Pricing & Markup</button>
+<div class="panel">
+<ul>
+  <li>Enter booking cost (daily or total)</li>
+  <li>System auto-calculates selling price</li>
+  <li>Use <strong>Mark-up Calculator</strong> if adjustment is needed</li>
+</ul>
+</div>
+
+<button class="accordion">Step 8: Cancellation & Supplier Reference</button>
+<div class="panel">
+<ul>
+  <li>Set cancellation deadline</li>
+  <li>Penalty must be <strong>100%</strong></li>
+  <li>Enter supplier reference or “Confirmed”</li>
+</ul>
+</div>
+
+<button class="accordion">Step 9: Communication & Confirmation</button>
+<div class="panel">
+<ul>
+  <li>Set customer & supplier email options</li>
+  <li>Customer acceptance usually set to <strong>No</strong></li>
+  <li>Click <strong>Confirm Misc</strong></li>
+</ul>
+<div class="warning">Always review summary before final confirmation.</div>
+</div>
+
+<!-- New Accordion: MISC for Credit Card clients -->
+<button class="accordion">
+  <span class="icon">⚙️</span>
+  <span class="miscTitle">MISC for Credit Card clients</span>
+  <span class="updateTag">Update</span>
+</button>
+<div class="panel">
+  <p>Ensure the following options are selected <strong>Yes</strong> to allow the customer to pay with a credit card:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Setting</th>
+        <th>Description</th>
+        <th>Yes</th>
+        <th>No</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Customer Acceptance Needed</td>
+        <td>Must be YES to allow credit card payment for MISC.</td>
+        <td><input type="radio" name="custAccept" value="yes" checked></td>
+        <td><input type="radio" name="custAccept" value="no"></td>
+      </tr>
+      <tr>
+        <td>Send email communication to customer</td>
+        <td>Must be YES to send notification emails to customers.</td>
+        <td><input type="radio" name="emailCust" value="yes" checked></td>
+        <td><input type="radio" name="emailCust" value="no"></td>
+      </tr>
+      <tr>
+        <td>Send email communication to supplier</td>
+        <td>Optional.</td>
+        <td><input type="radio" name="emailSupp" value="yes"></td>
+        <td><input type="radio" name="emailSupp" value="no" checked></td>
+      </tr>
+      <tr>
+        <td>Payable by Customer?</td>
+        <td>Must be YES for customer to pay MISC.</td>
+        <td><input type="radio" name="payableCust" value="yes" checked></td>
+        <td><input type="radio" name="payableCust" value="no"></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div id="warningMsg" class="warning" style="display:none; margin-top:15px;">
+    ⚠️ Warning: If you select <strong>No</strong> for "Customer Acceptance Needed" or "Send email communication to customer," the customer will NOT be able to pay with a credit card, and the created MISC will not be payable.
+  </div>
+</div>
+
+</div>
+
+<script>
+// Accordion functionality
+const acc = document.getElementsByClassName("accordion");
+for(let i=0; i<acc.length; i++){
+  acc[i].addEventListener("click", function(){
+    this.classList.toggle("active");
+    let panel = this.nextElementSibling;
+    panel.style.display = (panel.style.display === "block") ? "none" : "block";
+  });
+}
+
+// Warning logic
+const radios = document.querySelectorAll('input[type="radio"]');
+const warningMsg = document.getElementById("warningMsg");
+
+radios.forEach(radio => {
+  radio.addEventListener("change", () => {
+    const custAccept = document.querySelector('input[name="custAccept"]:checked').value;
+    const emailCust = document.querySelector('input[name="emailCust"]:checked').value;
+    if(custAccept === "no" || emailCust === "no") {
+      warningMsg.style.display = "block";
+    } else {
+      warningMsg.style.display = "none";
+    }
+  });
+});
+</script>
+
+</body>
+</html>

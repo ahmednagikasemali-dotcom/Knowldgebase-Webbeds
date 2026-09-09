@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loading Errors – Interactive Flow</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
+  background-size: cover;
+  margin: 0;
+  padding: 20px;
+  color: #333;
+}
+h1 { text-align: center; color: #e60000; text-shadow: 0 0 5px #fff; margin-bottom: 20px; }
+
+#homeIcon, #refreshBtn {
+  position: fixed;
+  width: 50px; height: 50px;
+  border-radius: 50%;
+  display: flex; justify-content: center; align-items: center;
+  cursor: pointer;
+  z-index: 999;
+}
+#homeIcon {
+  top: 20px; left: 20px; background: #e60000;
+}
+#homeIcon::before { content: "🏠"; font-size: 28px; color: white; }
+#refreshBtn {
+  top: 20px; right: 20px; background: #2196f3;
+}
+#refreshBtn::before { content: "🔄"; font-size: 28px; color: white; }
+
+.box {
+  background: rgba(255,255,255,0.95);
+  border: 2px solid #e60000;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
+}
+.option {
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-top: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+.option:hover { transform: scale(1.03); }
+
+ul { margin-top: 10px; list-style-type: none; padding-left: 20px; }
+ul li { margin-top: 5px; }
+
+/* Flow Chart Colors */
+.issueLevel { background: #ffe0b2; border: 1px solid #ff9800; padding: 10px; border-radius: 5px; }
+.timeLevel { background: #c8e6c9; border: 1px solid #4caf50; padding: 8px; border-radius: 5px; margin-left: 10px; }
+.faultLevel { background: #bbdefb; border: 1px solid #2196f3; padding: 8px; border-radius: 5px; margin-left: 20px; }
+.stepLevel { background: #f0f0f0; border-left: 3px solid #9e9e9e; padding: 6px 8px; border-radius: 3px; margin-left: 30px; }
+.backBtn { display: inline-block; margin: 5px 0; background: #e60000; color: #fff; padding: 4px 8px; border-radius: 5px; cursor: pointer; font-size: 0.9rem; }
+.collapseBtn { display: inline-block; margin: 5px 0; background: #ff9800; color: #fff; padding: 4px 8px; border-radius: 5px; cursor: pointer; font-size: 0.9rem; }
+
+</style>
+</head>
+<body>
+
+<div id="homeIcon" title="Go to Home" onclick="window.location.href='index.html'"></div>
+<div id="refreshBtn" title="Refresh Page" onclick="window.location.reload()"></div>
+
+<h1>Loading Errors – Interactive Flow</h1>
+
+<div id="issuesContainer">
+  <div class="box" id="issueBox">
+    <h3>Select Issue Type:</h3>
+    <div class="option issueLevel" onclick="toggleIssue('Meal Plan', this)">🥗 Meal Plan</div>
+    <div class="option issueLevel" onclick="toggleIssue('Room Type', this)">🛏️ Room Type</div>
+    <div class="option issueLevel" onclick="toggleIssue('Bedding Type', this)">🛌 Bedding Type</div>
+    <div class="option issueLevel" onclick="toggleIssue('Rates', this)">💲 Rates</div>
+    <div class="option issueLevel" onclick="toggleIssue('Extras / Supplements', this)">➕ Extras / Supplements</div>
+  </div>
+</div>
+
+<script>
+const data = {
+  "Meal Plan": {
+    description: "A Meal Plan Loading Error occurs when the booked meal plan does not match what should have been confirmed.",
+    steps: {
+      before: {
+        Client: ["Inform client of error.", "Attach investigation logs.", "Negotiate amendment if requested.", "Secure approval."],
+        WB: ["Check system logs.", "Contact hotel/provider to fix before confirmation.", "Transfer ticket to PST Team"],
+        Provider: ["Inform supplier/hotel of error.", "Attach logs.", "Request correction.", "Transfer ticket to PST Team"]
+      },
+      same: {
+        Client: ["Try to resolve ticket within 20 minutes; if not resolved, transfer ticket to In-Resort team."],
+        WB: ["Try to resolve ticket within 20 minutes; if not resolved, transfer ticket to In-Resort team."],
+        Provider: ["Try to resolve ticket within 20 minutes; if not resolved, transfer ticket to In-Resort team."]
+      },
+      after: {
+        Client: ["Transfer ticket to Customer Experience."],
+        WB: ["Transfer ticket to Customer Experience."],
+        Provider: ["Transfer ticket to Customer Experience."]
+      }
+    }
+  },
+  "Room Type": {
+    description: "Room Type Error occurs when the reserved room type does not match the expected booking.",
+    steps: {
+      before: {Client:["Inform client.","Check hotel availability.","Amend booking."], WB:["Check system logs.","Contact hotel/provider to fix before confirmation.","Transfer ticket to PST Team"], Provider:["Inform hotel of error.","Request correction.","Transfer ticket to PST Team"]},
+      same: {Client:["Try to resolve ticket within 20 minutes; if not resolved, transfer ticket to In-Resort team."], WB:["Try to resolve ticket within 20 minutes; if not resolved, transfer ticket to In-Resort team."], Provider:["Try to resolve ticket within 20 minutes; if not resolved, transfer ticket to In-Resort team."]},
+      after: {Client:["Transfer ticket to Customer Experience."], WB:["Transfer ticket to Customer Experience."], Provider:["Transfer ticket to Customer Experience."]}
+    }
+  },
+  "Bedding Type": {
+    description: "Bedding Type Error occurs when the assigned bed type does not match the reservation.",
+    steps: {
+      before: {Client:["Check booking.","Inform client."], WB:["Check system logs.","Contact hotel/provider to fix before confirmation.","Transfer ticket to PST Team"], Provider:["Inform hotel.","Transfer ticket to PST Team"]},
+      same: {Client:["Try to resolve ticket within 20 minutes; if not resolved, transfer ticket to In-Resort team."], WB:["Try to resolve ticket within 20 minutes; if not resolved, transfer ticket to In-Resort team."], Provider:["Try to resolve ticket within 20 minutes; if not resolved, transfer ticket to In-Resort team."]},
+      after: {Client:["Transfer ticket to Customer Experience."], WB:["Transfer ticket to Customer Experience."], Provider:["Transfer ticket to Customer Experience."]}
+    }
+  },
+  "Rates": {
+    description: "Rate Error occurs when the charged rate does not match the agreed rate.",
+    steps: {
+      before: {Client:["Verify rate.","Inform client."], WB:["Check system logs.","Contact hotel/provider to fix before confirmation.","Transfer ticket to PST Team"], Provider:["Inform supplier of rate error.","Transfer ticket to PST Team"]},
+      same: {Client:["Try to resolve ticket within 20 minutes; if not resolved, transfer ticket to In-Resort team."], WB:["Try to resolve ticket within 20 minutes; if not resolved, transfer ticket to In-Resort team."], Provider:["Try to resolve ticket within 20 minutes; if not resolved, transfer ticket to In-Resort team."]},
+      after: {Client:["Transfer ticket to Customer Experience."], WB:["Transfer ticket to Customer Experience."], Provider:["Transfer ticket to Customer Experience."]}
+    }
+  },
+  "Extras / Supplements": {
+    description: "Extras/Supplements Error occurs when optional services or supplements are missing or incorrectly applied.",
+    steps: {
+      before: {Client:["Check booking.","Inform client."], WB:["Check system logs.","Contact hotel/provider to fix before confirmation.","Transfer ticket to PST Team"], Provider:["Inform supplier/hotel of missing service.","Transfer ticket to PST Team"]},
+      same: {Client:["Try to resolve ticket within 20 minutes; if not resolved, transfer ticket to In-Resort team."], WB:["Try to resolve ticket within 20 minutes; if not resolved, transfer ticket to In-Resort team."], Provider:["Try to resolve ticket within 20 minutes; if not resolved, transfer ticket to In-Resort team."]},
+      after: {Client:["Transfer ticket to Customer Experience."], WB:["Transfer ticket to Customer Experience."], Provider:["Transfer ticket to Customer Experience."]}
+    }
+  }
+};
+
+let openBoxes = new Map();
+
+function toggleIssue(issue, el){
+  if(openBoxes.has(issue)){
+    openBoxes.get(issue).remove();
+    openBoxes.delete(issue);
+    return;
+  }
+
+  const box = document.createElement('div');
+  box.className = 'box';
+  box.id = `${issue}-box`;
+
+  const ulIssue = document.createElement('ul');
+  const liIssue = document.createElement('li');
+  liIssue.className = 'issueLevel';
+  liIssue.innerHTML = `📌 <strong>${issue}</strong>: ${data[issue].description}`;
+
+  const ulTime = document.createElement('ul');
+  ["before","same","after"].forEach(t=>{
+    const div = document.createElement('div');
+    div.className = 'option timeLevel';
+    div.innerText = t==='before'?'⏰ Before Check-in':t==='same'?'📅 Same Day of Check-in':'🕒 After Check-in';
+    div.onclick = ()=>selectTime(issue, t, ulTime, liIssue);
+    ulTime.appendChild(div);
+  });
+
+  liIssue.appendChild(ulTime);
+  ulIssue.appendChild(liIssue);
+  box.appendChild(ulIssue);
+
+  const collapseBtn = document.createElement('div');
+  collapseBtn.className = 'collapseBtn';
+  collapseBtn.innerText = "📂 Collapse Issue";
+  collapseBtn.onclick = ()=>{ box.remove(); openBoxes.delete(issue); };
+  box.appendChild(collapseBtn);
+
+  document.getElementById('issuesContainer').appendChild(box);
+  openBoxes.set(issue, box);
+}
+
+function selectTime(issue, time, parentUl, parentLi){
+  const old = parentUl.querySelector('ul');
+  if(old) parentUl.removeChild(old);
+
+  const ulFault = document.createElement('ul');
+  ["Client","WB","Provider"].forEach(f=>{
+    const div = document.createElement('div');
+    div.className = 'option faultLevel';
+    div.innerText = `👤 ${f}`;
+    div.onclick = ()=>showSteps(issue, time, f, ulFault, parentUl);
+    ulFault.appendChild(div);
+  });
+
+  const back = document.createElement('div');
+  back.className = 'backBtn';
+  back.innerText = "🔙 Back";
+  back.onclick = ()=>{parentUl.removeChild(ulFault);};
+  ulFault.appendChild(back);
+
+  parentUl.appendChild(ulFault);
+}
+
+function showSteps(issue, time, fault, parentUl, timeUl){
+  const old = parentUl.querySelector('ul:last-child');
+  if(old) parentUl.removeChild(old);
+
+  const ulSteps = document.createElement('ul');
+  const steps = data[issue].steps[time][fault];
+  steps.forEach(s=>{
+    const li = document.createElement('li');
+    li.className = 'stepLevel';
+    li.innerText = `➡️ ${s}`;
+    ulSteps.appendChild(li);
+  });
+
+  const back = document.createElement('div');
+  back.className = 'backBtn';
+  back.innerText = "🔙 Back";
+  back.onclick = ()=>{parentUl.removeChild(ulSteps);};
+
+  parentUl.appendChild(ulSteps);
+  parentUl.appendChild(back);
+}
+</script>
+
+</body>
+</html>

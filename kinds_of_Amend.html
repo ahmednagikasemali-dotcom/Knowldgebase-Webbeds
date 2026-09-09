@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Amendment Decision Tree – WebBeds</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background:#f5f5f5;
+    padding:20px;
+  }
+  h1, h3 {
+    color:#2c3e50;
+  }
+  h1 { text-align:center; }
+  .contentBox {
+    background:#fff;
+    border:1px solid #ccc;
+    border-radius:10px;
+    padding:20px;
+    max-width: 700px;
+    margin: auto;
+  }
+  .accordion, .replyBtn {
+    background:#e8f6f3;
+    border:none;
+    padding:14px;
+    width:100%;
+    margin-top:10px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size: 16px;
+  }
+  .accordion:hover, .replyBtn:hover {
+    background:#d0ece7;
+  }
+  .step {
+    margin-top:15px;
+  }
+  textarea {
+    width:100%;
+    height:200px;
+    margin-top:10px;
+    font-family: monospace;
+    font-size: 14px;
+  }
+  button.backBtn {
+    margin-top: 15px;
+    background: #ddd;
+    border: none;
+    padding: 8px 14px;
+    cursor: pointer;
+    border-radius: 6px;
+  }
+  button.backBtn:hover {
+    background: #ccc;
+  }
+
+  /* Home Button */
+  #homeBtn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    z-index: 1000;
+  }
+  #homeBtn .homeIcon {
+    width: 40px;
+    height: 40px;
+    background-color: red;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 20px;
+  }
+  #homeBtn span {
+    font-weight: bold;
+    font-size: 18px;
+    color: #2c3e50;
+  }
+</style>
+</head>
+<body>
+
+<!-- Home Button -->
+<div id="homeBtn" onclick="window.location.href='index.html'">
+  <div class="homeIcon">🏠</div>
+  <span>WebBeds</span>
+</div>
+
+<div class="contentBox">
+
+  <h1>Amendment Decision Tree</h1>
+
+  <!-- Step 1: Select Amend Type -->
+  <div class="step" id="step0">
+    <h3>Step 1: Select Amend Type</h3>
+    <p>Please choose the type of amendment you want to process:</p>
+    <button class="accordion" onclick="setAmendType('Name')">Amend Name<br><small>Change guest name(s) on booking</small></button>
+    <button class="accordion" onclick="setAmendType('Date')">Amend Date<br><small>Change check-in/check-out dates</small></button>
+    <button class="accordion" onclick="setAmendType('Room Type')">Amend Room Type<br><small>Change room category or type</small></button>
+    <button class="accordion" onclick="setAmendType('Others')">Amend Others<br><small>Other changes (requests, extras, etc.)</small></button>
+    <button class="accordion" onclick="setAmendType('Nationality')">Amend Nationality<br><small>Update guest nationality details</small></button>
+  </div>
+
+  <!-- Step 2: Deadline -->
+  <div class="step" id="step1" style="display:none;">
+    <h3>Step 2: Deadline Status</h3>
+    <p>Is the amendment request <b>Outside</b> or <b>Inside</b> the deadline?</p>
+    <button class="accordion" onclick="setDeadline('outside')">Outside Deadline</button>
+    <button class="accordion" onclick="setDeadline('inside')">Inside Deadline</button>
+    <button class="backBtn" onclick="goBack('step0')">🔄 Back</button>
+  </div>
+
+  <!-- Step 3: Instructions + Reply Options -->
+  <div class="step" id="step2" style="display:none;">
+    <h3>Step 3: Instructions</h3>
+    <div id="instructionText" style="background:#eef9f7; padding:15px; border-radius:8px; margin-bottom:15px;"></div>
+
+    <h3>Choose Client Reply Template</h3>
+    <button class="replyBtn" onclick="showReply('acknowledged')">Client Acknowledged</button>
+    <button class="replyBtn" onclick="showReply('approved')">Request Approved</button>
+    <button class="replyBtn" onclick="showReply('rejected')">Request Rejected</button>
+
+    <textarea id="replyText" style="display:none;" readonly></textarea>
+
+    <button class="backBtn" onclick="goBack('step1')" style="display:inline-block;" id="backStep2">🔄 Back</button>
+  </div>
+
+</div>
+
+<script>
+  let amendType = '';
+  let deadline = '';
+
+  function hideAll() {
+    document.querySelectorAll('.step').forEach(s => s.style.display = 'none');
+  }
+
+  function setAmendType(type) {
+    amendType = type;
+    hideAll();
+    document.getElementById('step1').style.display = 'block';
+  }
+
+  function setDeadline(status) {
+    deadline = status;
+    hideAll();
+    document.getElementById('step2').style.display = 'block';
+
+    const instruction = document.getElementById('instructionText');
+    const replyArea = document.getElementById('replyText');
+    replyArea.style.display = 'none'; // hide reply initially
+
+    // Logic based on Amend Type & Deadline
+    if (deadline === 'outside') {
+      if (amendType === 'Name') {
+        instruction.innerHTML = `<strong>Amend Name Outside Deadline:</strong> You may proceed with the amendment normally and check feasibility with the hotel.`;
+      } else {
+        instruction.innerHTML = `<strong>Outside Deadline:</strong> Amendments other than 'Amend Name' are not allowed outside the deadline. Please inform the client to cancel and rebook.`;
+      }
+    } else {
+      // Inside deadline, allowed for all amendments (simplified)
+      instruction.innerHTML = `<strong>Inside Deadline:</strong> You can proceed with the amendment, but it requires coordination with the hotel.`;
+    }
+  }
+
+  function goBack(stepId) {
+    hideAll();
+    document.getElementById(stepId).style.display = 'block';
+  }
+
+  function showReply(type) {
+    const replyArea = document.getElementById('replyText');
+    let emailBody = '';
+    const commonNote = "\n\n*Please reply on top of this email without changing the subject or deleting the addresses to avoid duplicate cases.*";
+
+    if(type === 'acknowledged'){
+      if (deadline === 'outside') {
+        if (amendType === 'Name') {
+          emailBody =
+`Dear Partner,
+
+We have received your amendment request to change the guest name . We are currently checking the feasibility with the hotel and will update you shortly.${commonNote}`;
+        } else {
+          emailBody =
+`Dear Partner,
+
+Due to system limitations and because the booking is outside the cancellation deadline, amendments other than 'Amend Name' cannot be processed. Please advise the guest to cancel and rebook.
+
+Thank you for your understanding.${commonNote}`;
+        }
+      } else {
+        emailBody =
+`Dear Partner,
+
+We have received your amendment request and are coordinating with the hotel to check feasibility. We will update you once we receive their response.${commonNote}`;
+      }
+    } else if(type === 'approved'){
+      emailBody =
+`Dear Partner,
+
+Greetings from WebBeds!
+
+We are pleased to confirm that your amendment request has been approved. The booking details have been updated accordingly.
+
+Should you require any further assistance, please do not hesitate to contact us.${commonNote}`;
+    } else if(type === 'rejected'){
+      emailBody =
+`Dear Partner,
+
+Greetings from WebBeds!
+
+Unfortunately, after coordination with the hotel, your amendment request has been rejected due to policy or system limitations.
+
+Please inform the guest accordingly.
+
+Thank you for your understanding.${commonNote}`;
+    }
+
+    replyArea.value = emailBody;
+    replyArea.style.display = 'block';
+  }
+</script>
+
+</body>
+</html>

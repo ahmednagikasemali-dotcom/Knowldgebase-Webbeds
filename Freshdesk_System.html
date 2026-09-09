@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freshdesk Functionality Manual - WebBeds</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #00a88e;
+            --secondary: #12344d;
+            --bg: #f4f7fa;
+            --white: #ffffff;
+            --text: #1e293b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            margin: 0;
+            display: flex;
+            background-color: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 300px;
+            background: var(--secondary);
+            color: white;
+            height: 100vh;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .sidebar h2 {
+            padding: 20px;
+            font-size: 1rem;
+            text-align: center;
+            border-bottom: 1px solid #1e4561;
+            color: var(--primary);
+        }
+
+        .sidebar a {
+            display: block;
+            color: #cbd5e1;
+            padding: 12px 20px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #1e4561;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .sidebar a:hover, .sidebar a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Content Area Container */
+        .main-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .header-tools {
+            background: var(--white);
+            padding: 15px 40px;
+            border-bottom: 3px solid var(--primary);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .button-row { display: flex; gap: 10px; }
+
+        .search-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 10px 45px 10px 15px;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .search-container i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            border: none;
+            font-size: 0.85rem;
+            transition: 0.3s;
+        }
+
+        .btn-home { background: #475569; color: white; }
+        .btn-refresh { background: var(--primary); color: white; }
+        .btn-pdf { background: #ef4444; color: white; }
+        .btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+        /* Sections Styling */
+        .content-body {
+            padding: 40px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        section {
+            display: none;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            animation: fadeIn 0.4s ease;
+        }
+
+        section.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 { color: var(--secondary); border-left: 5px solid var(--primary); padding-left: 15px; margin-top: 0; }
+        h2 { color: var(--primary); border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; }
+        th { background: #f1f5f9; }
+
+        .welcome-screen {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .welcome-screen i { font-size: 4rem; color: var(--primary); margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>FRESHDESK MANUAL</h2>
+        <a onclick="showSection('welcome')"><i class="fas fa-info-circle"></i> Getting Started</a>
+        <a onclick="showSection('benefits')">1. Freshdesk Benefits</a>
+        <a onclick="showSection('activation')">2. Activation & SSO</a>
+        <a onclick="showSection('homepage')">3. Homepage Layout</a>
+        <a onclick="showSection('dashboard')">4. Dashboard & Metrics</a>
+        <a onclick="showSection('productivity')">5. Productivity Counts</a>
+        <a onclick="showSection('search-box')">6. Search Engine Tools</a>
+        <a onclick="showSection('profile')">7. Profile & Signature</a>
+        <a onclick="showSection('summary-page')">8. Summary Page Components</a>
+        <a onclick="showSection('assigning')">9. Ticket Assignment Logic</a>
+        <a onclick="showSection('email-box')">10. Email & Ticketing Parts</a>
+    </div>
+
+    <div class="main-container">
+        
+        <div class="header-tools">
+            <div class="button-row">
+                <a href="index.html" class="btn btn-home">
+                    <i class="fas fa-home"></i> Main Page
+                </a>
+                
+                <button onclick="location.reload()" class="btn btn-refresh">
+                    <i class="fas fa-sync-alt"></i> Refresh Manual
+                </button>
+
+                <a href="2024 Freshdesk Functionality Manual - Customer Service 052724.pdf" target="_blank" class="btn btn-pdf">
+                    <i class="fas fa-file-pdf"></i> View Full PDF
+                </a>
+            </div>
+            
+            <div class="search-container">
+                <i class="fas fa-search"></i>
+                <input type="text" id="manualSearch" onkeyup="searchManual()" placeholder="Search through all documentation data...">
+            </div>
+        </div>
+
+        <div class="content-body">
+            
+            <section id="welcome" class="active">
+                <div class="welcome-screen">
+                    <i class="fas fa-book-reader"></i>
+                    <h1>Freshdesk Interactive Guide</h1>
+                    <p>Select a specific section from the left menu to view detailed functional data.</p>
+                </div>
+            </section>
+
+            <section id="benefits">
+                <h1>FRESHDESK’S BENEFITS</h1>
+                <p>Freshdesk is a special cloud-based CRM tool designed to improve customer support via an advanced ticketing system.</p>
+                <ul>
+                    <li><strong>Streamlined workflow:</strong> Emails and notes in a singular ticket trail.</li>
+                    <li><strong>Personalized Distribution:</strong> Efficient task sharing among team members.</li>
+                    <li><strong>Tracking:</strong> Assess team workload and reduce repetition.</li>
+                    <li><strong>Knowledge base:</strong> Built-in database for quick answers.</li>
+                </ul>
+            </section>
+
+            <section id="activation">
+                <h2>ACTIVATING & LOGGING IN</h2>
+                <p>Initial activation via email from <strong>Freshworks</strong>.</p>
+                <div style="background: #e0f2fe; padding: 20px; border-radius: 8px; border-left: 5px solid #0284c7;">
+                    <strong>WebBeds SSO (Single Sign-On):</strong> Users login via WebBeds SSO, providing secure access to multiple applications with one set of credentials.
+                </div>
+            </section>
+
+            <section id="homepage">
+                <h2>HOMEPAGE ACCESS COMPONENTS</h2>
+                <p>The interface consists of the following key areas:</p>
+                <ul>
+                    <li><strong>Section Icons:</strong> Left-side navigation.</li>
+                    <li><strong>Main Working Page:</strong> Central workspace.</li>
+                    <li><strong>New Email/Ticket:</strong> Outbound trail creation.</li>
+                    <li><strong>Search Box:</strong> Global search engine.</li>
+                    <li><strong>Status Toggle:</strong> Manage auto-assignment availability.</li>
+                </ul>
+            </section>
+
+            <section id="dashboard">
+                <h2>DASHBOARD FILTERS & METRICS</h2>
+                <p>Dashboards provide performance summaries.</p>
+                <h3>Group Filters</h3>
+                <p>Used by <strong>Supervisors</strong> to isolate data for specific groups (e.g., Mandarin group). Only Admins can create these groups.</p>
+            </section>
+
+            <section id="productivity">
+                <h2>PRODUCTIVITY COUNTS</h2>
+                <table>
+                    <tr><th>Metric</th><th>Definition</th></tr>
+                    <tr><td><strong>UNRESOLVED</strong></td><td>All tickets currently open for the user/group.</td></tr>
+                    <tr><td><strong>OVERDUE</strong></td><td>Tickets that exceeded the SLA agreement.</td></tr>
+                    <tr><td><strong>DUE TODAY</strong></td><td>Tickets reaching SLA within 24 hours.</td></tr>
+                    <tr><td><strong>OPEN</strong></td><td>Newly assigned tickets waiting for action.</td></tr>
+                </table>
+            </section>
+
+            <section id="search-box">
+                <h2>SEARCH ENGINE FUNCTIONALITY</h2>
+                <p>The search bar supports:</p>
+                <ul>
+                    <li><strong>References:</strong> Booking Ref #, Ticket ID.</li>
+                    <li><strong>Keywords:</strong> Hotel Name, Supplier Name.</li>
+                    <li><strong>Knowledge Base:</strong> Direct search for solution articles.</li>
+                    <li><strong>Characters:</strong> Supports Pinyin and other foreign characters.</li>
+                </ul>
+            </section>
+
+            <section id="profile">
+                <h2>USER PROFILE & SIGNATURE</h2>
+                <p>To set your signature: Navigate to User Menu > Profile Settings. Input your WebBeds approved signature in the designated box. Click <strong>Save Change</strong> to ensure it appears in outbound emails.</p>
+            </section>
+
+            <section id="summary-page">
+                <h2>SUMMARY PAGE COMPONENTS</h2>
+                <p>Features include: Sorting (Date/Status), Layout toggles (Card/Table), Export options (CSV/Excel for Supervisors), and Ticket Filtering on the right panel.</p>
+            </section>
+
+            <section id="assigning">
+                <h2>ASSIGNMENT LOGIC & SCENARIOS</h2>
+                <h3>Manual Move (Execute Scenarios)</h3>
+                <p>Mis-routed tickets: Click Ellipsis (...) > Execute Scenarios > Select "Move to [Correct Group]" > Execute.</p>
+                <h3>Automatic Assignment</h3>
+                <ul>
+                    <li><strong>Round Robin:</strong> Equal circular distribution.</li>
+                    <li><strong>Load Balanced:</strong> Maximum ticket load per agent.</li>
+                </ul>
+            </section>
+
+            <section id="email-box">
+                <h2>EMAIL MESSAGE BOX DETAILS</h2>
+                <p>From (Group Email), To, CC, BCC, Body, Signature, Canned Responses (Templates), Attachments, and Send/Forward buttons.</p>
+            </section>
+
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('section');
+            sections.forEach(s => s.classList.remove('active'));
+
+            const links = document.querySelectorAll('.sidebar a');
+            links.forEach(l => l.classList.remove('active'));
+
+            const target = document.getElementById(sectionId);
+            if(target) target.classList.add('active');
+
+            links.forEach(l => {
+                if(l.getAttribute('onclick')?.includes(sectionId)) {
+                    l.classList.add('active');
+                }
+            });
+            document.getElementById('manualSearch').value = "";
+        }
+
+        function searchManual() {
+            let input = document.getElementById('manualSearch').value.toLowerCase();
+            if (input === "") return;
+
+            let sections = document.querySelectorAll('section');
+            for (let i = 0; i < sections.length; i++) {
+                if (sections[i].id === "welcome") continue;
+                let text = sections[i].innerText.toLowerCase();
+                if (text.includes(input)) {
+                    showSection(sections[i].id);
+                    break; 
+                }
+            }
+        }
+    </script>
+</body>
+</html>

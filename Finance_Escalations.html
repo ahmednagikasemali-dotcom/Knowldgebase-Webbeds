@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance & VCC Escalation Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #0052cc;
+            --vcc-orange: #f57c00;
+            --success-green: #36b37e;
+            --danger-red: #ff5630;
+            --bg-light: #f4f5f7;
+            --text-dark: #172b4d;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Toolbar Section */
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        /* Home Button Linked to index.html */
+        .nav-link {
+            background: white;
+            border: 1px solid #dfe1e6;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--text-dark);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+            text-decoration: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .nav-link:hover {
+            background: var(--primary-blue);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        /* Search Box Design */
+        .search-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .search-wrapper input {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            border: 2px solid #dfe1e6;
+            border-radius: 25px;
+            outline: none;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            box-sizing: border-box;
+        }
+
+        .search-wrapper input:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 8px rgba(0,82,204,0.2);
+        }
+
+        .search-wrapper i {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7a869a;
+            font-size: 1.1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--primary-blue);
+            transition: 0.3s;
+        }
+
+        .card.vcc { border-top-color: var(--vcc-orange); }
+        .card.ap { border-top-color: var(--primary-blue); }
+        .card.ar { border-top-color: var(--success-green); }
+
+        h2 { margin-top: 0; display: flex; align-items: center; gap: 10px; font-size: 1.2rem; }
+
+        .teams-format {
+            background: #f0f2f5;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', Courier, monospace;
+            border-right: 4px solid var(--vcc-orange);
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .warning {
+            background: #ffebe6;
+            color: #bf2600;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px 10px;
+            border-bottom: 1px solid #eee;
+            font-size: 0.85rem;
+        }
+
+        .copy-btn {
+            background: #f4f5f7;
+            border: 1px solid #dfe1e6;
+            color: var(--primary-blue);
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: 0.2s;
+            margin-left: 5px;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .tag {
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .tag-dc { background: #e3f2fd; color: #1976d2; }
+        .tag-tp { background: #f3e5f5; color: #7b1fa2; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="toolbar">
+        <a href="index.html" class="nav-link">
+            <i class="fas fa-home"></i> Home
+        </a>
+        <button class="nav-link" onclick="window.location.reload()" style="cursor:pointer">
+            <i class="fas fa-sync-alt"></i> Refresh Page
+        </button>
+    </div>
+
+    <header>
+        <div>
+            <h1 style="margin:0; font-size: 1.5rem; color: var(--primary-blue);">FINANCE / VCC / AR HUB</h1>
+            <p style="margin:5px 0 0; color: #6b778c;">Centralized Escalation & Communication Directory</p>
+        </div>
+        
+        <div class="search-wrapper">
+            <input type="text" id="filterInput" onkeyup="filterData()" placeholder="Type to search (e.g. MEA, VCC, APAC)...">
+            <i class="fas fa-search"></i>
+        </div>
+    </header>
+
+    <div class="grid" id="dataGrid">
+        <div class="card vcc">
+            <h2><i class="fas fa-credit-card"></i> VCC & Teams Escalation</h2>
+            <div class="warning">
+                <i class="fas fa-exclamation-triangle"></i> DO NOT move Freshdesk tickets to Finance groups.
+            </div>
+            <p><strong>Main VCC Email:</strong> 
+                <span class="email-text">vcc.global@webbeds.com</span>
+                <button class="copy-btn" onclick="copyText('vcc.global@webbeds.com')"><i class="far fa-copy"></i></button>
+            </p>
+            <h3>Microsoft Teams Format:</h3>
+            <div class="teams-format">
+                Booking Reference + Supplier Region
+            </div>
+            <p style="font-size: 0.8rem; color: #6b778c;">Example: 14742XXX - APAC</p>
+        </div>
+
+        <div class="card ap">
+            <h2><i class="fas fa-file-invoice-dollar"></i> Accounts Payable (AP)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Region/Group</th>
+                        <th>Email</th>
+                        <th>Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>APAC</td><td>APCREDIT.APAC@webbeds.com <button onclick="copyText('APCREDIT.APAC@webbeds.com')" class="copy-btn"><i class="far fa-copy"></i></button></td><td><span class="tag tag-dc">DC</span></td></tr>
+                    <tr><td>EUROPE</td><td>APCREDIT.EUR@webbeds.com <button onclick="copyText('APCREDIT.EUR@webbeds.com')" class="copy-btn"><i class="far fa-copy"></i></button></td><td><span class="tag tag-dc">DC</span></td></tr>
+                    <tr><td>KSA</td><td>APCREDIT.KSA@WEBBEDS.COM <button onclick="copyText('APCREDIT.KSA@WEBBEDS.COM')" class="copy-btn"><i class="far fa-copy"></i></button></td><td><span class="tag tag-dc">DC</span></td></tr>
+                    <tr><td>MEA</td><td>APCREDIT.MEA@webbeds.com <button onclick="copyText('APCREDIT.MEA@webbeds.com')" class="copy-btn"><i class="far fa-copy"></i></button></td><td><span class="tag tag-dc">DC</span></td></tr>
+                    <tr><td>UAE</td><td>APCREDIT.UAE@WEBBEDS.COM <button onclick="copyText('APCREDIT.UAE@WEBBEDS.COM')" class="copy-btn"><i class="far fa-copy"></i></button></td><td><span class="tag tag-dc">DC</span></td></tr>
+                    <tr><td>USA</td><td>APCREDIT.USA@webbeds.com <button onclick="copyText('APCREDIT.USA@webbeds.com')" class="copy-btn"><i class="far fa-copy"></i></button></td><td><span class="tag tag-dc">DC</span></td></tr>
+                    <tr><td>3rd Party</td><td>AP.thirdparty@webbeds.com <button onclick="copyText('AP.thirdparty@webbeds.com')" class="copy-btn"><i class="far fa-copy"></i></button></td><td><span class="tag tag-tp">XML</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card ar">
+            <h2><i class="fas fa-hand-holding-usd"></i> AR & DOTW (Refunds)</h2>
+            <div style="margin-bottom: 15px;">
+                <strong>Refunds (MOR/CASH):</strong><br>
+                refunds.finance@webbeds.com <button onclick="copyText('refunds.finance@webbeds.com')" class="copy-btn"><i class="far fa-copy"></i></button>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <strong>Mark as Paid (MAP) EUR:</strong><br>
+                wbeurope.ar@webbeds.com <button onclick="copyText('wbeurope.ar@webbeds.com')" class="copy-btn"><i class="far fa-copy"></i></button>
+            </div>
+            <h3>AR Territories:</h3>
+            <table>
+                <tr><td>Europe</td><td>wbeurope.ar@webbeds.com <button onclick="copyText('wbeurope.ar@webbeds.com')" class="copy-btn"><i class="far fa-copy"></i></button></td></tr>
+                <tr><td>MEA</td><td>mea.ar@webbeds.com <button onclick="copyText('mea.ar@webbeds.com')" class="copy-btn"><i class="far fa-copy"></i></button></td></tr>
+                <tr><td>Americas</td><td>wbamerica.ar@webbeds.com <button onclick="copyText('wbamerica.ar@webbeds.com')" class="copy-btn"><i class="far fa-copy"></i></button></td></tr>
+                <tr><td>APAC</td><td>wbapac.ar@webbeds.com <button onclick="copyText('wbapac.ar@webbeds.com')" class="copy-btn"><i class="far fa-copy"></i></button></td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Copy Function
+    function copyText(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            alert("Copied to clipboard: " + text);
+        });
+    }
+
+    // Search/Filter Function
+    function filterData() {
+        let input = document.getElementById('filterInput').value.toLowerCase();
+        let cards = document.querySelectorAll('.card');
+        
+        cards.forEach(card => {
+            let text = card.innerText.toLowerCase();
+            if (text.includes(input)) {
+                card.style.display = "block";
+            } else {
+                card.style.display = "none";
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

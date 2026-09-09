@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotel / Customer Info Update – Steps</title>
+
+<style>
+/* ===== Body / Premium Background ===== */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background:
+    linear-gradient(
+      rgba(255, 255, 255, 0.6),
+      rgba(255, 255, 255, 0.6)
+    ),
+    url("https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260")
+    no-repeat center center fixed;
+  background-size: cover;
+}
+
+/* ===== Header ===== */
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.homeBtn, .backBtn {
+  background: #e60000;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 25px;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.homeBtn:hover { background: #b30000; }
+.backBtn { background: #34495e; }
+.backBtn:hover { background: #2c3e50; }
+
+/* ===== Title ===== */
+h1 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 25px;
+}
+
+/* ===== Tree / Steps ===== */
+.tree {
+  max-width: 900px;
+  margin: auto;
+}
+
+.node {
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 12px;
+  margin-bottom: 18px;
+  border-left: 6px solid #3498db;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  backdrop-filter: blur(3px);
+  overflow: hidden;
+  transition: 0.3s;
+}
+
+.nodeHeader {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  cursor: pointer;
+  background: #ecf3fa;
+  transition: 0.3s;
+}
+
+.nodeHeader:hover { background: #dde9f5; }
+
+.nodeHeader .icon { font-size: 26px; }
+
+.nodeHeader h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #2c3e50;
+}
+
+/* ===== Node Content ===== */
+.nodeContent {
+  display: none;
+  padding: 16px 20px;
+  color: #333;
+}
+
+/* ===== Child Nodes (Indented) ===== */
+.childNodes {
+  margin-left: 30px;
+}
+
+/* ===== Info Boxes ===== */
+.success {
+  background: #eafaf1;
+  border-left: 6px solid #2ecc71;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+.warning {
+  background: #fdecea;
+  border-left: 6px solid #e74c3c;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+.info {
+  background: #fff9e6;
+  border-left: 6px solid #f1c40f;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+.example {
+  background: #eef2f7;
+  border-left: 6px solid #7f8c8d;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+/* ===== Active Node ===== */
+.node.active .nodeContent { display: block; }
+</style>
+</head>
+
+<body>
+
+<!-- ===== Header ===== -->
+<div class="header">
+  <a href="index.html" class="homeBtn">🏠 Home</a>
+  <a href="javascript:history.back()" class="backBtn">⬅ Back</a>
+</div>
+
+<h1>Hotel / Customer Info Update – Steps</h1>
+
+<div class="tree">
+
+<!-- ROOT NODE -->
+<div class="node">
+  <div class="nodeHeader">
+    <div class="icon">📝</div>
+    <h2>Start: Update Booking / Customer Info</h2>
+  </div>
+  <div class="nodeContent childNodes">
+
+    <!-- Step 1: Verify Booking -->
+    <div class="node">
+      <div class="nodeHeader">
+        <div class="icon">🔍</div>
+        <h2>Step 1: Verify Booking Details</h2>
+      </div>
+      <div class="nodeContent childNodes">
+        <div class="info">
+          Check booking ID, customer name, dates, room type, and hotel info.
+        </div>
+        <div class="example">
+          📌 Example: Customer calls to update arrival date → verify original booking details first.
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Confirm Customer Request -->
+    <div class="node">
+      <div class="nodeHeader">
+        <div class="icon">📞</div>
+        <h2>Step 2: Confirm Customer Request</h2>
+      </div>
+      <div class="nodeContent childNodes">
+        <div class="success">
+          Ask for exact change: name, dates, room preferences, or contact info.
+        </div>
+        <div class="example">
+          📌 Example: Customer wants to change check-in date → confirm new date with them.
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Update Hotel System -->
+    <div class="node">
+      <div class="nodeHeader">
+        <div class="icon">🏨</div>
+        <h2>Step 3: Update Hotel System / GDS</h2>
+      </div>
+      <div class="nodeContent childNodes">
+        <div class="success">
+          Update booking according to customer request in the hotel system.
+        </div>
+        <div class="example">
+          📌 Example: Update arrival date, special requests, room type in PMS/GDS.
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4: Notify Customer -->
+    <div class="node">
+      <div class="nodeHeader">
+        <div class="icon">✉️</div>
+        <h2>Step 4: Notify Customer</h2>
+      </div>
+      <div class="nodeContent childNodes">
+        <div class="info">
+          Send confirmation email / SMS about updated booking details.
+        </div>
+        <div class="example">
+          📌 Example: Email customer: "Your check-in date has been updated to …"
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 5: Record Notes -->
+    <div class="node">
+      <div class="nodeHeader">
+        <div class="icon">🗒️</div>
+        <h2>Step 5: Add Notes / Internal Record</h2>
+      </div>
+      <div class="nodeContent childNodes">
+        <div class="info">
+          Add clear notes on ticket / CRM for audit and future reference.
+        </div>
+        <div class="example">
+          📌 Example: "Customer requested early check-in, updated in PMS on 16-Jan-2026."
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+<script>
+// Expand / Collapse Nodes
+document.querySelectorAll(".nodeHeader").forEach(header => {
+  header.addEventListener("click", () => {
+    header.parentElement.classList.toggle("active");
+  });
+});
+</script>
+
+</body>
+</html>

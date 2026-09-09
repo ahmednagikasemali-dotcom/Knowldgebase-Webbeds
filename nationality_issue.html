@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nationality Issue Flow</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
+  background-size: cover;
+  margin: 0;
+  padding: 20px;
+  color: #333;
+  direction: ltr; /* النص من الشمال لليمين */
+}
+h1 { text-align: center; color: #e60000; text-shadow: 0 0 5px #fff; margin-bottom: 20px; }
+
+#homeIcon, #refreshBtn, #helpIcon {
+  position: fixed;
+  width: 50px; height: 50px;
+  border-radius: 50%;
+  display: flex; justify-content: center; align-items: center;
+  cursor: pointer;
+  z-index: 999;
+}
+#homeIcon { top: 20px; left: 20px; background: #e60000; }
+#homeIcon::before { content: "🏠"; font-size: 28px; color: white; }
+#refreshBtn { top: 20px; right: 80px; background: #2196f3; }
+#refreshBtn::before { content: "🔄"; font-size: 28px; color: white; }
+#helpIcon { top: 20px; right: 20px; background: #ff9800; }
+#helpIcon::before { content: "❓"; font-size: 28px; color: white; }
+
+.box { background: rgba(255,255,255,0.95); border: 2px solid #e60000; border-radius: 10px; padding: 20px; margin-top: 20px; }
+
+.option { border-radius: 8px; padding: 10px 12px; margin-top: 5px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; }
+.option:hover { transform: scale(1.03); background-color: #ffe0b2; }
+
+ul { margin-top: 10px; list-style-type: none; padding-left: 0; }
+
+.stepLevel { border-left: 4px solid #9e9e9e; padding: 6px 8px; border-radius: 3px; margin-left: 20px; margin-top: 5px; background: #f0f0f0; display: flex; align-items: flex-start; justify-content: flex-start; }
+.stepLevel span { margin-right: 8px; }
+
+.customer { color: #007bff; font-weight: bold; } /* أزرق للعميل */
+.rimo { color: #d32f2f; font-weight: bold; } /* أحمر لـ RimoTours */
+
+#helpBox { position: fixed; top: 80px; right: 20px; background: #fff8e1; border: 2px solid #ff9800; padding: 15px; border-radius: 8px; width: 300px; display: none; z-index: 1000; }
+
+.backBtn {
+  margin-top: 10px;
+  padding: 6px 12px;
+  background-color: #ff9800;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s ease;
+}
+.backBtn:hover { background-color: #e68a00; }
+</style>
+</head>
+<body>
+
+<div id="homeIcon" title="Go to Home" onclick="window.location.href='index.html'"></div>
+<div id="refreshBtn" title="Refresh Page" onclick="window.location.reload()"></div>
+<div id="helpIcon" title="Help" onclick="toggleHelp()"></div>
+
+<h1>Nationality Issue Flow</h1>
+
+<div class="box">
+<h3>Select Scenario:</h3>
+<div class="option" onclick="showSteps('before')">⏳ Before Check-in</div>
+<div class="option" onclick="showSteps('sameDay')">📅 Same-Day Check-in</div>
+<div class="option" onclick="showSteps('rimo')">📌 RimoTours Exception</div>
+</div>
+
+<div id="stepsContainer"></div>
+
+<div id="helpBox">
+<h3>Help / Reference</h3>
+<ul>
+<li>Steps appear immediately below selection.</li>
+<li>Click each step to read details.</li>
+<li>Follow the flow from receiving notification → verifying → action → escalate if unresolved.</li>
+</ul>
+</div>
+
+<script>
+function toggleHelp(){
+  const box = document.getElementById('helpBox');
+  box.style.display = box.style.display==='block' ? 'none' : 'block';
+}
+
+function showSteps(type){
+  const container = document.getElementById('stepsContainer');
+  container.innerHTML = '';
+
+  const stepsBox = document.createElement('div');
+  stepsBox.className='box';
+  const ul = document.createElement('ul');
+
+  let steps = [];
+
+  if(type==='before'){
+    steps = [
+      "📩 Receive notification about nationality issue.",
+      "<span class='customer'>Customer responsibility:</span> Agency selected wrong nationality; check if provider can accommodate with extra cost, send proof to agency, inform about new price, request final decision (accept or cancel).",
+      "WebBeds responsibility: System issue or CS error, pass task to PST."
+    ];
+  } else if(type==='sameDay'){
+    steps = [
+      "📩 Receive request from client on same check-in day (any nationality issue or unconfirmed booking).",
+      "✅ Verify booking and nationality details with hotel/supplier.",
+      "<span class='customer'>Customer responsibility:</span> If client gave wrong nationality, follow up to adjust or cancel.",
+      "WebBeds responsibility: If system or CS error, escalate to PST/In-Resort."
+    ];
+  } else if(type==='rimo'){
+    steps = [
+      "<span class='rimo'>RimoTours Exception:</span> Whenever we receive a notification from RimoTours to check on the guest´s nationality and they will charge us an extra supplement and in case of the nationality is incorrect, kindly proceed as follows:",
+      "Reply to Rimo that we acknowledge receiving your email and we have sent to our client and advise that if no response is received from us and the guest arrives at the hotel, please ask the hotel to collect the rate difference directly from the guest and resolve the ticket.",
+      "We send to the client to verify on the guest’s nationality and inform that if we didn’t hear back from you and the guest arrived at the hotel, you (as the client) are liable for the rate difference and resolve the ticket.",
+      "If RimoTours comes back during the stay or after the check-out, please keep informing them that since you have not received any acceptance from our end, WebBeds is not liable for any rate difference."
+    ];
+  }
+
+  steps.forEach(s=>{
+    const li = document.createElement('li');
+    li.className='stepLevel';
+    li.innerHTML=`<span>➡️</span>${s}`;
+    ul.appendChild(li);
+  });
+
+  stepsBox.appendChild(ul);
+
+  const backBtn = document.createElement('button');
+  backBtn.className='backBtn';
+  backBtn.innerText='⬅️ Back';
+  backBtn.onclick = ()=>{ stepsBox.remove(); };
+  stepsBox.appendChild(backBtn);
+
+  container.appendChild(stepsBox);
+}
+</script>
+
+</body>
+</html>

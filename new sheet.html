@@ -1,0 +1,1153 @@
+import openpyxl
+from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+from openpyxl.utils import get_column_letter
+
+def create_action_plan_workbook_en():
+    wb = openpyxl.Workbook()
+    wb.remove(wb.active) # Remove default sheet
+
+    # Color Palette
+    DARK_NAVY = "0F172A"
+    SLATE_BLUE = "1E293B"
+    CYAN_ACCENT = "0EA5E9"
+    LIGHT_BG = "F8FAFC"
+    WHITE = "FFFFFF"
+    BORDER_COLOR = "CBD5E1"
+    
+    SUCCESS_GREEN = "10B981"
+    WARNING_YELLOW = "F59E0B"
+    DANGER_RED = "EF4444"
+    INFO_BLUE = "3B82F6"
+
+    # Typography & Styles
+    font_title = Font(name="Segoe UI", size=16, bold=True, color=WHITE)
+    font_section = Font(name="Segoe UI", size=13, bold=True, color=DARK_NAVY)
+    font_header = Font(name="Segoe UI", size=11, bold=True, color=WHITE)
+    font_body = Font(name="Segoe UI", size=10, color="334155")
+    font_bold = Font(name="Segoe UI", size=10, bold=True, color=DARK_NAVY)
+    
+    fill_navy = PatternFill(start_color=DARK_NAVY, end_color=DARK_NAVY, fill_type="solid")
+    fill_header = PatternFill(start_color="1E293B", end_color="1E293B", fill_type="solid")
+    fill_card = PatternFill(start_color="F8FAFC", end_color="F8FAFC", fill_type="solid")
+
+    thin_border = Side(border_style="thin", color=BORDER_COLOR)
+    border_all = Border(left=thin_border, right=thin_border, top=thin_border, bottom=thin_border)
+    
+    align_center = Alignment(horizontal="center", vertical="center", wrap_text=True)
+    align_left = Alignment(horizontal="left", vertical="center", wrap_text=True)
+
+    # =============================================================
+    # 1. TAB: Executive Dashboard
+    # =============================================================
+    ws_dash = wb.create_sheet(title="Dashboard")
+    ws_dash.views.sheetView[0].rightToLeft = False
+
+    ws_dash.merge_cells("A1:G1")
+    c_d1 = ws_dash["A1"]
+    c_d1.value = "COPS DE Training & Performance Executive Dashboard"
+    c_d1.font = font_title
+    c_d1.fill = fill_navy
+    c_d1.alignment = align_center
+    ws_dash.row_dimensions[1].height = 40
+
+    # KPI Summary Cards
+    kpis = [
+        ("Total Actions", "=COUNTA('Action Plan Tracker'!A4:A50)", "A", "B", INFO_BLUE),
+        ("Completed Actions", '=COUNTIF(\'Action Plan Tracker\'!H4:H50, "Completed")', "C", "D", SUCCESS_GREEN),
+        ("Avg Training Efficiency", "=AVERAGE('Action Plan Tracker'!I4:I50)", "E", "F", CYAN_ACCENT),
+    ]
+
+    for label, formula, c_start, c_end, color_hex in kpis:
+        ws_dash.merge_cells(f"{c_start}3:{c_end}3")
+        c_lbl = ws_dash[f"{c_start}3"]
+        c_lbl.value = label
+        c_lbl.font = Font(name="Segoe UI", size=11, bold=True, color=WHITE)
+        c_lbl.fill = PatternFill(start_color=color_hex, end_color=color_hex, fill_type="solid")
+        c_lbl.alignment = align_center
+        
+        ws_dash.merge_cells(f"{c_start}4:{c_end}5")
+        c_val = ws_dash[f"{c_start}4"]
+        c_val.value = formula
+        c_val.font = Font(name="Segoe UI", size=20, bold=True, color=DARK_NAVY)
+        c_val.fill = fill_card
+        c_val.alignment = align_center
+        if "Efficiency" in label:
+            c_val.number_format = "0.0%"
+
+    # Status Breakdown Table
+    ws_dash.cell(row=7, column=1, value="Action Status Breakdown").font = font_section
+    dash_headers = ["Status", "Action Count", "% of Total"]
+    for i, h in enumerate(dash_headers, start=1):
+        cell = ws_dash.cell(row=8, column=i, value=h)
+        cell.font = font_header
+        cell.fill = fill_header
+        cell.alignment = align_center
+
+    statuses = ["Completed", "In Progress", "Delayed", "Not Started"]
+    for idx, st in enumerate(statuses, start=9):
+        c1 = ws_dash.cell(row=idx, column=1, value=st)
+        c2 = ws_dash.cell(row=idx, column=2, value=f'=COUNTIF(\'Action Plan Tracker\'!H4:H50, "{st}")')
+        c3 = ws_dash.cell(row=idx, column=3, value=f'=B{idx}/B4')
+        for c in [c1, c2, c3]:
+            c.font = font_body
+            c.border = border_all
+            c.alignment = align_center
+        c3.number_format = "0.0%"
+
+    # =============================================================
+    # 2. TAB: Action Plan Tracker
+    # =============================================================
+    ws_track = wb.create_sheet(title="Action Plan Tracker")
+    ws_track.views.sheetView[0].rightToLeft = False
+
+    ws_track.merge_cells("A1:L1")
+    c_t1 = ws_track["A1"]
+    c_t1.value = "Training Specialist Operational Action Plan (COPS DE)"
+    c_t1.font = font_title
+    c_t1.fill = fill_navy
+    c_t1.alignment = align_center
+    ws_track.row_dimensions[1].height = 40
+
+    headers_track = [
+        "Action ID", "Action / Initiative Description", "Pillar / Focus Area", "Owner / Lead",
+        "Start Date", "Due Date", "Priority", "Status",
+        "Progress %", "Target Metric", "Actual Metric", "Operational Notes"
+    ]
+
+    ws_track.row_dimensions[3].height = 26
+    for col_idx, header in enumerate(headers_track, start=1):
+        cell = ws_track.cell(row=3, column=col_idx, value=header)
+        cell.font = font_header
+        cell.fill = fill_header
+        cell.alignment = align_center
+        cell.border = border_all
+
+    sample_track_data = [
+        ["ACT-001", "Structured Shadowing Program Rollout", "Operational Immersion", "Training Specialist", "2026-09-15", "2026-10-15", "High", "In Progress", 0.75, 95, 88, "Paired new hires with senior agents"],
+        ["ACT-002", "Micro-Learning Modules for Loading Errors", "Training Efficiency", "Training Specialist", "2026-09-20", "2026-10-30", "High", "In Progress", 0.60, 30, 18, "Targeting 30% error reduction"],
+        ["ACT-003", "Standard Operating Procedures (SOP) Refinement", "Documentation", "Quality & Training", "2026-10-01", "2026-11-15", "Medium", "Not Started", 0.00, 100, 0, "Updating error resolution workflows"],
+        ["ACT-004", "QA Score & Error Rate Calibration", "QA Validation", "QA Team / Training", "2026-09-10", "2026-10-05", "High", "Completed", 1.00, 90, 92, "Exceeded benchmark QA target"],
+        ["ACT-005", "Power BI Training Performance Dashboard", "Process Innovation", "Training Specialist", "2026-10-15", "2026-12-01", "Medium", "Not Started", 0.00, 100, 0, "Automating agent evaluation metrics"],
+        ["ACT-006", "Onboarding Knowledge Retention Assessments", "Onboarding Optimization", "Training Specialist", "2026-11-01", "2026-12-15", "High", "Not Started", 0.00, 85, 0, "Bi-weekly post-training quizzes"],
+    ]
+
+    for row_idx, row_data in enumerate(sample_track_data, start=4):
+        ws_track.row_dimensions[row_idx].height = 22
+        for col_idx, val in enumerate(row_data, start=1):
+            cell = ws_track.cell(row=row_idx, column=col_idx, value=val)
+            cell.font = font_body
+            cell.border = border_all
+            cell.alignment = align_center if col_idx in [1, 4, 5, 6, 7, 8] else align_left
+            if col_idx == 9:
+                cell.number_format = "0%"
+
+    # =============================================================
+    # 3. TAB: Monitoring & Gap Analysis
+    # =============================================================
+    ws_mon = wb.create_sheet(title="Monitoring & Gap Analysis")
+    ws_mon.views.sheetView[0].rightToLeft = False
+
+    ws_mon.merge_cells("A1:J1")
+    c_m1 = ws_mon["A1"]
+    c_m1.value = "Variance Tracking & Root Cause Analysis (5-Whys)"
+    c_m1.font = font_title
+    c_m1.fill = fill_navy
+    c_m1.alignment = align_center
+    ws_mon.row_dimensions[1].height = 40
+
+    headers_mon = [
+        "Action ID", "Action Title", "Target", "Actual", "Variance %",
+        "Risk Level", "Why 1? (Direct Cause)", "Why 2?", "Why 3?", "Root Cause"
+    ]
+
+    for col_idx, h in enumerate(headers_mon, start=1):
+        cell = ws_mon.cell(row=3, column=col_idx, value=h)
+        cell.font = font_header
+        cell.fill = fill_header
+        cell.alignment = align_center
+
+    for r_idx in range(4, 10):
+        t_row = r_idx
+        c_id = ws_mon.cell(row=r_idx, column=1, value=f"='Action Plan Tracker'!A{t_row}")
+        c_name = ws_mon.cell(row=r_idx, column=2, value=f"='Action Plan Tracker'!B{t_row}")
+        c_target = ws_mon.cell(row=r_idx, column=3, value=f"='Action Plan Tracker'!J{t_row}")
+        c_actual = ws_mon.cell(row=r_idx, column=4, value=f"='Action Plan Tracker'!K{t_row}")
+        c_var = ws_mon.cell(row=r_idx, column=5, value=f"=IF(C{r_idx}>0, (D{r_idx}-C{r_idx})/C{r_idx}, 0)")
+        c_var.number_format = "0.0%"
+        c_risk = ws_mon.cell(row=r_idx, column=6, value=f'=IF(E{r_idx}<-0.2, "Critical", IF(E{r_idx}<-0.05, "Moderate", "Acceptable"))')
+
+        for c in [c_id, c_name, c_target, c_actual, c_var, c_risk]:
+            c.font = font_body
+            c.border = border_all
+            c.alignment = align_center
+
+        for c_idx in range(7, 11):
+            c_why = ws_mon.cell(row=r_idx, column=c_idx, value="On Track / Minor Variance" if r_idx in [4, 7] else "Gaps in initial agent onboarding")
+            c_why.font = font_body
+            c_why.border = border_all
+            c_why.alignment = align_left
+
+    # =============================================================
+    # 4. TAB: Decision Support
+    # =============================================================
+    ws_dec = wb.create_sheet(title="Decision Support")
+    ws_dec.views.sheetView[0].rightToLeft = False
+
+    ws_dec.merge_cells("A1:G1")
+    c_dec1 = ws_dec["A1"]
+    c_dec1.value = "Strategic Deductions & Leadership Decision Support"
+    c_dec1.font = font_title
+    c_dec1.fill = fill_navy
+    c_dec1.alignment = align_center
+    ws_dec.row_dimensions[1].height = 40
+
+    headers_dec = [
+        "Action ID", "Observed Variance", "Analytical Deduction",
+        "Proposed Strategy", "Alternative Scenario", "Required Resources", "Approval Authority"
+    ]
+
+    for col_idx, h in enumerate(headers_dec, start=1):
+        cell = ws_dec.cell(row=3, column=col_idx, value=h)
+        cell.font = font_header
+        cell.fill = fill_header
+        cell.alignment = align_center
+
+    sample_dec = [
+        ["ACT-002", "-40.0%", "Loading errors stem from complex system edge cases", "Implement 5-minute daily micro-learning refreshers", "1-on-1 coaching for underperforming agents", "Micro-learning modules", "Operations Manager"],
+        ["ACT-003", "0.0% (Pending)", "Outdated SOPs cause confusion during live ticket handling", "Accelerate SOP documentation update timeline", "Deploy quick-reference cheat sheets", "Technical Writer time", "Quality Lead"],
+    ]
+
+    for row_idx, row_data in enumerate(sample_dec, start=4):
+        ws_dec.row_dimensions[row_idx].height = 24
+        for col_idx, val in enumerate(row_data, start=1):
+            cell = ws_dec.cell(row=row_idx, column=col_idx, value=val)
+            cell.font = font_body
+            cell.border = border_all
+            cell.alignment = align_center if col_idx in [1, 2, 7] else align_left
+
+    # =============================================================
+    # 5. TAB: Continuous Improvement (PDCA)
+    # =============================================================
+    ws_pdca = wb.create_sheet(title="Continuous Improvement (PDCA)")
+    ws_pdca.views.sheetView[0].rightToLeft = False
+
+    ws_pdca.merge_cells("A1:H1")
+    c_p1 = ws_pdca["A1"]
+    c_p1.value = "Continuous Improvement & Kaizen Action Log (PDCA)"
+    c_p1.font = font_title
+    c_p1.fill = fill_navy
+    c_p1.alignment = align_center
+    ws_pdca.row_dimensions[1].height = 40
+
+    headers_pdca = [
+        "Kaizen ID", "Linked Action", "PDCA Stage",
+        "Corrective Action Plan", "Improvement Owner", "Next Review Date",
+        "Expected Impact", "Final Status"
+    ]
+
+    for col_idx, h in enumerate(headers_pdca, start=1):
+        cell = ws_pdca.cell(row=3, column=col_idx, value=h)
+        cell.font = font_header
+        cell.fill = fill_header
+        cell.alignment = align_center
+
+    sample_pdca = [
+        ["KZN-001", "ACT-001", "Plan", "Design standardized shadowing evaluation checklist", "Training Specialist", "2026-10-15", "+15% Onboarding Efficiency", "In Progress"],
+        ["KZN-002", "ACT-002", "Do", "Deploy micro-learning modules for high-frequency errors", "Training Specialist", "2026-10-25", "30% Error Reduction", "In Progress"],
+        ["KZN-003", "ACT-004", "Act", "Standardize QA error-logging rubric team-wide", "Quality Lead", "2026-11-01", "Sustained High QA Scores", "Completed"]
+    ]
+
+    for row_idx, row_data in enumerate(sample_pdca, start=4):
+        ws_pdca.row_dimensions[row_idx].height = 24
+        for col_idx, val in enumerate(row_data, start=1):
+            cell = ws_pdca.cell(row=row_idx, column=col_idx, value=val)
+            cell.font = font_body
+            cell.border = border_all
+            cell.alignment = align_center if col_idx in [1, 2, 3, 5, 6, 8] else align_left
+
+    # Auto-adjust column widths
+    for sheet in wb.worksheets:
+        for col in sheet.columns:
+            max_len = 0
+            col_letter = get_column_letter(col[0].column)
+            for cell in col:
+                if cell.row == 1:
+                    continue
+                val_str = str(cell.value or '')
+                if len(val_str) > max_len:
+                    max_len = len(val_str)
+            sheet.column_dimensions[col_letter].width = max(max_len * 1.2, 14)
+
+    output_filename = "COPS_DE_Action_Plan_Performance_System.xlsx"
+    wb.save(output_filename)
+    print(f"File created successfully: {output_filename}")
+
+if __name__ == "__main__":
+    create_action_plan_workbook_en()
+```eof
+
+```html:performance_action_plan_excel_en.html
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COPS DE Training Action Plan & Performance Management System</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+        .tab-btn.active {
+            background-color: #0284c7;
+            color: #ffffff;
+            border-bottom: 3px solid #38bdf8;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-30 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Title & Branding -->
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white text-2xl shadow-md">
+                        <i class="fa-solid fa-square-poll-vertical"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-white tracking-wide">COPS DE Training & Action Plan System</h1>
+                        <p class="text-xs text-slate-400">Comprehensive Performance & Operational Roadmap Dashboard</p>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex items-center gap-3">
+                    <button onclick="openTaskModal()" class="bg-sky-600 hover:bg-sky-500 text-white px-4 py-2.5 rounded-lg font-semibold text-sm transition flex items-center gap-2 shadow-md">
+                        <i class="fa-solid fa-plus"></i> Add New Action
+                    </button>
+                    <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2.5 rounded-lg font-semibold text-sm transition flex items-center gap-2 shadow-md">
+                        <i class="fa-solid fa-file-excel"></i> Export to Excel (CSV)
+                    </button>
+                    <button onclick="resetData()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-2.5 rounded-lg font-semibold text-sm transition" title="Reset Default Data">
+                        <i class="fa-solid fa-rotate-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tabs Menu -->
+            <div class="flex space-x-1 border-t border-slate-800/80 overflow-x-auto">
+                <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn active px-5 py-3 text-sm font-bold text-slate-300 hover:text-white transition flex items-center gap-2 whitespace-nowrap">
+                    <i class="fa-solid fa-chart-pie"></i> 1. Dashboard
+                </button>
+                <button onclick="switchTab('action-plan')" id="tab-action-plan" class="tab-btn px-5 py-3 text-sm font-bold text-slate-300 hover:text-white transition flex items-center gap-2 whitespace-nowrap">
+                    <i class="fa-solid fa-list-check"></i> 2. Action Plan Tracker
+                </button>
+                <button onclick="switchTab('monitoring')" id="tab-monitoring" class="tab-btn px-5 py-3 text-sm font-bold text-slate-300 hover:text-white transition flex items-center gap-2 whitespace-nowrap">
+                    <i class="fa-solid fa-magnifying-glass-chart"></i> 3. Gap & Variance Analysis
+                </button>
+                <button onclick="switchTab('insights')" id="tab-insights" class="tab-btn px-5 py-3 text-sm font-bold text-slate-300 hover:text-white transition flex items-center gap-2 whitespace-nowrap">
+                    <i class="fa-solid fa-brain"></i> 4. Decision Support
+                </button>
+                <button onclick="switchTab('pdca')" id="tab-pdca" class="tab-btn px-5 py-3 text-sm font-bold text-slate-300 hover:text-white transition flex items-center gap-2 whitespace-nowrap">
+                    <i class="fa-solid fa-arrows-spin"></i> 5. Continuous Improvement (PDCA)
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- ================= TAB 1: DASHBOARD ================= -->
+        <section id="sec-dashboard" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                <div class="bg-slate-800 border border-slate-700/60 rounded-xl p-5 shadow-sm">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase">Total Actions</span>
+                        <i class="fa-solid fa-folder-open text-sky-400"></i>
+                    </div>
+                    <div id="kpi-total" class="text-3xl font-black text-white">0</div>
+                    <p class="text-xs text-slate-400 mt-2">Planned Initiatives</p>
+                </div>
+
+                <div class="bg-slate-800 border border-slate-700/60 rounded-xl p-5 shadow-sm">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase">Completed</span>
+                        <i class="fa-solid fa-circle-check text-emerald-400"></i>
+                    </div>
+                    <div id="kpi-completed" class="text-3xl font-black text-emerald-400">0</div>
+                    <p id="kpi-completed-pct" class="text-xs text-emerald-500/80 mt-2">0% of total</p>
+                </div>
+
+                <div class="bg-slate-800 border border-slate-700/60 rounded-xl p-5 shadow-sm">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase">In Progress</span>
+                        <i class="fa-solid fa-spinner text-sky-400"></i>
+                    </div>
+                    <div id="kpi-in-progress" class="text-3xl font-black text-sky-400">0</div>
+                    <p class="text-xs text-slate-400 mt-2">Active On Roadmap</p>
+                </div>
+
+                <div class="bg-slate-800 border border-slate-700/60 rounded-xl p-5 shadow-sm">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase">Critical Gaps</span>
+                        <i class="fa-solid fa-triangle-exclamation text-rose-400"></i>
+                    </div>
+                    <div id="kpi-critical" class="text-3xl font-black text-rose-400">0</div>
+                    <p class="text-xs text-rose-400/80 mt-2">Requires Action</p>
+                </div>
+
+                <div class="bg-slate-800 border border-slate-700/60 rounded-xl p-5 shadow-sm">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase">Training Efficiency</span>
+                        <i class="fa-solid fa-chart-line text-indigo-400"></i>
+                    </div>
+                    <div id="kpi-avg-progress" class="text-3xl font-black text-indigo-400">0%</div>
+                    <div class="w-full bg-slate-700 rounded-full h-1.5 mt-3">
+                        <div id="kpi-avg-progress-bar" class="bg-indigo-500 h-1.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-slate-800 border border-slate-700/60 rounded-xl p-6 shadow-sm">
+                    <h2 class="text-base font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie text-sky-400"></i> Status Breakdown
+                    </h2>
+                    <div class="h-64 flex items-center justify-center">
+                        <canvas id="chartStatus"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800 border border-slate-700/60 rounded-xl p-6 shadow-sm">
+                    <h2 class="text-base font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-column text-emerald-400"></i> Target vs Actual Execution
+                    </h2>
+                    <div class="h-64">
+                        <canvas id="chartTargetVSActual"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alerts Table -->
+            <div class="bg-slate-800 border border-slate-700/60 rounded-xl p-6 shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-base font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-bell text-amber-400"></i> Operational Risk & Variance Alerts
+                    </h2>
+                    <span class="text-xs bg-rose-500/10 text-rose-400 border border-rose-500/20 px-3 py-1 rounded-full font-semibold">
+                        Automated Tracking
+                    </span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-900/60 text-slate-400 text-xs font-semibold">
+                            <tr>
+                                <th class="p-3">Action ID</th>
+                                <th class="p-3">Title</th>
+                                <th class="p-3">Owner</th>
+                                <th class="p-3">Target vs Actual</th>
+                                <th class="p-3">Variance %</th>
+                                <th class="p-3">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbl-critical-alerts" class="divide-y divide-slate-700/50">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 2: ACTION PLAN TRACKER ================= -->
+        <section id="sec-action-plan" class="space-y-6 hidden">
+            <div class="bg-slate-800 border border-slate-700/60 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center gap-3 flex-grow max-w-md">
+                    <div class="relative w-full">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400"></i>
+                        <input type="text" id="filter-search" oninput="renderTables()" placeholder="Search action or owner..." class="w-full bg-slate-900 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500">
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 flex-wrap">
+                    <select id="filter-status" onchange="renderTables()" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-300 focus:outline-none focus:border-sky-500">
+                        <option value="ALL">All Statuses</option>
+                        <option value="Completed">Completed</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Delayed">Delayed</option>
+                        <option value="Critical Gap">Critical Gap</option>
+                    </select>
+
+                    <select id="filter-priority" onchange="renderTables()" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-300 focus:outline-none focus:border-sky-500">
+                        <option value="ALL">All Priorities</option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="bg-slate-800 border border-slate-700/60 rounded-xl overflow-hidden shadow-sm">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-900 text-slate-300 text-xs font-bold uppercase tracking-wider">
+                            <tr>
+                                <th class="p-4">Action ID</th>
+                                <th class="p-4">Operational Action Title</th>
+                                <th class="p-4">Owner</th>
+                                <th class="p-4">Priority</th>
+                                <th class="p-4">Due Date</th>
+                                <th class="p-4">Target</th>
+                                <th class="p-4">Actual</th>
+                                <th class="p-4">Progress (%)</th>
+                                <th class="p-4">Status</th>
+                                <th class="p-4 text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbl-action-plan" class="divide-y divide-slate-700/50 text-slate-300">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 3: MONITORING & VARIANCE ANALYSIS ================= -->
+        <section id="sec-monitoring" class="space-y-6 hidden">
+            <div class="bg-slate-800 border border-slate-700/60 rounded-xl p-6 shadow-sm">
+                <div class="mb-4">
+                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-calculator text-indigo-400"></i> Gap Monitoring & Variance Tracking
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-1">
+                        Variance formula: <code class="bg-slate-900 px-2 py-0.5 rounded text-sky-400">Variance % = ((Actual - Target) / Target) * 100</code>
+                    </p>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-900 text-slate-300 text-xs font-bold uppercase">
+                            <tr>
+                                <th class="p-3">ID</th>
+                                <th class="p-3">Action Title</th>
+                                <th class="p-3">Target</th>
+                                <th class="p-3">Actual</th>
+                                <th class="p-3">Variance %</th>
+                                <th class="p-3">Risk Category</th>
+                                <th class="p-3">Root Cause Analysis (5-Whys)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbl-monitoring" class="divide-y divide-slate-700/50">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 4: DECISION SUPPORT ================= -->
+        <section id="sec-insights" class="space-y-6 hidden">
+            <div class="bg-slate-800 border border-slate-700/60 rounded-xl p-6 shadow-sm">
+                <h2 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-brain text-amber-400"></i> Executive Decision Support & Strategy Recommendations
+                </h2>
+                <p class="text-xs text-slate-400 mb-6">Data-driven recommendations generated for training specialist leadership alignment</p>
+
+                <div id="insights-container" class="space-y-4">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 5: PDCA CONTINUOUS IMPROVEMENT ================= -->
+        <section id="sec-pdca" class="space-y-6 hidden">
+            <div class="bg-slate-800 border border-slate-700/60 rounded-xl p-6 shadow-sm">
+                <div class="mb-6">
+                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-arrows-spin text-emerald-400"></i> Continuous Improvement Log (PDCA / Kaizen)
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-1">Connecting variance findings to immediate corrective actions</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-slate-900 border border-slate-700 p-4 rounded-lg border-l-4 border-l-sky-500">
+                        <div class="text-xs text-slate-400 font-bold">1. PLAN</div>
+                        <div class="text-sm text-white font-semibold mt-1">Identify Gap & Action Plan</div>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-700 p-4 rounded-lg border-l-4 border-l-amber-500">
+                        <div class="text-xs text-slate-400 font-bold">2. DO</div>
+                        <div class="text-sm text-white font-semibold mt-1">Execute Micro-Learning & Shadowing</div>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-700 p-4 rounded-lg border-l-4 border-l-indigo-500">
+                        <div class="text-xs text-slate-400 font-bold">3. CHECK</div>
+                        <div class="text-sm text-white font-semibold mt-1">Evaluate QA & Error Metrics</div>
+                    </div>
+                    <div class="bg-slate-900 border border-slate-700 p-4 rounded-lg border-l-4 border-l-emerald-500">
+                        <div class="text-xs text-slate-400 font-bold">4. ACT</div>
+                        <div class="text-sm text-white font-semibold mt-1">Standardize SOPs & Best Practices</div>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-900 text-slate-300 text-xs font-bold uppercase">
+                            <tr>
+                                <th class="p-3">Kaizen ID</th>
+                                <th class="p-3">Linked Action</th>
+                                <th class="p-3">PDCA Stage</th>
+                                <th class="p-3">Corrective Action Plan</th>
+                                <th class="p-3">Improvement Owner</th>
+                                <th class="p-3">Expected Impact</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbl-pdca" class="divide-y divide-slate-700/50">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Task Modal -->
+    <div id="taskModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl">
+            <div class="bg-slate-800/80 px-6 py-4 border-b border-slate-700 flex justify-between items-center">
+                <h3 id="modalTitle" class="text-lg font-bold text-white">Add New Operational Action</h3>
+                <button onclick="closeTaskModal()" class="text-slate-400 hover:text-white text-xl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="taskForm" onsubmit="saveTask(event)" class="p-6 space-y-4">
+                <input type="hidden" id="task-id">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">Action Title *</label>
+                        <input type="text" id="task-title" required class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-sky-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">Owner *</label>
+                        <input type="text" id="task-owner" required class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-sky-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">Priority</label>
+                        <select id="task-priority" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-sky-500">
+                            <option value="High">High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">Due Date</label>
+                        <input type="date" id="task-date" required class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-sky-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">Target Metric</label>
+                        <input type="number" id="task-target" value="100" required class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-sky-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">Actual Metric</label>
+                        <input type="number" id="task-actual" value="0" required class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-sky-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">Root Cause Analysis (5-Whys)</label>
+                    <textarea id="task-root-cause" rows="2" placeholder="Analyze operational gaps..." class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-sky-500"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">PDCA Corrective Action</label>
+                    <input type="text" id="task-pdca-action" placeholder="Improvement action step..." class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-sky-500">
+                </div>
+
+                <div class="flex justify-end gap-3 pt-4 border-t border-slate-800">
+                    <button type="button" onclick="closeTaskModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-sm font-semibold">Cancel</button>
+                    <button type="submit" class="px-6 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-sm font-semibold">Save Action</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JS Logic -->
+    <script>
+        const initialTasks = [
+            {
+                id: "ACT-001",
+                title: "Structured Shadowing Program Rollout",
+                owner: "Training Specialist",
+                priority: "High",
+                date: "2026-10-15",
+                target: 95,
+                actual: 88,
+                rootCause: "Minor scheduling conflicts during peak operational hours.",
+                pdcaAction: "Standardize shadowing evaluation checklists and shift pairing.",
+                pdcaStage: "CHECK"
+            },
+            {
+                id: "ACT-002",
+                title: "Micro-Learning Modules for Loading Errors",
+                owner: "Training Specialist",
+                priority: "High",
+                date: "2026-10-30",
+                target: 30,
+                actual: 18,
+                rootCause: "Edge-case errors required deeper documentation updates.",
+                pdcaAction: "Deploy 5-minute daily micro-refreshers targeted at top loading errors.",
+                pdcaStage: "DO"
+            },
+            {
+                id: "ACT-003",
+                title: "SOP Refinement & Workflow Documentation",
+                owner: "Quality & Training",
+                priority: "Medium",
+                date: "2026-11-15",
+                target: 100,
+                actual: 40,
+                rootCause: "Awaiting final sign-off from operational leads.",
+                pdcaAction: "Publish quick-reference cheat sheets prior to full SOP release.",
+                pdcaStage: "PLAN"
+            },
+            {
+                id: "ACT-004",
+                title: "QA Score & Error Rate Calibration",
+                owner: "QA Team / Training",
+                priority: "High",
+                date: "2026-10-05",
+                target: 90,
+                actual: 92,
+                rootCause: "No gap - Exceeded baseline QA score target.",
+                pdcaAction: "Standardize error-logging rubric team-wide.",
+                pdcaStage: "ACT"
+            },
+            {
+                id: "ACT-005",
+                title: "Power BI Performance & Training Dashboard",
+                owner: "Training Specialist",
+                priority: "Medium",
+                date: "2026-12-01",
+                target: 100,
+                actual: 100,
+                rootCause: "No gap - Dashboard live and updating.",
+                pdcaAction: "Integrate automated agent evaluation metrics.",
+                pdcaStage: "ACT"
+            }
+        ];
+
+        let tasks = [];
+        let chartStatusInstance = null;
+        let chartTargetActualInstance = null;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadData();
+            renderAll();
+        });
+
+        function loadData() {
+            const saved = localStorage.getItem("cops_de_action_plan_tasks");
+            if (saved) {
+                tasks = JSON.parse(saved);
+            } else {
+                tasks = [...initialTasks];
+                saveData();
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem("cops_de_action_plan_tasks", JSON.stringify(tasks));
+        }
+
+        function resetData() {
+            if (confirm("Reset dataset to default action plan?")) {
+                tasks = [...initialTasks];
+                saveData();
+                renderAll();
+            }
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+            document.getElementById(`tab-${tabName}`).classList.add("active");
+
+            document.querySelectorAll("main > section").forEach(sec => sec.classList.add("hidden"));
+            document.getElementById(`sec-${tabName}`).classList.remove("hidden");
+
+            if (tabName === 'dashboard') renderCharts();
+        }
+
+        function getTaskStatus(task) {
+            const pct = Math.round((task.actual / task.target) * 100);
+            if (pct >= 100) return "Completed";
+            if (pct >= 75) return "In Progress";
+            if (pct >= 50) return "Delayed";
+            return "Critical Gap";
+        }
+
+        function getStatusBadge(status) {
+            switch(status) {
+                case "Completed":
+                    return `<span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-1 rounded-full text-xs font-bold"><i class="fa-solid fa-check"></i> Completed</span>`;
+                case "In Progress":
+                    return `<span class="bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-1 rounded-full text-xs font-bold"><i class="fa-solid fa-spinner"></i> In Progress</span>`;
+                case "Delayed":
+                    return `<span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2.5 py-1 rounded-full text-xs font-bold"><i class="fa-solid fa-clock"></i> Delayed</span>`;
+                default:
+                    return `<span class="bg-rose-500/10 text-rose-400 border border-rose-500/20 px-2.5 py-1 rounded-full text-xs font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Critical Gap</span>`;
+            }
+        }
+
+        function getPriorityBadge(prio) {
+            if (prio === "High") return `<span class="text-rose-400 font-bold"><i class="fa-solid fa-angle-up"></i> High</span>`;
+            if (prio === "Medium") return `<span class="text-amber-400 font-bold"><i class="fa-solid fa-minus"></i> Medium</span>`;
+            return `<span class="text-slate-400 font-bold"><i class="fa-solid fa-angle-down"></i> Low</span>`;
+        }
+
+        function renderAll() {
+            renderKPIs();
+            renderTables();
+            renderInsights();
+            renderCharts();
+        }
+
+        function renderKPIs() {
+            const total = tasks.length;
+            const completed = tasks.filter(t => getTaskStatus(t) === "Completed").length;
+            const inProgress = tasks.filter(t => getTaskStatus(t) === "In Progress").length;
+            const critical = tasks.filter(t => getTaskStatus(t) === "Critical Gap" || getTaskStatus(t) === "Delayed").length;
+            const avgPct = total > 0 ? Math.round(tasks.reduce((sum, t) => sum + ((t.actual / t.target)*100), 0) / total) : 0;
+
+            document.getElementById("kpi-total").innerText = total;
+            document.getElementById("kpi-completed").innerText = completed;
+            document.getElementById("kpi-completed-pct").innerText = `${total > 0 ? Math.round((completed/total)*100) : 0}% of action plan`;
+            document.getElementById("kpi-in-progress").innerText = inProgress;
+            document.getElementById("kpi-critical").innerText = critical;
+            document.getElementById("kpi-avg-progress").innerText = `${avgPct}%`;
+            document.getElementById("kpi-avg-progress-bar").style.width = `${Math.min(avgPct, 100)}%`;
+        }
+
+        function renderTables() {
+            const searchVal = document.getElementById("filter-search").value.toLowerCase();
+            const statusFilter = document.getElementById("filter-status").value;
+            const priorityFilter = document.getElementById("filter-priority").value;
+
+            const filtered = tasks.filter(t => {
+                const matchesSearch = t.title.toLowerCase().includes(searchVal) || t.owner.toLowerCase().includes(searchVal);
+                const matchesStatus = statusFilter === "ALL" || getTaskStatus(t) === statusFilter;
+                const matchesPriority = priorityFilter === "ALL" || t.priority === priorityFilter;
+                return matchesSearch && matchesStatus && matchesPriority;
+            });
+
+            // Action Plan
+            document.getElementById("tbl-action-plan").innerHTML = filtered.map(t => {
+                const pct = Math.round((t.actual / t.target) * 100);
+                return `
+                    <tr class="hover:bg-slate-700/30 transition">
+                        <td class="p-4 font-mono text-sky-400 font-bold">${t.id}</td>
+                        <td class="p-4 font-semibold text-white">${t.title}</td>
+                        <td class="p-4">${t.owner}</td>
+                        <td class="p-4">${getPriorityBadge(t.priority)}</td>
+                        <td class="p-4 text-xs font-mono text-slate-400">${t.date}</td>
+                        <td class="p-4 font-mono">${t.target}</td>
+                        <td class="p-4 font-mono">${t.actual}</td>
+                        <td class="p-4">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold w-8">${pct}%</span>
+                                <div class="w-20 bg-slate-700 rounded-full h-1.5 overflow-hidden">
+                                    <div class="bg-sky-500 h-1.5" style="width: ${Math.min(pct, 100)}%"></div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="p-4">${getStatusBadge(getTaskStatus(t))}</td>
+                        <td class="p-4 text-center">
+                            <div class="flex justify-center gap-2">
+                                <button onclick="editTask('${t.id}')" class="text-slate-400 hover:text-sky-400 p-1"><i class="fa-solid fa-pen-to-square"></i></button>
+                                <button onclick="deleteTask('${t.id}')" class="text-slate-400 hover:text-rose-400 p-1"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join("") || `<tr><td colspan="10" class="p-8 text-center text-slate-500">No actions found matching criteria</td></tr>`;
+
+            // Alerts
+            const criticalList = tasks.filter(t => getTaskStatus(t) === "Critical Gap" || getTaskStatus(t) === "Delayed");
+            document.getElementById("tbl-critical-alerts").innerHTML = criticalList.map(t => {
+                const variance = Math.round(((t.actual - t.target) / t.target) * 100);
+                return `
+                    <tr class="hover:bg-slate-700/30">
+                        <td class="p-3 font-mono text-rose-400 font-bold">${t.id}</td>
+                        <td class="p-3 text-white font-semibold">${t.title}</td>
+                        <td class="p-3 text-slate-300">${t.owner}</td>
+                        <td class="p-3 font-mono">${t.target} / ${t.actual}</td>
+                        <td class="p-3 font-mono text-rose-400 font-bold">${variance}%</td>
+                        <td class="p-3">${getStatusBadge(getTaskStatus(t))}</td>
+                    </tr>
+                `;
+            }).join("") || `<tr><td colspan="6" class="p-4 text-center text-emerald-400 font-semibold"><i class="fa-solid fa-shield-check"></i> Great job! No critical variance alerts at this time.</td></tr>`;
+
+            // Monitoring
+            document.getElementById("tbl-monitoring").innerHTML = tasks.map(t => {
+                const variance = Math.round(((t.actual - t.target) / t.target) * 100);
+                let gapClass = "text-emerald-400";
+                let gapText = "On Track";
+                if (variance < -40) { gapClass = "text-rose-400 font-bold"; gapText = "Critical Gap"; }
+                else if (variance < 0) { gapClass = "text-amber-400 font-bold"; gapText = "Moderate Gap"; }
+
+                return `
+                    <tr class="hover:bg-slate-700/30">
+                        <td class="p-3 font-mono text-sky-400 font-bold">${t.id}</td>
+                        <td class="p-3 font-semibold text-white">${t.title}</td>
+                        <td class="p-3 font-mono text-slate-300">${t.target}</td>
+                        <td class="p-3 font-mono text-slate-300">${t.actual}</td>
+                        <td class="p-3 font-mono ${variance < 0 ? 'text-rose-400' : 'text-emerald-400'} font-bold">${variance}%</td>
+                        <td class="p-3 ${gapClass}">${gapText}</td>
+                        <td class="p-3 text-xs text-slate-300 italic">${t.rootCause || "No root cause recorded"}</td>
+                    </tr>
+                `;
+            }).join("");
+
+            // PDCA
+            document.getElementById("tbl-pdca").innerHTML = tasks.map(t => {
+                return `
+                    <tr class="hover:bg-slate-700/30">
+                        <td class="p-3 font-mono text-sky-400 font-bold">${t.id}</td>
+                        <td class="p-3 text-white font-semibold">${t.title}</td>
+                        <td class="p-3"><span class="bg-slate-900 text-sky-400 border border-sky-500/30 px-2 py-0.5 rounded text-xs font-mono font-bold">${t.pdcaStage || 'PLAN'}</span></td>
+                        <td class="p-3 text-slate-200 text-xs">${t.pdcaAction || "In formulation"}</td>
+                        <td class="p-3 text-slate-300">${t.owner}</td>
+                        <td class="p-3 text-xs text-emerald-400">Targeting +30% training efficiency & error reduction</td>
+                    </tr>
+                `;
+            }).join("");
+        }
+
+        function renderInsights() {
+            const container = document.getElementById("insights-container");
+            const criticals = tasks.filter(t => getTaskStatus(t) === "Critical Gap");
+            const completed = tasks.filter(t => getTaskStatus(t) === "Completed");
+
+            let html = "";
+            if (criticals.length > 0) {
+                html += `
+                    <div class="bg-rose-950/40 border border-rose-800/60 rounded-xl p-5 flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-lg bg-rose-500/20 text-rose-400 flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-bold text-rose-300">Urgent Recommendation: Address Loading Errors Gap (${criticals.length} Action)</h3>
+                            <p class="text-xs text-slate-300 mt-1">
+                                Variance detected in <strong class="text-white">${criticals[0].title}</strong>. Recommend launching daily 5-minute micro-learning modules to achieve the 30% error reduction target.
+                            </p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            html += `
+                <div class="bg-sky-950/40 border border-sky-800/60 rounded-xl p-5 flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-sky-300">Training Roadmap Efficiency Summary</h3>
+                        <p class="text-xs text-slate-300 mt-1">
+                            Overall action completion rate stands at <strong class="text-emerald-400">${tasks.length > 0 ? Math.round((completed.length/tasks.length)*100) : 0}%</strong>. Structured shadowing and Power BI dashboard integration are progressing as planned toward achieving sustained knowledge retention.
+                        </p>
+                    </div>
+                </div>
+            `;
+            container.innerHTML = html;
+        }
+
+        function renderCharts() {
+            const ctx1 = document.getElementById("chartStatus")?.getContext("2d");
+            if (ctx1) {
+                const completed = tasks.filter(t => getTaskStatus(t) === "Completed").length;
+                const inProgress = tasks.filter(t => getTaskStatus(t) === "In Progress").length;
+                const delayed = tasks.filter(t => getTaskStatus(t) === "Delayed").length;
+                const critical = tasks.filter(t => getTaskStatus(t) === "Critical Gap").length;
+
+                if (chartStatusInstance) chartStatusInstance.destroy();
+                chartStatusInstance = new Chart(ctx1, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Completed', 'In Progress', 'Delayed', 'Critical Gap'],
+                        datasets: [{
+                            data: [completed, inProgress, delayed, critical],
+                            backgroundColor: ['#10b981', '#0284c7', '#f59e0b', '#f43f5e'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { family: 'Inter' } } } }
+                    }
+                });
+            }
+
+            const ctx2 = document.getElementById("chartTargetVSActual")?.getContext("2d");
+            if (ctx2) {
+                if (chartTargetActualInstance) chartTargetActualInstance.destroy();
+                chartTargetActualInstance = new Chart(ctx2, {
+                    type: 'bar',
+                    data: {
+                        labels: tasks.map(t => t.id),
+                        datasets: [
+                            { label: 'Target', data: tasks.map(t => t.target), backgroundColor: '#334155' },
+                            { label: 'Actual', data: tasks.map(t => t.actual), backgroundColor: '#0284c7' }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { ticks: { color: '#94a3b8' }, grid: { display: false } },
+                            y: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } }
+                        },
+                        plugins: { legend: { labels: { color: '#94a3b8', font: { family: 'Inter' } } } }
+                    }
+                });
+            }
+        }
+
+        function openTaskModal() {
+            document.getElementById("taskForm").reset();
+            document.getElementById("task-id").value = "";
+            document.getElementById("modalTitle").innerText = "Add New Operational Action";
+            document.getElementById("taskModal").classList.remove("hidden");
+        }
+
+        function closeTaskModal() {
+            document.getElementById("taskModal").classList.add("hidden");
+        }
+
+        function editTask(id) {
+            const task = tasks.find(t => t.id === id);
+            if (!task) return;
+            document.getElementById("task-id").value = task.id;
+            document.getElementById("task-title").value = task.title;
+            document.getElementById("task-owner").value = task.owner;
+            document.getElementById("task-priority").value = task.priority;
+            document.getElementById("task-date").value = task.date;
+            document.getElementById("task-target").value = task.target;
+            document.getElementById("task-actual").value = task.actual;
+            document.getElementById("task-root-cause").value = task.rootCause || "";
+            document.getElementById("task-pdca-action").value = task.pdcaAction || "";
+            document.getElementById("modalTitle").innerText = `Edit Action ${task.id}`;
+            document.getElementById("taskModal").classList.remove("hidden");
+        }
+
+        function saveTask(e) {
+            e.preventDefault();
+            const id = document.getElementById("task-id").value;
+            const title = document.getElementById("task-title").value;
+            const owner = document.getElementById("task-owner").value;
+            const priority = document.getElementById("task-priority").value;
+            const date = document.getElementById("task-date").value;
+            const target = Number(document.getElementById("task-target").value);
+            const actual = Number(document.getElementById("task-actual").value);
+            const rootCause = document.getElementById("task-root-cause").value;
+            const pdcaAction = document.getElementById("task-pdca-action").value;
+
+            if (id) {
+                const index = tasks.findIndex(t => t.id === id);
+                if (index !== -1) tasks[index] = { ...tasks[index], title, owner, priority, date, target, actual, rootCause, pdcaAction };
+            } else {
+                const newId = `ACT-00${tasks.length + 1}`;
+                tasks.push({ id: newId, title, owner, priority, date, target, actual, rootCause, pdcaAction, pdcaStage: "PLAN" });
+            }
+
+            saveData();
+            renderAll();
+            closeTaskModal();
+        }
+
+        function deleteTask(id) {
+            if (confirm(`Delete action item ${id}?`)) {
+                tasks = tasks.filter(t => t.id !== id);
+                saveData();
+                renderAll();
+            }
+        }
+
+        function exportToCSV() {
+            let csvContent = "\uFEFF";
+            csvContent += "Action ID,Action Title,Owner,Priority,Due Date,Target Metric,Actual Metric,Progress %,Variance %,Status,Root Cause,PDCA Action\n";
+
+            tasks.forEach(t => {
+                const pct = Math.round((t.actual / t.target) * 100);
+                const variance = Math.round(((t.actual - t.target) / t.target) * 100);
+                const status = getTaskStatus(t);
+                csvContent += `"${t.id}","${t.title}","${t.owner}","${t.priority}","${t.date}",${t.target},${t.actual},"${pct}%","${variance}%","${status}","${t.rootCause || ''}","${t.pdcaAction || ''}"\n`;
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `COPS_DE_Action_Plan_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
+```eof
+
+An English version of the entire **Training Specialist Action Plan & Performance Management System** tailored to your operational roadmap and deliverables has been created.
+
+---
+
+## 1. Included Components & Specific Action Items
+
+The system includes all key deliverables from your action plan:
+
+* **Action Plan Pillars:**
+  * **Operational Immersion & Shadowing:** Structured shadowing program rollout to pair new hires with senior agents.
+  * **Training Efficiency & Loading Error Reduction:** Micro-learning modules designed to hit the **30% error reduction target** and decrease loading mistakes.
+  * **SOP & Documentation Refinement:** Updating standard operating procedures and error resolution guides.
+  * **QA Calibration & Validation:** QA score tracking and error rate alignment.
+  * **Process Innovation:** Building the interactive **Power BI training performance dashboard** and automated reporting.
+  * **Onboarding Optimization:** Knowledge retention assessments and 6-month development roadmap tracking.
+
+---
+
+## 2. Available Deliverables & Code Formats
+
+### A. Python Script (`generate_action_plan_excel_en.py`)
+Generates a native `.xlsx` workbook formatted in English with **LTR (Left-To-Right)** layout, formulas, and dark navy headers. Run it using Python:
+```bash
+python generate_action_plan_excel_en.py

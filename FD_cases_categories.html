@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Case Categories Table</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f4f6f8;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #2c3e50;
+    padding: 12px 20px;
+    color: #fff;
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.home {
+    font-size: 22px;
+    cursor: pointer;
+}
+
+select, input {
+    padding: 7px;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    font-size: 13px;
+    text-align: center;
+}
+
+th {
+    background: #3498db;
+    color: white;
+    position: sticky;
+    top: 0;
+}
+
+tr:nth-child(even) {
+    background: #f2f2f2;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <div class="left">
+        <a href="index.html" class="home">🏠 Home</a>
+        <select id="categoryFilter" onchange="filterTable()">
+            <option value="">All Categories</option>
+            <option>Booking Creation</option>
+            <option>Answering Queries</option>
+            <option>Issues Management</option>
+            <option>Booking Management</option>
+            <option>Others</option>
+        </select>
+    </div>
+
+    <input type="text" id="searchInput" placeholder="Search..." onkeyup="filterTable()">
+</div>
+
+<table id="caseTable">
+<thead>
+<tr>
+    <th>Case Category</th>
+    <th>Case Type</th>
+    <th>Case Sub-type</th>
+    <th>Definition</th>
+</tr>
+</thead>
+
+<tbody>
+
+<!-- Booking Creation -->
+<tr><td>Booking Creation</td><td>Booking Creation</td><td>New booking</td><td>Any booking creation or requests for hotels, tours, transfers and visa, including complimentary booking requests due to commercial gesture</td></tr>
+<tr><td>Booking Creation</td><td>Booking Creation</td><td>Reinstatement</td><td>Request for create a reinstatement booking due to booking cancellation</td></tr>
+<tr><td>Booking Creation</td><td>Booking Creation</td><td>Booking extension</td><td>Request for to create a booking extension for an existing booking or guest is still in-house.</td></tr>
+<tr><td>Booking Creation</td><td>Booking Creation</td><td>Group booking</td><td>Group Booking creation.</td></tr>
+
+<!-- Answering Queries -->
+<tr><td>Answering Queries</td><td>Special Requests</td><td>n/a</td><td>Any requests such as: Bed Type / Smoking configuration / Room view / Connecting Room / Room Location / Early Check-In / Late Check-in / Early Check-Out / Late Check-Out / VIP / Complimentary meal or drink / Complimentary Room Upgrade / Complimentary Transfer / Honeymooners etc</td></tr>
+
+<tr><td>Answering Queries</td><td>Tours & Transfers</td><td>Pick up and drop off (location/time)</td><td>Request for specific location of pick up and drop off or exact time</td></tr>
+<tr><td>Answering Queries</td><td>Tours & Transfers</td><td>Vehicle Type</td><td>Requests for a specific vehicle to be provided for the transfer service.</td></tr>
+<tr><td>Answering Queries</td><td>Tours & Transfers</td><td>Confirmation</td><td>Confirmation related request.</td></tr>
+<tr><td>Answering Queries</td><td>Tours & Transfers</td><td>Quotation</td><td>Manual quotation for tours and transfers services that are not available on our system.</td></tr>
+<tr><td>Answering Queries</td><td>Tours & Transfers</td><td>Itinerary</td><td>Customer request for complete day to day itinerary of service.</td></tr>
+<tr><td>Answering Queries</td><td>Tours & Transfers</td><td>Car Disposal</td><td>Transfers based on the duration of the service. This is manually quoted and booked via MISC.</td></tr>
+<tr><td>Answering Queries</td><td>Tours & Transfers</td><td>Maldives</td><td>Any post-booking requests for Maldives transfers already included in hotel booking.</td></tr>
+<tr><td>Answering Queries</td><td>Booking Confirmation</td><td>Reconfirmation of on request</td><td>Request for confirmation of an on-request booking.</td></tr>
+<tr><td>Answering Queries</td><td>Booking Confirmation</td><td>Reconfirmation of confirmed</td><td>Reconfirmation of a confirmed booking on our system</td></tr>
+<tr><td>Answering Queries</td><td>Booking Confirmation</td><td>Reinstatement</td><td>Request to reconfirm reinstated booking.</td></tr>
+<tr><td>Answering Queries</td><td>Booking Confirmation</td><td>No-Show</td><td>Customer request regarding no-show confirmation.</td></tr>
+<tr><td>Answering Queries</td><td>Booking Cancellation</td><td>Cancelled with charge</td><td>Cancellation request with charges.</td></tr>
+<tr><td>Answering Queries</td><td>Booking Cancellation</td><td>Cancelled without charge</td><td>Free cancellation without waiver.</td></tr>
+<tr><td>Answering Queries</td><td>Booking Cancellation</td><td>Fee waiver requests</td><td>Request to waive cancellation or no-show fees.</td></tr>
+<tr><td>Answering Queries</td><td>Amendment</td><td>Name</td><td>Name amendment request.</td></tr>
+<tr><td>Answering Queries</td><td>Amendment</td><td>Date</td><td>Date amendment request.</td></tr>
+<tr><td>Answering Queries</td><td>Amendment</td><td>Nationality</td><td>Nationality amendment request.</td></tr>
+<tr><td>Answering Queries</td><td>Amendment</td><td>Room Type</td><td>Room category change with additional payment.</td></tr>
+<tr><td>Answering Queries</td><td>Amendment</td><td>Others</td><td>Guest info update, occupancy, meal plan, taxes, amenities.</td></tr>
+<tr><td>Answering Queries</td><td>Payment Related Queries</td><td>Mark as paid</td><td>Request to mark booking as paid.</td></tr>
+<tr><td>Answering Queries</td><td>Payment Related Queries</td><td>VCC details</td><td>Request to resend VCC details.</td></tr>
+<tr><td>Answering Queries</td><td>Payment Related Queries</td><td>Updated SOA</td><td>Request for updated invoice or statement.</td></tr>
+<tr><td>Answering Queries</td><td>Payment Related Queries</td><td>CC white listing</td><td>Credit card whitelisting request.</td></tr>
+<tr><td>Answering Queries</td><td>Payment Related Queries</td><td>Credit limit adjustment</td><td>Credit limit adjustment request.</td></tr>
+<tr><td>Answering Queries</td><td>Payment Related Queries</td><td>Supplier Dispute</td><td>Pre-travel rate or policy dispute.</td></tr>
+
+<!-- Remaining sections -->
+<tr><td>Issues Management</td><td>On-Spot Relocation</td><td>Stop sale</td><td>OTS relocation due to missed stop-sale.</td></tr>
+<tr><td>Issues Management</td><td>On-Spot Relocation</td><td>Promotion</td><td>OTS relocation due to hotel not confirming due to incorrect promotion.</td></tr>
+<tr><td>Issues Management</td><td>On-Spot Relocation</td><td>Rate/Currency error</td><td>OTS relocation due to rate or currency error.</td></tr>
+<tr><td>Issues Management</td><td>On-Spot Relocation</td><td>Rate/System error</td><td>OTS relocation due to Tool limitation, xml logs issue, booking not sent to suppliers domain.</td></tr>
+<tr><td>Issues Management</td><td>On-Spot Relocation</td><td>Loading error</td><td>OTS relocation due to wrong allocation number was input in the system.</td></tr>
+<tr><td>Issues Management</td><td>On-Spot Relocation</td><td>Mapping error</td><td>OTS relocation due to Wrong mapping of room or hotel and resulted to an on-spot relocation.</td></tr>
+<tr><td>Issues Management</td><td>On-Spot Relocation</td><td>Customer error</td><td>OTS relocation due to rror is on the customer side, could be mapping or loading error on their side but WB managed to resolve.</td></tr>
+<tr><td>Issues Management</td><td>On-Spot Relocation</td><td>Supplier error</td><td>OTS relocation due to Error is on the supplier side, could be mapping or loading error on their side but WB managed to resolve.</td></tr>
+<tr><td>Issues Management</td><td>On-Spot Relocation</td><td>
+Force Majeure</td><td>OTS relocation due to Hotel closure, renovation, calamity, disaster etc.</td></tr>
+<tr><td>Issues Management</td><td>Future-Dated Relocation</td><td>Force Majeure</td><td>Hotel closure, renovation, disaster.</td></tr>
+<tr><td>Issues Management</td><td>Future-Dated Relocation</td><td>Stop sale</td><td>OTS relocation due to missed stop-sale.</td></tr>
+<tr><td>Issues Management</td><td>Future-Dated Relocation</td><td>Promotion</td><td>OTS relocation due to hotel not confirming due to incorrect promotion.</td></tr>
+<tr><td>Issues Management</td><td>Future-Dated Relocation</td><td>Rate/Currency error</td><td>OTS relocation due to rate or currency error.</td></tr>
+<tr><td>Issues Management</td><td>Future-Dated Relocation</td><td>Rate/System error</td><td>OTS relocation due to Tool limitation, xml logs issue, booking not sent to suppliers domain.</td></tr>
+<tr><td>Issues Management</td><td>Future-Dated Relocation</td><td>Loading error</td><td>OTS relocation due to wrong allocation number was input in the system.</td></tr>
+<tr><td>Issues Management</td><td>Future-Dated Relocation</td><td>Mapping error</td><td>OTS relocation due to Wrong mapping of room or hotel and resulted to an on-spot relocation.</td></tr>
+<tr><td>Issues Management</td><td>Future-Dated Relocation</td><td>Customer error</td><td>OTS relocation due to rror is on the customer side, could be mapping or loading error on their side but WB managed to resolve.</td></tr>
+<tr><td>Issues Management</td><td>Future-Dated Relocation</td><td>Supplier error</td><td>OTS relocation due to Error is on the supplier side, could be mapping or loading error on their side but WB managed to resolve.</td></tr>
+<tr><td>Issues Management</td><td>OTS</td><td>Resent confirmation</td><td>Hotel is not confirming booking as they have not received the booking form/LPO and is resolved by resending the LPO/booking.</td></tr>
+<tr><td>Issues Management</td><td>OTS</td><td>Resent VCC</td><td>Hotel is not confirming booking as they have not received the VCC details and is resolved by resending the VCC details.</td></tr>
+<tr><td>Issues Management</td><td>OTS</td><td>OTS Quality complaint</td><td>Guest raised a complaint about the hotel / room type, upon check-in or during the stay with the hotel.</td></tr>
+<tr><td>Issues Management</td><td>OTS</td><td>Compensation</td><td>Guest is asking compensation requests due to On-Spot Issue.</td></tr>
+<tr><td>Issues Management</td><td>OTS</td><td>OTS with no issue</td><td>
+Issues wherein it was initially raised on-spot, but after clarifying with the hotel/supplier, there was no issue found. Guest is able to properly check-in.</td></tr>
+<tr><td>Issues Management</td><td>Payment Issue</td><td>Outstanding balances</td><td>Pending invoice or credit facility issue.</td></tr>
+<tr><td>Issues Management</td><td>Payment Issue</td><td>Rate exposure compensation</td><td>complaints and compensation requests.</td></tr>
+<tr><td>Issues Management</td><td>Payment Issue</td><td>VCC denied</td><td>VCC was denied (regardless of the travel dates) and is not able to confirm the booking.</td></tr>
+<</tr>
+<tr><td>Issues Management</td><td>Nationality Issue</td><td>n/a</td><td>Booking rejected due to nationality discrepancy.</td></tr>
+<</tr>
+<tr><td>Issues Management</td><td>Booking failures</td><td>Booking creation</td><td>Failed or timed-out booking creation.</td></tr>
+<</tr>
+<tr><td>Issues Management</td><td>Email Failures</td><td>Undelivered emails</td><td>Hotel did not receive LPO.</td></tr
+</tr>
+<tr><td>Issues Management</td><td>Renovation</td><td>n/a</td><td>Hotel renovation notification.</td></tr>
+</tr>
+<tr><td>Issues Management</td><td>Hotelmize</td><td>n/a</td><td>Rebooked with lower supplier rate.</td></tr>
+</tr>
+<tr><td>Issues Management</td><td>Post - Travel</td><td>n/a</td><td>Issue raised after check-out.</td></tr>
+
+<!-- Booking Management -->
+<tr><td>Booking Management</td><td>Booking Management</td><td>Booking management</td><td>Chasing confirmation without customer request.</td></tr>
+<tr><td>Booking Management</td><td>Hotel/Customer information update</td><td>n/a</td><td>Rebranding, closure, advisories, promotions.</td></tr>
+
+<!-- Others -->
+<tr><td>Others</td><td>Hotel information</td><td>Hotel information</td><td>Amenities, location, star category, meal plan.</td></tr>
+<tr><td>Others</td><td>Spam</td><td>n/a</td><td>Non-business related emails.</td></tr>
+<tr><td>Others</td><td>Transferred tickets</td><td>n/a</td><td>No action required tickets.</td></tr>
+
+</tbody>
+</table>
+
+<script>
+function filterTable() {
+    let search = document.getElementById("searchInput").value.toLowerCase();
+    let category = document.getElementById("categoryFilter").value.toLowerCase();
+    let rows = document.querySelectorAll("#caseTable tbody tr");
+
+    rows.forEach(row => {
+        let text = row.innerText.toLowerCase();
+        let rowCategory = row.cells[0].innerText.toLowerCase();
+        let show = text.includes(search) && (category === "" || rowCategory === category);
+        row.style.display = show ? "" : "none";
+    });
+}
+</script>
+
+</body>
+</html>
